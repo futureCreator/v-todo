@@ -16,6 +16,8 @@ import AiCleanupDiff from "@/components/AiCleanupDiff";
 import BriefingModal from "@/components/BriefingModal";
 import TodoEditSheet from "@/components/TodoEditSheet";
 
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 export default function Home() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [activeQuadrant, setActiveQuadrant] = useState<Quadrant>("urgent-important");
@@ -29,7 +31,7 @@ export default function Home() {
 
   const fetchTodos = useCallback(async () => {
     try {
-      const res = await fetch("/api/todos");
+      const res = await fetch(`${BASE}/api/todos`);
       const body: ApiResponse<Todo[]> = await res.json();
       if (body.data) setTodos(body.data);
     } catch {
@@ -43,7 +45,7 @@ export default function Home() {
 
   const handleAdd = async (title: string, quadrant: Quadrant, dueDate: string | null) => {
     try {
-      const res = await fetch("/api/todos", {
+      const res = await fetch(`${BASE}/api/todos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, quadrant, dueDate }),
@@ -56,7 +58,7 @@ export default function Home() {
 
   const handleToggle = async (id: string, completed: boolean) => {
     try {
-      const res = await fetch(`/api/todos/${id}`, {
+      const res = await fetch(`${BASE}/api/todos/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ completed }),
@@ -72,7 +74,7 @@ export default function Home() {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/todos/${id}`, { method: "DELETE" });
+      const res = await fetch(`${BASE}/api/todos/${id}`, { method: "DELETE" });
       if (!res.ok) {
         const body: ApiResponse<null> = await res.json();
         setError(body.error || "삭제에 실패했습니다.");
@@ -85,7 +87,7 @@ export default function Home() {
   const handleSuggest = async () => {
     setAiLoading(true);
     try {
-      const res = await fetch("/api/ai/suggest", {
+      const res = await fetch(`${BASE}/api/ai/suggest`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quadrant: activeQuadrant }),
@@ -99,7 +101,7 @@ export default function Home() {
 
   const handleAcceptSuggestions = async (selected: AiSuggestResponse["suggestions"]) => {
     for (const s of selected) {
-      await fetch("/api/todos", {
+      await fetch(`${BASE}/api/todos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: s.title, quadrant: activeQuadrant, dueDate: s.dueDate, aiGenerated: true }),
@@ -112,7 +114,7 @@ export default function Home() {
   const handleCleanup = async () => {
     setAiLoading(true);
     try {
-      const res = await fetch("/api/ai/cleanup", {
+      const res = await fetch(`${BASE}/api/ai/cleanup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quadrant: activeQuadrant }),
@@ -127,7 +129,7 @@ export default function Home() {
 
   const handleApplyCleanup = async (accepted: AiCleanupChange[]) => {
     try {
-      await fetch("/api/ai/cleanup/apply", {
+      await fetch(`${BASE}/api/ai/cleanup/apply`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quadrant: activeQuadrant, changes: accepted }),
@@ -140,7 +142,7 @@ export default function Home() {
   const handleBriefing = async () => {
     setAiLoading(true);
     try {
-      const res = await fetch("/api/ai/briefing");
+      const res = await fetch(`${BASE}/api/ai/briefing`);
       const body: ApiResponse<AiBriefingResponse> = await res.json();
       if (!res.ok || !body.data) { setError(body.error || "AI 서비스를 사용할 수 없습니다."); return; }
       setBriefing(body.data.briefing);
@@ -150,7 +152,7 @@ export default function Home() {
 
   const handleEdit = async (id: string, updates: UpdateTodoRequest) => {
     try {
-      const res = await fetch(`/api/todos/${id}`, {
+      const res = await fetch(`${BASE}/api/todos/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
