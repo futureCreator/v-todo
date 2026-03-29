@@ -53,6 +53,22 @@
   /* ── System Purple (Milestone labels) ── */
   --system-purple: #8839ef;              /* Mauve */
 
+  /* ── Component Aliases ── */
+  --bg-primary: var(--sys-bg);
+  --bg-elevated: var(--sys-bg-elevated);
+  --label-primary: var(--sys-label);
+  --label-secondary: var(--sys-label-secondary);
+  --label-tertiary: var(--sys-label-tertiary);
+  --label-quaternary: var(--sys-label-quaternary);
+  --fill-primary: var(--sys-fill);
+  --fill-secondary: var(--sys-fill-secondary);
+  --fill-tertiary: var(--sys-fill-tertiary);
+  --fill-quaternary: var(--sys-fill-quaternary);
+  --separator: var(--sys-separator);
+  --accent-primary: var(--sys-blue);
+  --system-red: var(--sys-red);
+  --system-orange: var(--sys-orange);
+
   /* ── Shadows ── */
   --shadow-xs: 0 0.5px 1px rgba(76, 79, 105, 0.04);
   --shadow-sm: 0 1px 3px rgba(76, 79, 105, 0.06), 0 0.5px 1px rgba(76, 79, 105, 0.03);
