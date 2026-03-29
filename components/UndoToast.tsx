@@ -21,10 +21,10 @@ export default function UndoToast({
   }, [onDismiss, duration]);
 
   return (
-    <div className="fixed bottom-20 left-4 right-4 z-50 flex items-center justify-between gap-3 px-4 py-3 rounded-2xl bg-[var(--fill-primary)] text-[var(--label-primary)] shadow-md animate-[toastSlide_0.3s_ease-out]">
-      <span className="text-[14px]">{message}</span>
+    <div className="fixed bottom-[68px] md:bottom-8 left-4 right-4 md:left-auto md:right-8 md:w-[360px] z-50 flex items-center justify-between gap-4 px-5 py-3.5 rounded-2xl bg-[var(--sys-bg-elevated)] text-[var(--label-primary)] shadow-lg ios-toast safe-area-pb">
+      <span className="text-[15px] leading-[20px] truncate">{message}</span>
       <button
-        className="text-[14px] font-bold text-[var(--accent-primary)] flex-shrink-0"
+        className="text-[15px] font-semibold text-[var(--accent-primary)] flex-shrink-0 active:opacity-60"
         onClick={onUndo}
       >
         실행 취소
