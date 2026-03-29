@@ -1,14 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import fs from "fs/promises";
-import path from "path";
-
-const DATA_PATH = path.join(process.cwd(), "data", "todos.json");
+import { TODO_PATH } from "../store";
 
 import { GET, POST } from "@/app/api/todos/route";
 
 describe("GET /api/todos", () => {
   beforeEach(async () => {
-    await fs.writeFile(DATA_PATH, JSON.stringify({ todos: [] }));
+    await fs.writeFile(TODO_PATH, JSON.stringify({ todos: [] }));
   });
 
   it("returns empty array initially", async () => {
@@ -17,37 +15,57 @@ describe("GET /api/todos", () => {
     expect(res.status).toBe(200);
     expect(body.data).toEqual([]);
   });
+
+  it("applies decay on GET", async () => {
+    const fourDaysAgo = new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString();
+    await fs.writeFile(
+      TODO_PATH,
+      JSON.stringify({
+        todos: [
+          {
+            id: "decay-1",
+            title: "Old item",
+            stage: "now",
+            completed: false,
+            aiGenerated: false,
+            createdAt: fourDaysAgo,
+            stageMovedAt: fourDaysAgo,
+            completedAt: null,
+          },
+        ],
+      })
+    );
+    const res = await GET();
+    const body = await res.json();
+    expect(body.data[0].stage).toBe("soon");
+  });
 });
 
 describe("POST /api/todos", () => {
   beforeEach(async () => {
-    await fs.writeFile(DATA_PATH, JSON.stringify({ todos: [] }));
+    await fs.writeFile(TODO_PATH, JSON.stringify({ todos: [] }));
   });
 
-  it("creates a todo", async () => {
+  it("creates a todo with stage=now", async () => {
     const req = new Request("http://localhost/api/todos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: "테스트 할 일",
-        quadrant: "urgent-important",
-      }),
+      body: JSON.stringify({ title: "테스트 할 일" }),
     });
     const res = await POST(req);
     const body = await res.json();
     expect(res.status).toBe(201);
     expect(body.data.title).toBe("테스트 할 일");
-    expect(body.data.quadrant).toBe("urgent-important");
+    expect(body.data.stage).toBe("now");
     expect(body.data.completed).toBe(false);
-    expect(body.data.aiGenerated).toBe(false);
-    expect(body.data.id).toBeDefined();
+    expect(body.data.stageMovedAt).toBeDefined();
   });
 
   it("rejects empty title", async () => {
     const req = new Request("http://localhost/api/todos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "", quadrant: "urgent-important" }),
+      body: JSON.stringify({ title: "" }),
     });
     const res = await POST(req);
     expect(res.status).toBe(400);
@@ -57,20 +75,7 @@ describe("POST /api/todos", () => {
     const req = new Request("http://localhost/api/todos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: "a".repeat(201),
-        quadrant: "urgent-important",
-      }),
-    });
-    const res = await POST(req);
-    expect(res.status).toBe(400);
-  });
-
-  it("rejects invalid quadrant", async () => {
-    const req = new Request("http://localhost/api/todos", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "test", quadrant: "invalid" }),
+      body: JSON.stringify({ title: "a".repeat(201) }),
     });
     const res = await POST(req);
     expect(res.status).toBe(400);
