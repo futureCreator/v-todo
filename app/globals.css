@@ -50,23 +50,8 @@
   --sys-purple: #ea76cb;   /* Pink */
   --sys-gray: #9ca0b0;     /* Overlay0 */
 
-  /* ── Quadrant Colors ── */
-  --q-urgent-important: #d20f39;          /* Red */
-  --q-not-urgent-important: #fe640b;      /* Peach */
-  --q-urgent-not-important: #1e66f5;      /* Blue */
-  --q-not-urgent-not-important: #9ca0b0;  /* Overlay0 */
-
-  /* ── Quadrant Tints ── */
-  --q-urgent-important-tint: rgba(210, 15, 57, 0.08);
-  --q-not-urgent-important-tint: rgba(254, 100, 11, 0.08);
-  --q-urgent-not-important-tint: rgba(30, 102, 245, 0.08);
-  --q-not-urgent-not-important-tint: rgba(156, 160, 176, 0.06);
-
-  /* ── AI Gradient ── */
-  --ai-from: #8839ef;                     /* Mauve */
-  --ai-to: #1e66f5;                       /* Blue */
-  --ai-bg: rgba(136, 57, 239, 0.06);
-  --ai-border: rgba(136, 57, 239, 0.12);
+  /* ── System Purple (Milestone labels) ── */
+  --system-purple: #8839ef;              /* Mauve */
 
   /* ── Shadows ── */
   --shadow-xs: 0 0.5px 1px rgba(76, 79, 105, 0.04);
@@ -111,23 +96,8 @@
     --sys-purple: #f5c2e7;   /* Pink */
     --sys-gray: #9399b2;     /* Overlay2 */
 
-    /* ── Quadrant Colors ── */
-    --q-urgent-important: #f38ba8;          /* Red */
-    --q-not-urgent-important: #fab387;      /* Peach */
-    --q-urgent-not-important: #89b4fa;      /* Blue */
-    --q-not-urgent-not-important: #9399b2;  /* Overlay2 */
-
-    /* ── Quadrant Tints ── */
-    --q-urgent-important-tint: rgba(243, 139, 168, 0.15);
-    --q-not-urgent-important-tint: rgba(250, 179, 135, 0.15);
-    --q-urgent-not-important-tint: rgba(137, 180, 250, 0.15);
-    --q-not-urgent-not-important-tint: rgba(147, 153, 178, 0.1);
-
-    /* ── AI Gradient ── */
-    --ai-from: #cba6f7;                       /* Mauve */
-    --ai-to: #89b4fa;                         /* Blue */
-    --ai-bg: rgba(203, 166, 247, 0.12);
-    --ai-border: rgba(203, 166, 247, 0.2);
+    /* ── System Purple (Milestone labels) ── */
+    --system-purple: #cba6f7;              /* Mauve */
 
     /* ── Shadows ── */
     --shadow-xs: 0 0.5px 1px rgba(17, 17, 27, 0.2);
@@ -353,18 +323,6 @@
   }
   .stagger-10 {
     animation-delay: 0.2s;
-  }
-  .ai-shimmer {
-    background: linear-gradient(
-      110deg,
-      var(--ai-from) 0%,
-      var(--ai-to) 40%,
-      color-mix(in srgb, var(--ai-to) 70%, white) 50%,
-      var(--ai-to) 60%,
-      var(--ai-from) 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 3s ease-in-out infinite;
   }
   .check-pop {
     animation: checkPop 0.25s cubic-bezier(0.32, 0.72, 0, 1);
