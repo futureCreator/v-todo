@@ -19,8 +19,8 @@ export default function TodoInput({ onAdd }: TodoInputProps) {
   };
 
   return (
-    <div className="flex items-center gap-3 px-5 md:px-6 py-1">
-      <div className="flex-1 flex items-center min-h-[44px] gap-3 px-4 rounded-xl bg-[var(--fill-quaternary)]">
+    <div className="flex items-center gap-3 py-1.5">
+      <div className="flex-1 flex items-center min-h-[48px] gap-3 px-4 rounded-xl bg-[var(--fill-quaternary)]">
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--label-quaternary)" strokeWidth="2" strokeLinecap="round" className="flex-shrink-0">
           <line x1="9" y1="4" x2="9" y2="14" />
           <line x1="4" y1="9" x2="14" y2="9" />
@@ -33,7 +33,7 @@ export default function TodoInput({ onAdd }: TodoInputProps) {
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           placeholder="새로운 할 일"
           maxLength={200}
-          className="flex-1 bg-transparent text-[17px] leading-[22px] text-[var(--label-primary)] placeholder:text-[var(--label-tertiary)] outline-none py-2.5"
+          className="flex-1 bg-transparent text-[16px] leading-[21px] text-[var(--label-primary)] placeholder:text-[var(--label-tertiary)] outline-none py-2.5"
         />
       </div>
       {title.trim() && (

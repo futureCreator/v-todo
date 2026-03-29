@@ -37,6 +37,16 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.2.0 - 2026-03-29
+- **Complete redesign**: Eisenhower matrix → time-decay stage model (지금/곧/보관함)
+- **D-day & Anniversary**: Calendar-style layout with auto-computed next occurrence, milestone labels (N주년, N개월째, N일째)
+- **Lunar calendar**: Support for 음력 dates with solar conversion
+- **AI Briefing**: Unified daily briefing for todos + schedules via Gemini
+- **New components**: BottomNav, SectionTabs, ScheduleItem, AddScheduleSheet, ArchiveView, UndoToast
+- **Catppuccin theme**: Latte (light) / Mocha (dark) with system preference
+- **Responsive layout**: Desktop sidebar + mobile bottom nav, card-based items
+- **Auto-decay**: Todos auto-migrate from "지금" to "곧" after 3 days
+
 ### v0.1.1 - 2026-03-21
 - Add `basePath` proxy support (`/proxy/todo`) for reverse-proxy deployments
 - Update all API fetch calls to use `NEXT_PUBLIC_BASE_PATH` environment variable

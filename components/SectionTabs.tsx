@@ -8,7 +8,7 @@ interface SectionTabsProps {
 
 export default function SectionTabs({ tabs, active, onChange }: SectionTabsProps) {
   return (
-    <div className="flex mx-5 md:mx-6 my-2 p-[3px] rounded-[10px] bg-[var(--fill-quaternary)]">
+    <div className="flex mx-5 md:mx-0 my-2 p-[3px] rounded-[10px] bg-[var(--fill-quaternary)]">
       {tabs.map((tab) => (
         <button
           key={tab.key}

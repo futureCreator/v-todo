@@ -6,7 +6,7 @@ import BottomNav from "@/components/BottomNav";
 import SectionTabs from "@/components/SectionTabs";
 import TodoItem from "@/components/TodoItem";
 import TodoInput from "@/components/TodoInput";
-import ScheduleItem from "@/components/ScheduleItem";
+import ScheduleItem, { getDisplayInfo } from "@/components/ScheduleItem";
 import AddScheduleSheet from "@/components/AddScheduleSheet";
 import UndoToast from "@/components/UndoToast";
 import ArchiveView from "@/components/ArchiveView";
@@ -184,10 +184,7 @@ export default function Home() {
         ? s.type === "general"
         : s.type === "anniversary"
     )
-    .sort(
-      (a, b) =>
-        new Date(a.targetDate).getTime() - new Date(b.targetDate).getTime()
-    );
+    .sort((a, b) => getDisplayInfo(a).daysLeft - getDisplayInfo(b).daysLeft);
 
   const nowCount = todos.filter((t) => t.stage === "now" && !t.completed).length;
   const soonCount = todos.filter((t) => t.stage === "soon" && !t.completed).length;
@@ -331,7 +328,7 @@ export default function Home() {
       </header>
 
       {/* Tabs */}
-      <div className="px-0 md:px-8 pt-1 pb-2">
+      <div className="md:px-8 pt-1 pb-2">
         {section === "todo" ? (
           <SectionTabs
             tabs={[
@@ -374,20 +371,23 @@ export default function Home() {
                   </p>
                 </div>
               ) : (
-                <div className="md:bg-[var(--sys-bg-elevated)] md:rounded-xl md:border md:border-[var(--separator)] md:overflow-hidden">
+                <div className="mx-5 md:mx-0 flex flex-col gap-2.5">
                   {filteredTodos.map((todo) => (
-                    <TodoItem
-                      key={todo.id}
-                      todo={todo}
-                      onToggle={toggleTodo}
-                      onDelete={deleteTodo}
-                    />
+                    <div key={todo.id} className="bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden">
+                      <TodoItem
+                        todo={todo}
+                        onToggle={toggleTodo}
+                        onDelete={deleteTodo}
+                      />
+                    </div>
                   ))}
                 </div>
               )}
-              <div className="mt-3 md:mt-4">
-                <TodoInput onAdd={addTodo} />
-              </div>
+              {todoTab === "now" && (
+                <div className="mx-5 md:mx-0 mt-2.5">
+                  <TodoInput onAdd={addTodo} />
+                </div>
+              )}
             </>
           ) : (
             <>
@@ -402,7 +402,7 @@ export default function Home() {
                   </p>
                 </div>
               ) : (
-                <div className="md:bg-[var(--sys-bg-elevated)] md:rounded-xl md:border md:border-[var(--separator)] md:overflow-hidden">
+                <div className="mx-5 md:mx-0 bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden">
                   {filteredSchedules.map((schedule) => (
                     <ScheduleItem
                       key={schedule.id}
@@ -415,7 +415,7 @@ export default function Home() {
                   ))}
                 </div>
               )}
-              <div className="px-5 md:px-0 mt-4">
+              <div className="mx-5 md:mx-0 mt-4">
                 <button
                   className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[17px] font-semibold active:opacity-80 transition-opacity"
                   onClick={() => {
