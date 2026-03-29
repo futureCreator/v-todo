@@ -37,6 +37,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.2.1 - 2026-03-30
+- **Fix**: Font path for reverse-proxy deployment (`/proxy/todo/` prefix)
+- **Fix**: Lunar calendar yearly schedule display (correct solar conversion for D-day)
+- **Improve**: Schedule list — individual rounded cards with gap spacing
+- **Refactor**: AddScheduleSheet — unified date input for lunar/solar, simplified conversion logic
+- **Polish**: Toggle switch & schedule item card sizing to match HIG
+
 ### v0.2.0 - 2026-03-29
 - **Complete redesign**: Eisenhower matrix → time-decay stage model (지금/곧/보관함)
 - **D-day & Anniversary**: Calendar-style layout with auto-computed next occurrence, milestone labels (N주년, N개월째, N일째)

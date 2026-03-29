@@ -4,13 +4,15 @@ import { useState, useEffect } from "react";
 import type { Schedule, ScheduleType, RepeatMode } from "@/types";
 import KoreanLunarCalendar from "korean-lunar-calendar";
 
-function clientLunarToSolar(year: number, month: number, day: number) {
+function lunarToSolar(year: number, month: number, day: number) {
   try {
     const cal = new KoreanLunarCalendar();
     if (!cal.setLunarDate(year, month, day, false)) return null;
     const s = cal.getSolarCalendar();
-    return { year: s.year, month: s.month, day: s.day };
-  } catch { return null; }
+    return `${s.year}-${String(s.month).padStart(2, "0")}-${String(s.day).padStart(2, "0")}`;
+  } catch {
+    return null;
+  }
 }
 
 interface AddScheduleSheetProps {
@@ -40,11 +42,16 @@ export default function AddScheduleSheet({
   const [name, setName] = useState(schedule?.name ?? "");
   const [type, setType] = useState<ScheduleType>(schedule?.type ?? defaultType);
   const [repeatMode, setRepeatMode] = useState<RepeatMode>(schedule?.repeatMode ?? "none");
-  const [targetDate, setTargetDate] = useState(schedule?.targetDate ?? "");
-  const [originDate, setOriginDate] = useState(schedule?.originDate ?? "");
   const [isLunar, setIsLunar] = useState(schedule?.isLunar ?? false);
-  const [lunarMonth, setLunarMonth] = useState<number | null>(schedule?.lunarMonth ?? null);
-  const [lunarDay, setLunarDay] = useState<number | null>(schedule?.lunarDay ?? null);
+  const [inputDate, setInputDate] = useState(() => {
+    if (!schedule) return "";
+    if (schedule.isLunar && schedule.lunarMonth && schedule.lunarDay) {
+      const y = new Date(schedule.originDate + "T00:00:00").getFullYear();
+      return `${y}-${String(schedule.lunarMonth).padStart(2, "0")}-${String(schedule.lunarDay).padStart(2, "0")}`;
+    }
+    return schedule.targetDate;
+  });
+  const [originDate, setOriginDate] = useState(schedule?.originDate ?? "");
   const [solarPreview, setSolarPreview] = useState<string | null>(null);
 
   useEffect(() => {
@@ -55,38 +62,57 @@ export default function AddScheduleSheet({
     }
   }, [type, repeatMode]);
 
+  // Compute solar preview when lunar is on
   useEffect(() => {
-    if (isLunar && lunarMonth && lunarDay) {
-      const year = new Date().getFullYear();
-      const solar = clientLunarToSolar(year, lunarMonth, lunarDay);
-      if (solar) {
-        const dateStr = `${solar.year}-${String(solar.month).padStart(2, "0")}-${String(solar.day).padStart(2, "0")}`;
-        setSolarPreview(dateStr);
-        setTargetDate(dateStr);
-        setOriginDate(dateStr);
+    if (isLunar && inputDate) {
+      const [, m, d] = inputDate.split("-").map(Number);
+      if (m && d) {
+        const solar = lunarToSolar(new Date().getFullYear(), m, d);
+        setSolarPreview(solar);
       } else {
         setSolarPreview(null);
       }
     } else {
       setSolarPreview(null);
     }
-  }, [isLunar, lunarMonth, lunarDay]);
+  }, [isLunar, inputDate]);
 
   const handleSave = () => {
-    if (!name.trim() || !targetDate) return;
+    if (!name.trim() || !inputDate) return;
+
+    let targetDate: string;
+    let finalOriginDate: string;
+    let lunarMonth: number | null = null;
+    let lunarDay: number | null = null;
+
+    if (isLunar) {
+      const [y, m, d] = inputDate.split("-").map(Number);
+      lunarMonth = m;
+      lunarDay = d;
+      // targetDate: 올해(또는 내년) 양력 변환 (다음 도래일)
+      const solar = lunarToSolar(new Date().getFullYear(), m, d);
+      targetDate = solar ?? inputDate;
+      // originDate: 입력한 원래 연도의 양력 변환 (주년 계산 기준)
+      const solarOrigin = lunarToSolar(y, m, d);
+      finalOriginDate = solarOrigin ?? inputDate;
+    } else {
+      targetDate = inputDate;
+      finalOriginDate = originDate || targetDate;
+    }
+
     onSave({
       name: name.trim(),
       targetDate,
-      originDate: originDate || targetDate,
+      originDate: finalOriginDate,
       type,
       repeatMode,
       isLunar,
-      lunarMonth: isLunar ? lunarMonth : null,
-      lunarDay: isLunar ? lunarDay : null,
+      lunarMonth,
+      lunarDay,
     });
   };
 
-  const canSave = name.trim().length > 0 && targetDate.length > 0;
+  const canSave = name.trim().length > 0 && inputDate.length > 0;
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40" onClick={onClose}>
@@ -158,51 +184,29 @@ export default function AddScheduleSheet({
         <div className="flex items-center justify-between mb-4">
           <span className="text-[14px] text-[var(--label-secondary)]">음력</span>
           <button
-            className={`w-12 h-7 rounded-full transition-colors relative ${
+            type="button"
+            className={`w-[51px] h-[31px] rounded-full transition-colors duration-200 relative flex-shrink-0 ${
               isLunar ? "bg-[var(--accent-primary)]" : "bg-[var(--fill-tertiary)]"
             }`}
             onClick={() => setIsLunar(!isLunar)}
           >
             <span
-              className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow transition-transform ${
-                isLunar ? "translate-x-5" : "translate-x-0.5"
+              className={`pointer-events-none absolute top-[2px] left-[2px] w-[27px] h-[27px] rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                isLunar ? "translate-x-[20px]" : "translate-x-0"
               }`}
             />
           </button>
         </div>
 
-        {isLunar ? (
-          <div className="flex gap-2 mb-3">
-            <input
-              type="number"
-              min={1}
-              max={12}
-              value={lunarMonth ?? ""}
-              onChange={(e) => setLunarMonth(Number(e.target.value) || null)}
-              placeholder="월"
-              className="flex-1 px-3 py-3 rounded-xl bg-[var(--fill-quaternary)] text-[15px] text-center text-[var(--label-primary)] outline-none"
-            />
-            <input
-              type="number"
-              min={1}
-              max={30}
-              value={lunarDay ?? ""}
-              onChange={(e) => setLunarDay(Number(e.target.value) || null)}
-              placeholder="일"
-              className="flex-1 px-3 py-3 rounded-xl bg-[var(--fill-quaternary)] text-[15px] text-center text-[var(--label-primary)] outline-none"
-            />
-          </div>
-        ) : (
-          <input
-            type="date"
-            value={targetDate}
-            onChange={(e) => {
-              setTargetDate(e.target.value);
-              if (!originDate) setOriginDate(e.target.value);
-            }}
-            className="w-full px-4 py-3 rounded-xl bg-[var(--fill-quaternary)] text-[15px] text-[var(--label-primary)] outline-none mb-3"
-          />
-        )}
+        <input
+          type="date"
+          value={inputDate}
+          onChange={(e) => {
+            setInputDate(e.target.value);
+            if (!isLunar) setOriginDate(e.target.value);
+          }}
+          className="w-full px-4 py-3 rounded-xl bg-[var(--fill-quaternary)] text-[15px] text-[var(--label-primary)] outline-none mb-3"
+        />
 
         {solarPreview && (
           <p className="text-[12px] text-[var(--label-tertiary)] mb-4">

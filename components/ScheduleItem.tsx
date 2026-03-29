@@ -21,20 +21,30 @@ export function getDisplayInfo(schedule: Schedule): {
 
     switch (schedule.repeatMode) {
       case "yearly": {
-        let year = today.getFullYear();
-        let next = new Date(year, origin.getMonth(), origin.getDate());
-        if (next.getTime() < today.getTime()) {
-          year++;
+        let next: Date;
+        let years: number;
+
+        if (schedule.isLunar) {
+          // 음력: targetDate가 이미 올해/내년 양력 변환값
+          next = new Date(schedule.targetDate + "T00:00:00");
+          years = next.getFullYear() - origin.getFullYear();
+        } else {
+          let year = today.getFullYear();
           next = new Date(year, origin.getMonth(), origin.getDate());
+          if (next.getTime() < today.getTime()) {
+            year++;
+            next = new Date(year, origin.getMonth(), origin.getDate());
+          }
+          years = year - origin.getFullYear();
         }
-        const years = year - origin.getFullYear();
+
         const daysLeft = Math.ceil(
           (next.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
         );
         return {
           displayDate: next,
           daysLeft,
-          milestone: years > 0 ? `${years}주년` : null,
+          milestone: `${years}주년`,
         };
       }
       case "monthly": {
@@ -123,7 +133,7 @@ export default function ScheduleItem({ schedule, onEdit }: ScheduleItemProps) {
 
   return (
     <button
-      className="w-full flex items-center gap-3.5 px-4 md:px-6 min-h-[72px] text-left group"
+      className="w-full flex items-center gap-3.5 px-4 md:px-6 min-h-[64px] text-left group"
       onClick={() => onEdit(schedule)}
     >
       {/* Calendar block */}
@@ -137,7 +147,7 @@ export default function ScheduleItem({ schedule, onEdit }: ScheduleItemProps) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 min-w-0 py-3 border-b border-[var(--separator)]">
+      <div className="flex-1 min-w-0">
         <div className="text-[16px] leading-[21px] font-semibold text-[var(--label-primary)] truncate">
           {schedule.name}
         </div>

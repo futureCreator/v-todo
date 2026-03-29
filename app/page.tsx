@@ -402,16 +402,20 @@ export default function Home() {
                   </p>
                 </div>
               ) : (
-                <div className="mx-5 md:mx-0 bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden">
+                <div className="mx-5 md:mx-0 flex flex-col gap-2">
                   {filteredSchedules.map((schedule) => (
-                    <ScheduleItem
+                    <div
                       key={schedule.id}
-                      schedule={schedule}
-                      onEdit={(s) => {
-                        setEditSchedule(s);
-                        setShowAddSchedule(true);
-                      }}
-                    />
+                      className="bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden"
+                    >
+                      <ScheduleItem
+                        schedule={schedule}
+                        onEdit={(s) => {
+                          setEditSchedule(s);
+                          setShowAddSchedule(true);
+                        }}
+                      />
+                    </div>
                   ))}
                 </div>
               )}
