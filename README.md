@@ -37,6 +37,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.2.2 - 2026-03-30
+- **Improve**: Apple HIG typography compliance — all text sizes increased for better mobile readability
+- **Improve**: Body text 16→20px, secondary text 12→15px, segment tabs 13→17px, sheet titles 17→20px, D-day labels 20→24px
+- **Improve**: Calendar block and schedule item row height increased for better touch targets
+- **Improve**: Bottom nav labels 10→12px, briefing modal prose-sm→prose for larger body text
+
 ### v0.2.1 - 2026-03-30
 - **Fix**: Font path for reverse-proxy deployment (`/proxy/todo/` prefix)
 - **Fix**: Lunar calendar yearly schedule display (correct solar conversion for D-day)

@@ -33,7 +33,7 @@ export default function TodoInput({ onAdd }: TodoInputProps) {
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
           placeholder="새로운 할 일"
           maxLength={200}
-          className="flex-1 bg-transparent text-[16px] leading-[21px] text-[var(--label-primary)] placeholder:text-[var(--label-tertiary)] outline-none py-2.5"
+          className="flex-1 bg-transparent text-[20px] leading-[26px] text-[var(--label-primary)] placeholder:text-[var(--label-tertiary)] outline-none py-2.5"
         />
       </div>
       {title.trim() && (

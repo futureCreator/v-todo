@@ -27,7 +27,7 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
               </>
             )}
           </svg>
-          <span className="text-[10px] font-medium">할 일</span>
+          <span className="text-[12px] font-medium">할 일</span>
         </button>
         <button
           className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
@@ -47,7 +47,7 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
               </>
             )}
           </svg>
-          <span className="text-[10px] font-medium">D-day</span>
+          <span className="text-[12px] font-medium">D-day</span>
         </button>
       </div>
     </nav>

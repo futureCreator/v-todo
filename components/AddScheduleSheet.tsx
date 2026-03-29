@@ -123,14 +123,14 @@ export default function AddScheduleSheet({
         <div className="w-10 h-1 bg-[var(--fill-tertiary)] rounded-full mx-auto mb-6" />
 
         <div className="flex items-center justify-between mb-6">
-          <button className="text-[var(--label-tertiary)] text-[15px]" onClick={onClose}>
+          <button className="text-[var(--label-tertiary)] text-[20px]" onClick={onClose}>
             취소
           </button>
-          <h2 className="text-[17px] font-bold text-[var(--label-primary)]">
+          <h2 className="text-[20px] font-bold text-[var(--label-primary)]">
             {schedule ? "일정 수정" : "새 일정"}
           </h2>
           <button
-            className={`text-[15px] font-bold ${canSave ? "text-[var(--accent-primary)]" : "text-[var(--label-quaternary)]"}`}
+            className={`text-[20px] font-bold ${canSave ? "text-[var(--accent-primary)]" : "text-[var(--label-quaternary)]"}`}
             onClick={handleSave}
             disabled={!canSave}
           >
@@ -144,14 +144,14 @@ export default function AddScheduleSheet({
           onChange={(e) => setName(e.target.value)}
           placeholder="일정 이름"
           maxLength={100}
-          className="w-full px-4 py-3 rounded-xl bg-[var(--fill-quaternary)] text-[15px] text-[var(--label-primary)] placeholder:text-[var(--label-quaternary)] outline-none mb-4"
+          className="w-full px-4 py-3.5 rounded-xl bg-[var(--fill-quaternary)] text-[20px] text-[var(--label-primary)] placeholder:text-[var(--label-quaternary)] outline-none mb-4"
         />
 
         <div className="flex gap-2 mb-4">
           {(["general", "anniversary"] as const).map((t) => (
             <button
               key={t}
-              className={`flex-1 py-2.5 rounded-xl text-[13px] font-medium transition-colors ${
+              className={`flex-1 py-3 rounded-xl text-[17px] font-medium transition-colors ${
                 type === t
                   ? "bg-[var(--accent-primary)] text-white"
                   : "bg-[var(--fill-quaternary)] text-[var(--label-secondary)]"
@@ -168,7 +168,7 @@ export default function AddScheduleSheet({
             {(["every_100_days", "monthly", "yearly"] as const).map((m) => (
               <button
                 key={m}
-                className={`flex-1 py-2 rounded-lg text-[12px] font-medium transition-colors ${
+                className={`flex-1 py-2.5 rounded-lg text-[15px] font-medium transition-colors ${
                   repeatMode === m
                     ? "bg-[var(--accent-primary)]/20 text-[var(--accent-primary)]"
                     : "bg-[var(--fill-quaternary)] text-[var(--label-tertiary)]"
@@ -182,7 +182,7 @@ export default function AddScheduleSheet({
         )}
 
         <div className="flex items-center justify-between mb-4">
-          <span className="text-[14px] text-[var(--label-secondary)]">음력</span>
+          <span className="text-[20px] text-[var(--label-primary)]">음력</span>
           <button
             type="button"
             className={`w-[51px] h-[31px] rounded-full transition-colors duration-200 relative flex-shrink-0 ${
@@ -205,18 +205,18 @@ export default function AddScheduleSheet({
             setInputDate(e.target.value);
             if (!isLunar) setOriginDate(e.target.value);
           }}
-          className="w-full px-4 py-3 rounded-xl bg-[var(--fill-quaternary)] text-[15px] text-[var(--label-primary)] outline-none mb-3"
+          className="w-full px-4 py-3.5 rounded-xl bg-[var(--fill-quaternary)] text-[20px] text-[var(--label-primary)] outline-none mb-3"
         />
 
         {solarPreview && (
-          <p className="text-[12px] text-[var(--label-tertiary)] mb-4">
+          <p className="text-[15px] text-[var(--label-tertiary)] mb-4">
             양력 변환: {solarPreview}
           </p>
         )}
 
         {schedule && onDelete && (
           <button
-            className="w-full py-3 mt-4 rounded-xl text-[15px] font-medium text-[var(--system-red)] bg-[var(--system-red)]/10"
+            className="w-full py-3.5 mt-4 rounded-xl text-[20px] font-medium text-[var(--system-red)] bg-[var(--system-red)]/10"
             onClick={() => onDelete(schedule.id)}
           >
             일정 삭제

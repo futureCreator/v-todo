@@ -62,10 +62,10 @@ export default function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
 
       {/* Content */}
       <div className="flex-1 flex items-center min-h-[56px] py-3.5">
-        <span className="flex-1 text-[16px] leading-[21px] text-[var(--label-primary)]">
+        <span className="flex-1 text-[20px] leading-[26px] text-[var(--label-primary)]">
           {todo.title}
         </span>
-        <span className="text-[13px] text-[var(--label-tertiary)] ml-3 flex-shrink-0">
+        <span className="text-[15px] text-[var(--label-tertiary)] ml-3 flex-shrink-0">
           {ageLabel(todo.stageMovedAt)}
         </span>
       </div>

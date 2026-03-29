@@ -23,9 +23,9 @@ export default function ArchiveView({ todos, onToggle, onDelete, onClose }: Arch
 
         <div className="flex items-center justify-between px-5 md:px-6 py-3.5 border-b border-[var(--separator)]">
           <div className="w-[60px]" />
-          <h2 className="text-[17px] font-semibold text-[var(--label-primary)]">보관함</h2>
+          <h2 className="text-[20px] font-semibold text-[var(--label-primary)]">보관함</h2>
           <button
-            className="w-[60px] text-right text-[17px] text-[var(--accent-primary)] active:opacity-60"
+            className="w-[60px] text-right text-[20px] text-[var(--accent-primary)] active:opacity-60"
             onClick={onClose}
           >
             완료
@@ -40,8 +40,8 @@ export default function ArchiveView({ todos, onToggle, onDelete, onClose }: Arch
                 <path d="M4 12h40" />
                 <path d="M18 20h12" />
               </svg>
-              <p className="text-[17px]">보관함이 비어 있습니다</p>
-              <p className="text-[13px] mt-1 text-[var(--label-quaternary)]">30일 후 자동 삭제됩니다</p>
+              <p className="text-[20px]">보관함이 비어 있습니다</p>
+              <p className="text-[15px] mt-1.5 text-[var(--label-quaternary)]">30일 후 자동 삭제됩니다</p>
             </div>
           ) : (
             <div className="py-1">

@@ -22,9 +22,9 @@ export default function UndoToast({
 
   return (
     <div className="fixed bottom-[68px] md:bottom-8 left-4 right-4 md:left-auto md:right-8 md:w-[360px] z-50 flex items-center justify-between gap-4 px-5 py-3.5 rounded-2xl bg-[var(--sys-bg-elevated)] text-[var(--label-primary)] shadow-lg ios-toast safe-area-pb">
-      <span className="text-[15px] leading-[20px] truncate">{message}</span>
+      <span className="text-[18px] leading-[24px] truncate">{message}</span>
       <button
-        className="text-[15px] font-semibold text-[var(--accent-primary)] flex-shrink-0 active:opacity-60"
+        className="text-[18px] font-semibold text-[var(--accent-primary)] flex-shrink-0 active:opacity-60"
         onClick={onUndo}
       >
         실행 취소

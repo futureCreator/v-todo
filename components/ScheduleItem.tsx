@@ -133,26 +133,26 @@ export default function ScheduleItem({ schedule, onEdit }: ScheduleItemProps) {
 
   return (
     <button
-      className="w-full flex items-center gap-3.5 px-4 md:px-6 min-h-[64px] text-left group"
+      className="w-full flex items-center gap-3.5 px-4 md:px-6 min-h-[72px] py-2 text-left group"
       onClick={() => onEdit(schedule)}
     >
       {/* Calendar block */}
-      <div className="w-14 h-14 rounded-[10px] bg-[var(--fill-quaternary)] flex flex-col items-center justify-center flex-shrink-0">
-        <span className="text-[11px] font-medium text-[var(--label-tertiary)] leading-tight">
+      <div className="w-[60px] h-[60px] rounded-[12px] bg-[var(--fill-quaternary)] flex flex-col items-center justify-center flex-shrink-0">
+        <span className="text-[14px] font-medium text-[var(--label-tertiary)] leading-tight">
           {month}월
         </span>
-        <span className="text-[22px] font-bold text-[var(--label-primary)] leading-tight">
+        <span className="text-[26px] font-bold text-[var(--label-primary)] leading-tight">
           {day}
         </span>
       </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <div className="text-[16px] leading-[21px] font-semibold text-[var(--label-primary)] truncate">
+        <div className="text-[20px] leading-[26px] font-semibold text-[var(--label-primary)] truncate">
           {schedule.name}
         </div>
         {subtitleParts.length > 0 && (
-          <div className="text-[12px] leading-[16px] text-[var(--label-tertiary)] mt-0.5">
+          <div className="text-[15px] leading-[20px] text-[var(--label-tertiary)] mt-0.5">
             {subtitleParts.map((part, i) => (
               <span key={i}>
                 {i > 0 && (
@@ -173,7 +173,7 @@ export default function ScheduleItem({ schedule, onEdit }: ScheduleItemProps) {
 
       {/* D-day */}
       <span
-        className={`text-[20px] font-bold flex-shrink-0 ${ddayColor(daysLeft)}`}
+        className={`text-[24px] font-bold flex-shrink-0 ${ddayColor(daysLeft)}`}
       >
         {ddayLabel(daysLeft)}
       </span>

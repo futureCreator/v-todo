@@ -291,7 +291,7 @@ export default function Home() {
     <div className="flex-1 flex flex-col h-dvh overflow-hidden">
       {/* Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-5 pt-3 pb-1 safe-area-pt">
-        <h1 className="text-[34px] font-bold tracking-tight text-[var(--label-primary)]">
+        <h1 className="text-[38px] font-bold tracking-tight text-[var(--label-primary)]">
           {section === "todo" ? "할 일" : "D-day"}
         </h1>
         <div className="flex items-center gap-1">
@@ -361,10 +361,10 @@ export default function Home() {
                     <rect x="10" y="10" width="36" height="36" rx="8" />
                     <path d="M20 28l6 6 10-10" />
                   </svg>
-                  <p className="text-[17px]">
+                  <p className="text-[20px]">
                     {todoTab === "now" ? "할 일을 추가해보세요" : "곧 처리할 일이 없습니다"}
                   </p>
-                  <p className="text-[13px] text-[var(--label-quaternary)] mt-1">
+                  <p className="text-[15px] text-[var(--label-quaternary)] mt-1.5">
                     {todoTab === "now"
                       ? "3일 이내에 완료하지 않으면 '곧'으로 이동합니다"
                       : "3일 동안 미처리된 할 일이 여기에 표시됩니다"}
@@ -397,7 +397,7 @@ export default function Home() {
                     <circle cx="28" cy="28" r="20" />
                     <polyline points="28 16 28 28 36 33" />
                   </svg>
-                  <p className="text-[17px]">
+                  <p className="text-[20px]">
                     {ddayTab === "general" ? "일정을 추가해보세요" : "기념일을 추가해보세요"}
                   </p>
                 </div>
@@ -421,7 +421,7 @@ export default function Home() {
               )}
               <div className="mx-5 md:mx-0 mt-4">
                 <button
-                  className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[17px] font-semibold active:opacity-80 transition-opacity"
+                  className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
                   onClick={() => {
                     setEditSchedule(null);
                     setShowAddSchedule(true);
