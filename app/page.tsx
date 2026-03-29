@@ -1,327 +1,330 @@
+// app/page.tsx
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import type {
-  Todo, Quadrant, ApiResponse, UpdateTodoRequest,
-  AiSuggestResponse, AiCleanupResponse, AiCleanupChange, AiBriefingResponse,
-} from "@/types";
-import TabBar from "@/components/TabBar";
-import QuadrantGrid from "@/components/QuadrantGrid";
-import QuadrantPanel from "@/components/QuadrantPanel";
+import type { Todo, Schedule, ScheduleType, RepeatMode } from "@/types";
+import BottomNav from "@/components/BottomNav";
+import SectionTabs from "@/components/SectionTabs";
+import TodoItem from "@/components/TodoItem";
 import TodoInput from "@/components/TodoInput";
-import Toast from "@/components/Toast";
-import AiActions from "@/components/AiActions";
-import AiSuggestPreview from "@/components/AiSuggestPreview";
-import AiCleanupDiff from "@/components/AiCleanupDiff";
+import ScheduleItem from "@/components/ScheduleItem";
+import AddScheduleSheet from "@/components/AddScheduleSheet";
+import UndoToast from "@/components/UndoToast";
+import ArchiveView from "@/components/ArchiveView";
 import BriefingModal from "@/components/BriefingModal";
-import TodoEditSheet from "@/components/TodoEditSheet";
 
-const BASE = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export default function Home() {
+  const [section, setSection] = useState<"todo" | "dday">("todo");
+  const [todoTab, setTodoTab] = useState<"now" | "soon">("now");
+  const [ddayTab, setDdayTab] = useState<"general" | "anniversary">("general");
+
   const [todos, setTodos] = useState<Todo[]>([]);
-  const [activeQuadrant, setActiveQuadrant] = useState<Quadrant>("urgent-important");
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [aiLoading, setAiLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState<AiSuggestResponse["suggestions"] | null>(null);
-  const [cleanupChanges, setCleanupChanges] = useState<AiCleanupChange[] | null>(null);
-  const [briefing, setBriefing] = useState<string | null>(null);
-  const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
+
+  const [showArchive, setShowArchive] = useState(false);
+  const [showAddSchedule, setShowAddSchedule] = useState(false);
+  const [editSchedule, setEditSchedule] = useState<Schedule | null>(null);
+  const [showBriefing, setShowBriefing] = useState(false);
+  const [briefingText, setBriefingText] = useState("");
+  const [briefingLoading, setBriefingLoading] = useState(false);
+
+  const [undoItem, setUndoItem] = useState<{ todo: Todo; timeout: NodeJS.Timeout } | null>(null);
 
   const fetchTodos = useCallback(async () => {
     try {
       const res = await fetch(`${BASE}/api/todos`);
-      const body: ApiResponse<Todo[]> = await res.json();
+      const body = await res.json();
       if (body.data) setTodos(body.data);
-    } catch {
-      setError("할 일을 불러올 수 없습니다.");
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      console.error("Failed to fetch todos:", err);
     }
   }, []);
 
-  useEffect(() => { fetchTodos(); }, [fetchTodos]);
+  const fetchSchedules = useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE}/api/schedules`);
+      const body = await res.json();
+      if (body.data) setSchedules(body.data);
+    } catch (err) {
+      console.error("Failed to fetch schedules:", err);
+    }
+  }, []);
 
-  const handleAdd = async (title: string, quadrant: Quadrant, dueDate: string | null) => {
+  useEffect(() => {
+    Promise.all([fetchTodos(), fetchSchedules()]).finally(() => setLoading(false));
+  }, [fetchTodos, fetchSchedules]);
+
+  const addTodo = async (title: string) => {
     try {
       const res = await fetch(`${BASE}/api/todos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, quadrant, dueDate }),
+        body: JSON.stringify({ title }),
       });
-      const body: ApiResponse<Todo> = await res.json();
-      if (!res.ok) { setError(body.error || "추가에 실패했습니다."); return; }
-      await fetchTodos();
-    } catch { setError("추가에 실패했습니다."); }
-  };
-
-  const handleToggle = async (id: string, completed: boolean) => {
-    try {
-      const res = await fetch(`${BASE}/api/todos/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ completed }),
-      });
-      if (!res.ok) {
-        const body: ApiResponse<null> = await res.json();
-        setError(body.error || "수정에 실패했습니다.");
-        return;
-      }
-      await fetchTodos();
-    } catch { setError("수정에 실패했습니다."); }
-  };
-
-  const handleDelete = async (id: string) => {
-    try {
-      const res = await fetch(`${BASE}/api/todos/${id}`, { method: "DELETE" });
-      if (!res.ok) {
-        const body: ApiResponse<null> = await res.json();
-        setError(body.error || "삭제에 실패했습니다.");
-        return;
-      }
-      await fetchTodos();
-    } catch { setError("삭제에 실패했습니다."); }
-  };
-
-  const handleSuggest = async () => {
-    setAiLoading(true);
-    try {
-      const res = await fetch(`${BASE}/api/ai/suggest`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quadrant: activeQuadrant }),
-      });
-      const body: ApiResponse<AiSuggestResponse> = await res.json();
-      if (!res.ok || !body.data) { setError(body.error || "AI 서비스를 사용할 수 없습니다."); return; }
-      setSuggestions(body.data.suggestions);
-    } catch { setError("AI 서비스를 사용할 수 없습니다."); }
-    finally { setAiLoading(false); }
-  };
-
-  const handleAcceptSuggestions = async (selected: AiSuggestResponse["suggestions"]) => {
-    for (const s of selected) {
-      await fetch(`${BASE}/api/todos`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: s.title, quadrant: activeQuadrant, dueDate: s.dueDate, aiGenerated: true }),
-      });
+      const body = await res.json();
+      if (body.data) setTodos((prev) => [body.data, ...prev]);
+    } catch (err) {
+      console.error("Failed to add todo:", err);
     }
-    setSuggestions(null);
-    await fetchTodos();
   };
 
-  const handleCleanup = async () => {
-    setAiLoading(true);
+  const toggleTodo = async (id: string) => {
+    const todo = todos.find((t) => t.id === id);
+    if (!todo) return;
+
+    setTodos((prev) => prev.filter((t) => t.id !== id));
+
+    await fetch(`${BASE}/api/todos/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ completed: true }),
+    });
+
+    if (undoItem) clearTimeout(undoItem.timeout);
+    const timeout = setTimeout(() => setUndoItem(null), 3000);
+    setUndoItem({ todo, timeout });
+  };
+
+  const undoComplete = async () => {
+    if (!undoItem) return;
+    clearTimeout(undoItem.timeout);
+
+    await fetch(`${BASE}/api/todos/${undoItem.todo.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ completed: false }),
+    });
+
+    setTodos((prev) => [undoItem.todo, ...prev]);
+    setUndoItem(null);
+  };
+
+  const deleteTodo = async (id: string) => {
+    setTodos((prev) => prev.filter((t) => t.id !== id));
+    await fetch(`${BASE}/api/todos/${id}`, { method: "DELETE" });
+  };
+
+  const saveSchedule = async (data: {
+    name: string;
+    targetDate: string;
+    originDate: string;
+    type: ScheduleType;
+    repeatMode: RepeatMode;
+    isLunar: boolean;
+    lunarMonth: number | null;
+    lunarDay: number | null;
+  }) => {
     try {
-      const res = await fetch(`${BASE}/api/ai/cleanup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quadrant: activeQuadrant }),
-      });
-      const body: ApiResponse<AiCleanupResponse> = await res.json();
-      if (!res.ok || !body.data) { setError(body.error || "AI 서비스를 사용할 수 없습니다."); return; }
-      if (body.data.changes.length === 0) { setError("정리할 항목이 없습니다."); return; }
-      setCleanupChanges(body.data.changes);
-    } catch { setError("AI 서비스를 사용할 수 없습니다."); }
-    finally { setAiLoading(false); }
+      if (editSchedule) {
+        const res = await fetch(`${BASE}/api/schedules/${editSchedule.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const body = await res.json();
+        if (body.data) {
+          setSchedules((prev) =>
+            prev.map((s) => (s.id === editSchedule.id ? body.data : s))
+          );
+        }
+      } else {
+        const res = await fetch(`${BASE}/api/schedules`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const body = await res.json();
+        if (body.data) setSchedules((prev) => [...prev, body.data]);
+      }
+    } catch (err) {
+      console.error("Failed to save schedule:", err);
+    }
+    setShowAddSchedule(false);
+    setEditSchedule(null);
   };
 
-  const handleApplyCleanup = async (accepted: AiCleanupChange[]) => {
-    try {
-      await fetch(`${BASE}/api/ai/cleanup/apply`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quadrant: activeQuadrant, changes: accepted }),
-      });
-      setCleanupChanges(null);
-      await fetchTodos();
-    } catch { setError("정리 적용에 실패했습니다."); }
+  const deleteSchedule = async (id: string) => {
+    setSchedules((prev) => prev.filter((s) => s.id !== id));
+    await fetch(`${BASE}/api/schedules/${id}`, { method: "DELETE" });
+    setShowAddSchedule(false);
+    setEditSchedule(null);
   };
 
-  const handleBriefing = async () => {
-    setAiLoading(true);
+  const loadBriefing = async () => {
+    setShowBriefing(true);
+    setBriefingLoading(true);
     try {
       const res = await fetch(`${BASE}/api/ai/briefing`);
-      const body: ApiResponse<AiBriefingResponse> = await res.json();
-      if (!res.ok || !body.data) { setError(body.error || "AI 서비스를 사용할 수 없습니다."); return; }
-      setBriefing(body.data.briefing);
-    } catch { setError("AI 서비스를 사용할 수 없습니다."); }
-    finally { setAiLoading(false); }
+      const body = await res.json();
+      setBriefingText(body.data?.briefing ?? "브리핑을 불러올 수 없습니다.");
+    } catch {
+      setBriefingText("AI 서비스를 사용할 수 없습니다.");
+    } finally {
+      setBriefingLoading(false);
+    }
   };
 
-  const handleEdit = async (id: string, updates: UpdateTodoRequest) => {
-    try {
-      const res = await fetch(`${BASE}/api/todos/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updates),
-      });
-      if (!res.ok) {
-        const body: ApiResponse<null> = await res.json();
-        setError(body.error || "수정에 실패했습니다.");
-        return;
-      }
-      setEditingTodo(null);
-      await fetchTodos();
-    } catch { setError("수정에 실패했습니다."); }
-  };
+  const filteredTodos = todos.filter((t) => t.stage === todoTab && !t.completed);
+  const filteredSchedules = schedules
+    .filter((s) => (ddayTab === "general" ? s.type === "general" : s.type === "anniversary"))
+    .sort((a, b) => new Date(a.targetDate).getTime() - new Date(b.targetDate).getTime());
 
-  const handleEditDelete = async (id: string) => {
-    setEditingTodo(null);
-    await handleDelete(id);
-  };
-
-  /* ── Loading State ── */
   if (loading) {
     return (
-      <main className="min-h-dvh flex items-center justify-center" style={{ background: "var(--sys-bg)" }}>
-        <div className="flex flex-col items-center gap-4 item-enter">
-          <div
-            className="w-[48px] h-[48px] rounded-[14px] flex items-center justify-center"
-            style={{ background: "var(--sys-fill-quaternary)" }}
-          >
-            <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
-              <path
-                d="M6 14L12 20L22 8"
-                stroke="var(--sys-blue)"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-          <div
-            className="w-6 h-6 rounded-full border-[2px] border-t-transparent"
-            style={{
-              borderColor: "var(--sys-separator-opaque)",
-              borderTopColor: "transparent",
-              animation: "spin 0.8s linear infinite",
-            }}
-          />
-        </div>
-      </main>
+      <div className="flex items-center justify-center h-dvh">
+        <div className="w-6 h-6 border-2 border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+      </div>
     );
   }
-
-  /* ── Empty State ── */
-  if (todos.length === 0) {
-    return (
-      <main
-        className="min-h-dvh flex flex-col items-center justify-center px-6"
-        style={{ background: "var(--sys-bg)" }}
-      >
-        <div className="flex flex-col items-center w-full max-w-sm item-enter">
-          {/* Matrix illustration */}
-          <div className="mb-8">
-            <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
-              <rect x="4" y="4" width="42" height="42" rx="10" fill="var(--q-urgent-important-tint)" stroke="var(--q-urgent-important)" strokeWidth="1" opacity="0.8" />
-              <rect x="54" y="4" width="42" height="42" rx="10" fill="var(--q-not-urgent-important-tint)" stroke="var(--q-not-urgent-important)" strokeWidth="1" opacity="0.6" />
-              <rect x="4" y="54" width="42" height="42" rx="10" fill="var(--q-urgent-not-important-tint)" stroke="var(--q-urgent-not-important)" strokeWidth="1" opacity="0.6" />
-              <rect x="54" y="54" width="42" height="42" rx="10" fill="var(--q-not-urgent-not-important-tint)" stroke="var(--q-not-urgent-not-important)" strokeWidth="1" opacity="0.4" />
-              <path d="M18 25l4 4 8-8" stroke="var(--q-urgent-important)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M68 25l4 4 8-8" stroke="var(--q-not-urgent-important)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-          <h1 className="text-[28px] font-bold mb-2" style={{ color: "var(--sys-label)" }}>
-            v-todo
-          </h1>
-          <p
-            className="text-[16px] text-center mb-10 leading-relaxed"
-            style={{ color: "var(--sys-label-tertiary)" }}
-          >
-            아이젠하워 매트릭스로<br />할 일의 우선순위를 관리하세요
-          </p>
-          <div className="w-full ios-card">
-            <TodoInput quadrant="urgent-important" onAdd={handleAdd} />
-          </div>
-        </div>
-        {error && <Toast message={error} onClose={() => setError(null)} />}
-      </main>
-    );
-  }
-
-  /* ── Main ── */
-  const activeTodos = todos.filter((t) => t.quadrant === activeQuadrant);
 
   return (
-    <main className="min-h-dvh flex flex-col" style={{ background: "var(--sys-bg)" }}>
-      {/* Navigation Bar */}
-      <header className="ios-navbar sticky top-0 z-30 safe-area-pt">
-        <div className="flex items-center justify-between px-7 md:px-12 h-[44px]">
-          <span className="text-[17px] font-semibold md:block hidden" style={{ color: "var(--sys-label)" }}>
-            v-todo
-          </span>
-          <span className="text-[17px] font-semibold md:hidden" style={{ color: "var(--sys-label)" }}>
-            &nbsp;
-          </span>
+    <div className="flex flex-col h-dvh bg-[var(--bg-primary)]">
+      <header className="flex items-center justify-between px-5 pt-3 pb-2 safe-area-pt">
+        <h1 className="text-[20px] font-bold text-[var(--label-primary)]">v-todo</h1>
+        <div className="flex items-center gap-2">
+          {section === "todo" && (
+            <button
+              className="p-2 text-[var(--label-tertiary)] hover:text-[var(--label-primary)]"
+              onClick={() => setShowArchive(true)}
+              title="보관함"
+            >
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 5h14l-1.5 10H4.5L3 5z" />
+                <path d="M2 5h16" />
+                <path d="M8 9h4" />
+              </svg>
+            </button>
+          )}
           <button
-            onClick={handleBriefing}
-            disabled={aiLoading}
-            className="text-[15px] font-medium disabled:opacity-40 transition-opacity active:opacity-60"
-            style={{ color: "var(--sys-blue)" }}
+            className="px-3 py-1.5 text-[13px] font-medium text-[var(--accent-primary)] rounded-lg hover:bg-[var(--fill-quaternary)]"
+            onClick={loadBriefing}
           >
             브리핑
           </button>
         </div>
       </header>
 
-      {/* Large Title — mobile only */}
-      <div className="md:hidden px-7 pt-1 pb-2">
-        <h1 className="text-[34px] font-bold tracking-tight" style={{ color: "var(--sys-label)" }}>
-          v-todo
-        </h1>
-      </div>
-
-      {/* Desktop: 2x2 Grid */}
-      <QuadrantGrid
-        todos={todos}
-        activeQuadrant={activeQuadrant}
-        onSelectQuadrant={setActiveQuadrant}
-        onAdd={handleAdd}
-        onToggle={handleToggle}
-        onDelete={handleDelete}
-        onEdit={(todo) => setEditingTodo(todo)}
-      />
-
-      {/* Mobile: Single quadrant */}
-      <div className="flex-1 md:hidden overflow-hidden px-5 pb-[88px]">
-        <QuadrantPanel
-          quadrant={activeQuadrant}
-          todos={activeTodos}
-          isActive={true}
-          onSelect={() => {}}
-          onAdd={handleAdd}
-          onToggle={handleToggle}
-          onDelete={handleDelete}
-          onEdit={(todo) => setEditingTodo(todo)}
+      {section === "todo" ? (
+        <SectionTabs
+          tabs={[
+            { key: "now", label: "지금" },
+            { key: "soon", label: "곧" },
+          ]}
+          active={todoTab}
+          onChange={(key) => setTodoTab(key as "now" | "soon")}
         />
-      </div>
-
-      <TabBar active={activeQuadrant} onChange={setActiveQuadrant} />
-
-      <AiActions onSuggest={handleSuggest} onCleanup={handleCleanup} loading={aiLoading} />
-
-      {suggestions && (
-        <AiSuggestPreview suggestions={suggestions} onAccept={handleAcceptSuggestions} onClose={() => setSuggestions(null)} />
-      )}
-      {cleanupChanges && (
-        <AiCleanupDiff changes={cleanupChanges} onApply={handleApplyCleanup} onClose={() => setCleanupChanges(null)} />
-      )}
-      {briefing && (
-        <BriefingModal briefing={briefing} onClose={() => setBriefing(null)} />
-      )}
-
-      {editingTodo && (
-        <TodoEditSheet
-          todo={editingTodo}
-          onSave={handleEdit}
-          onDelete={handleEditDelete}
-          onClose={() => setEditingTodo(null)}
+      ) : (
+        <SectionTabs
+          tabs={[
+            { key: "general", label: "D-day" },
+            { key: "anniversary", label: "기념일" },
+          ]}
+          active={ddayTab}
+          onChange={(key) => setDdayTab(key as "general" | "anniversary")}
         />
       )}
 
-      {error && <Toast message={error} onClose={() => setError(null)} />}
-    </main>
+      <main className="flex-1 overflow-y-auto pb-24">
+        {section === "todo" ? (
+          <>
+            {filteredTodos.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-64 text-[var(--label-quaternary)]">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="mb-3 opacity-40">
+                  <rect x="6" y="6" width="28" height="28" rx="4" />
+                  <path d="M14 20l4 4 8-8" />
+                </svg>
+                <p className="text-[14px]">할 일을 추가해보세요</p>
+              </div>
+            ) : (
+              filteredTodos.map((todo) => (
+                <TodoItem
+                  key={todo.id}
+                  todo={todo}
+                  onToggle={toggleTodo}
+                  onDelete={deleteTodo}
+                />
+              ))
+            )}
+            <TodoInput onAdd={addTodo} />
+          </>
+        ) : (
+          <>
+            {filteredSchedules.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-64 text-[var(--label-quaternary)]">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5" className="mb-3 opacity-40">
+                  <circle cx="20" cy="20" r="14" />
+                  <polyline points="20 12 20 20 26 23" />
+                </svg>
+                <p className="text-[14px]">일정을 추가해보세요</p>
+              </div>
+            ) : (
+              filteredSchedules.map((schedule) => (
+                <ScheduleItem
+                  key={schedule.id}
+                  schedule={schedule}
+                  onEdit={(s) => {
+                    setEditSchedule(s);
+                    setShowAddSchedule(true);
+                  }}
+                />
+              ))
+            )}
+            <div className="px-4 py-3">
+              <button
+                className="w-full py-3 rounded-2xl bg-[var(--fill-quaternary)] text-[var(--accent-primary)] text-[15px] font-medium hover:bg-[var(--fill-tertiary)] transition-colors"
+                onClick={() => {
+                  setEditSchedule(null);
+                  setShowAddSchedule(true);
+                }}
+              >
+                + 새 일정
+              </button>
+            </div>
+          </>
+        )}
+      </main>
+
+      <BottomNav active={section} onChange={setSection} />
+
+      {showArchive && (
+        <ArchiveView
+          todos={todos}
+          onToggle={toggleTodo}
+          onDelete={deleteTodo}
+          onClose={() => setShowArchive(false)}
+        />
+      )}
+
+      {showAddSchedule && (
+        <AddScheduleSheet
+          schedule={editSchedule}
+          defaultType={ddayTab === "anniversary" ? "anniversary" : "general"}
+          onSave={saveSchedule}
+          onDelete={editSchedule ? deleteSchedule : undefined}
+          onClose={() => {
+            setShowAddSchedule(false);
+            setEditSchedule(null);
+          }}
+        />
+      )}
+
+      {showBriefing && (
+        <BriefingModal
+          briefing={briefingLoading ? "브리핑을 생성하고 있습니다..." : briefingText}
+          onClose={() => setShowBriefing(false)}
+        />
+      )}
+
+      {undoItem && (
+        <UndoToast
+          message={`"${undoItem.todo.title}" 완료됨`}
+          onUndo={undoComplete}
+          onDismiss={() => setUndoItem(null)}
+        />
+      )}
+    </div>
   );
 }
