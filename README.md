@@ -37,6 +37,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.2.3 - 2026-03-30
+- **Feature**: Swipe gesture to switch tabs (지금/곧, D-day/기념일)
+- **Fix**: Briefing date showing previous day (UTC→KST timezone fix in prompts.ts)
+- **Fix**: React Error #310 — move useRef to component top level (hooks rules)
+- **Docs**: Add deployment procedure and code rules to CLAUDE.md
+
 ### v0.2.2 - 2026-03-30
 - **Improve**: Apple HIG typography compliance — all text sizes increased for better mobile readability
 - **Improve**: Body text 16→20px, secondary text 12→15px, segment tabs 13→17px, sheet titles 17→20px, D-day labels 20→24px

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import type { Todo, Schedule, ScheduleType, RepeatMode } from "@/types";
 import BottomNav from "@/components/BottomNav";
 import SectionTabs from "@/components/SectionTabs";
@@ -34,6 +34,9 @@ export default function Home() {
     todo: Todo;
     timeout: NodeJS.Timeout;
   } | null>(null);
+
+  /* ── Swipe gesture ── */
+  const touchRef = useRef<{ x: number; y: number; time: number } | null>(null);
 
   const fetchTodos = useCallback(async () => {
     try {
@@ -286,6 +289,35 @@ export default function Home() {
     </aside>
   );
 
+  const handleSwipe = (dir: "left" | "right") => {
+    if (section === "todo") {
+      if (dir === "left" && todoTab === "now") setTodoTab("soon");
+      if (dir === "right" && todoTab === "soon") setTodoTab("now");
+    } else {
+      if (dir === "left" && ddayTab === "general") setDdayTab("anniversary");
+      if (dir === "right" && ddayTab === "anniversary") setDdayTab("general");
+    }
+  };
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    touchRef.current = { x: t.clientX, y: t.clientY, time: Date.now() };
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touchRef.current) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchRef.current.x;
+    const dy = t.clientY - touchRef.current.y;
+    const dt = Date.now() - touchRef.current.time;
+    touchRef.current = null;
+
+    // 최소 60px 수평 이동, 수직보다 수평이 커야 함, 500ms 이내
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 500) {
+      handleSwipe(dx < 0 ? "left" : "right");
+    }
+  };
+
   /* ── Content Area ── */
   const Content = () => (
     <div className="flex-1 flex flex-col h-dvh overflow-hidden">
@@ -351,7 +383,11 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto pb-20 md:pb-8">
+      <main
+        className="flex-1 overflow-y-auto pb-20 md:pb-8"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
         <div className="md:px-8">
           {section === "todo" ? (
             <>
