@@ -37,6 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.3.1 - 2026-03-31
+- **Improve**: AI 브리핑에 오늘/어제 데일리 노트 내용을 포함하여 더 풍부한 맥락 제공
+
 ### v0.3.0 - 2026-03-31
 - **Feature**: Notes section — new 3rd tab (할 일 / 노트 / D-day) with two sub-tabs
 - **Feature**: Daily Notes — date-navigated markdown journal with CodeMirror v6 editor, auto-save (1s debounce + focus-out)

@@ -8,7 +8,13 @@ function daysUntil(dateStr: string): number {
   return Math.ceil((target.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 }
 
-export function buildBriefingPrompt(todos: Todo[], schedules: Schedule[]): string {
+export function buildBriefingPrompt(
+  todos: Todo[],
+  schedules: Schedule[],
+  todayNote?: string,
+  yesterdayNote?: string,
+  yesterdayDate?: string,
+): string {
   const now = new Date();
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
@@ -31,6 +37,15 @@ export function buildBriefingPrompt(todos: Todo[], schedules: Schedule[]): strin
     })
     .join("\n");
 
+  const noteSections: string[] = [];
+  if (todayNote?.trim()) {
+    noteSections.push(`## 오늘의 데일리 노트 (${today})\n${todayNote.trim()}`);
+  }
+  if (yesterdayNote?.trim()) {
+    noteSections.push(`## 어제의 데일리 노트 (${yesterdayDate})\n${yesterdayNote.trim()}`);
+  }
+  const dailyNoteBlock = noteSections.length > 0 ? "\n" + noteSections.join("\n\n") + "\n" : "";
+
   return `당신은 일일 업무 브리핑 도우미입니다.
 오늘 날짜: ${today}
 
@@ -39,12 +54,12 @@ ${todoList || "(할 일이 없습니다)"}
 
 ## D-day / 일정
 ${scheduleList || "(등록된 일정이 없습니다)"}
-
+${dailyNoteBlock}
 위 내용을 종합하여 오늘의 브리핑을 작성해주세요:
 1. 오늘 집중해야 할 항목 ("지금" 단계의 할 일 우선)
 2. 곧 단계로 넘어갈 위험이 있는 항목 (3일 임박)
 3. 다가오는 D-day (14일 이내)
 4. 오늘/이번 주 기념일
-
+${dailyNoteBlock ? "5. 데일리 노트에 적힌 내용 중 오늘 브리핑에 참고할 만한 사항\n" : ""}
 간결하고 실행 가능한 마크다운 형식으로 응답하세요.`;
 }
