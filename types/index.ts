@@ -87,3 +87,13 @@ export const STAGE_LABELS: Record<Stage, string> = {
 export const VALID_STAGES: Stage[] = ["now", "soon", "archive"];
 export const VALID_SCHEDULE_TYPES: ScheduleType[] = ["general", "anniversary"];
 export const VALID_REPEAT_MODES: RepeatMode[] = ["none", "every_100_days", "monthly", "yearly"];
+
+// Notes
+export type Section = "todo" | "note" | "dday";
+export type NoteTab = "daily" | "general";
+
+export interface FileItem {
+  name: string;
+  type: "file" | "directory";
+  modifiedAt: string;
+}

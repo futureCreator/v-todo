@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { Todo, Schedule, ScheduleType, RepeatMode } from "@/types";
+import type { Todo, Schedule, ScheduleType, RepeatMode, Section, NoteTab } from "@/types";
 import BottomNav from "@/components/BottomNav";
 import SectionTabs from "@/components/SectionTabs";
 import TodoItem from "@/components/TodoItem";
@@ -11,13 +11,16 @@ import AddScheduleSheet from "@/components/AddScheduleSheet";
 import UndoToast from "@/components/UndoToast";
 import ArchiveView from "@/components/ArchiveView";
 import BriefingModal from "@/components/BriefingModal";
+import DailyNoteView from "@/components/DailyNoteView";
+import GeneralNoteView from "@/components/GeneralNoteView";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export default function Home() {
-  const [section, setSection] = useState<"todo" | "dday">("todo");
+  const [section, setSection] = useState<Section>("todo");
   const [todoTab, setTodoTab] = useState<"now" | "soon">("now");
   const [ddayTab, setDdayTab] = useState<"general" | "anniversary">("general");
+  const [noteTab, setNoteTab] = useState<NoteTab>("daily");
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -238,6 +241,29 @@ export default function Home() {
 
         <button
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
+            section === "note"
+              ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
+              : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
+          }`}
+          onClick={() => setSection("note")}
+        >
+          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "note" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "note" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
+            {section === "note" ? (
+              <path d="M5 2C3.9 2 3 2.9 3 4v14c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H5zm2 4h8v1.5H7V6zm0 3.5h8V11H7V9.5zm0 3.5h5v1.5H7V13z" />
+            ) : (
+              <>
+                <rect x="4" y="3" width="14" height="16" rx="2" />
+                <line x1="8" y1="7" x2="14" y2="7" />
+                <line x1="8" y1="11" x2="14" y2="11" />
+                <line x1="8" y1="15" x2="12" y2="15" />
+              </>
+            )}
+          </svg>
+          <span className="text-[15px] font-medium flex-1">노트</span>
+        </button>
+
+        <button
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
             section === "dday"
               ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
               : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
@@ -293,6 +319,9 @@ export default function Home() {
     if (section === "todo") {
       if (dir === "left" && todoTab === "now") setTodoTab("soon");
       if (dir === "right" && todoTab === "soon") setTodoTab("now");
+    } else if (section === "note") {
+      if (dir === "left" && noteTab === "daily") setNoteTab("general");
+      if (dir === "right" && noteTab === "general") setNoteTab("daily");
     } else {
       if (dir === "left" && ddayTab === "general") setDdayTab("anniversary");
       if (dir === "right" && ddayTab === "anniversary") setDdayTab("general");
@@ -324,7 +353,7 @@ export default function Home() {
       {/* Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-5 pt-3 pb-1 safe-area-pt">
         <h1 className="text-[38px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : "D-day"}
+          {section === "todo" ? "할 일" : section === "note" ? "노트" : "D-day"}
         </h1>
         <div className="flex items-center gap-1">
           {section === "todo" && (
@@ -355,7 +384,7 @@ export default function Home() {
       {/* Desktop Header */}
       <header className="hidden md:flex items-center justify-between px-8 pt-8 pb-2">
         <h1 className="text-[28px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : "D-day"}
+          {section === "todo" ? "할 일" : section === "note" ? "노트" : "D-day"}
         </h1>
       </header>
 
@@ -369,6 +398,15 @@ export default function Home() {
             ]}
             active={todoTab}
             onChange={(key) => setTodoTab(key as "now" | "soon")}
+          />
+        ) : section === "note" ? (
+          <SectionTabs
+            tabs={[
+              { key: "daily", label: "데일리" },
+              { key: "general", label: "노트" },
+            ]}
+            active={noteTab}
+            onChange={(key) => setNoteTab(key as NoteTab)}
           />
         ) : (
           <SectionTabs
@@ -384,12 +422,16 @@ export default function Home() {
 
       {/* Main Content */}
       <main
-        className="flex-1 overflow-y-auto pb-20 md:pb-8"
+        className={`flex-1 overflow-y-auto ${section === "note" ? "pb-[70px] md:pb-0 flex flex-col min-h-0" : "pb-20 md:pb-8"}`}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <div className="md:px-8">
-          {section === "todo" ? (
+        <div className={`${section === "note" ? "flex-1 flex flex-col min-h-0" : "md:px-8"}`}>
+          {section === "note" ? (
+            <div className="flex-1 flex flex-col min-h-0 md:px-8">
+              {noteTab === "daily" ? <DailyNoteView /> : <GeneralNoteView />}
+            </div>
+          ) : section === "todo" ? (
             <>
               {filteredTodos.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-[var(--label-tertiary)]">

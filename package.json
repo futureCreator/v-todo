@@ -1,6 +1,6 @@
 {
   "name": "v-todo",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,7 +11,14 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@codemirror/commands": "^6.10.3",
+    "@codemirror/lang-markdown": "^6.5.0",
+    "@codemirror/language": "^6.12.3",
+    "@codemirror/language-data": "^6.5.2",
+    "@codemirror/state": "^6.6.0",
+    "@codemirror/view": "^6.40.0",
     "@google/generative-ai": "^0.24.1",
+    "@lezer/highlight": "^1.2.3",
     "@tailwindcss/typography": "^0.5.19",
     "korean-lunar-calendar": "^0.3.6",
     "next": "16.2.1",

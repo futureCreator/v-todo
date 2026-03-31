@@ -37,6 +37,15 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.3.0 - 2026-03-31
+- **Feature**: Notes section — new 3rd tab (할 일 / 노트 / D-day) with two sub-tabs
+- **Feature**: Daily Notes — date-navigated markdown journal with CodeMirror v6 editor, auto-save (1s debounce + focus-out)
+- **Feature**: General Notes — file/folder based markdown notebook with create, rename, delete, navigation stack
+- **Feature**: CodeMirror v6 markdown editor with Catppuccin-themed syntax highlighting (Latte/Mocha)
+- **Feature**: API routes for daily notes (`/api/notes/daily`) and file management (`/api/notes/files`)
+- **Improve**: Bottom nav now opaque background instead of semi-transparent to prevent content bleed-through
+- **Improve**: Font sizes aligned to Apple HIG Dynamic Type across all note components (Body 20px, Footnote 15px)
+
 ### v0.2.3 - 2026-03-30
 - **Feature**: Swipe gesture to switch tabs (지금/곧, D-day/기념일)
 - **Fix**: Briefing date showing previous day (UTC→KST timezone fix in prompts.ts)
