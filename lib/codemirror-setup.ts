@@ -36,6 +36,7 @@ export const mdHighlight = HighlightStyle.define([
 export const cmTheme = EditorView.theme({
   "&": {
     flex: "1",
+    minHeight: "0",
     overflow: "hidden",
     display: "flex",
     flexDirection: "column",

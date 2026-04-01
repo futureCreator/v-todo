@@ -37,6 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.3.4 - 2026-04-01
+- **Fix**: 노트 에디터 스크롤 불가 버그 수정 — 데스크톱/모바일 모두 내용이 길어도 스크롤되지 않던 문제 해결
+
 ### v0.3.3 - 2026-04-01
 - **Improve**: 새 환경 셋업 지원 — `.env.local.example` 추가, `ecosystem.config.js` git 추적으로 전환
 - **Fix**: `ecosystem.config.js`의 `cwd`를 `__dirname`으로 변경하여 어떤 경로에서든 PM2 정상 동작
