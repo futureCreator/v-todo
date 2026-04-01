@@ -30,6 +30,7 @@ yarn-error.log*
 
 # env files
 .env*
+!.env.local.example
 
 # vercel
 .vercel
@@ -50,5 +51,4 @@ next-env.d.ts
 /data/
 /.test-data/
 
-# PM2
-ecosystem.config.js
+# PM2 (ecosystem.config.js is now tracked)

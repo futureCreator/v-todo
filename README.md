@@ -37,6 +37,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.3.3 - 2026-04-01
+- **Improve**: 새 환경 셋업 지원 — `.env.local.example` 추가, `ecosystem.config.js` git 추적으로 전환
+- **Fix**: `ecosystem.config.js`의 `cwd`를 `__dirname`으로 변경하여 어떤 경로에서든 PM2 정상 동작
+- **Fix**: `.gitignore`에서 `.env.local.example` 예외 처리 추가
+
 ### v0.3.2 - 2026-04-01
 - **Feature**: AI 주간 리뷰 — 매주 일요일 밤 데일리 노트를 분석하여 인사이트를 불릿 포인트로 추출, `weekly-review/` 폴더에 자동 저장
 - **Feature**: 직전 주 리뷰를 LLM에 함께 전달하여 연속성 있는 분석 제공
