@@ -37,6 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.4.0 - 2026-04-01
+- **Feature**: 노트 에디터 격자무늬 배경 — 다이어리 스타일의 그리드 패턴을 CodeMirror 에디터 배경에 적용, 라이트/다크 모드 자동 대응
+
 ### v0.3.4 - 2026-04-01
 - **Fix**: 노트 에디터 스크롤 불가 버그 수정 — 데스크톱/모바일 모두 내용이 길어도 스크롤되지 않던 문제 해결
 

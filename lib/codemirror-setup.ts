@@ -43,6 +43,9 @@ export const cmTheme = EditorView.theme({
     fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, sans-serif',
     fontSize: "20px",
     backgroundColor: "transparent",
+    backgroundImage:
+      "linear-gradient(var(--note-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--note-grid-color) 1px, transparent 1px)",
+    backgroundSize: "24px 24px",
   },
   ".cm-scroller": {
     flex: "1",

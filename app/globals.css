@@ -69,6 +69,9 @@
   --system-red: var(--sys-red);
   --system-orange: var(--sys-orange);
 
+  /* ── Note Grid ── */
+  --note-grid-color: rgba(76, 79, 105, 0.08);
+
   /* ── Shadows ── */
   --shadow-xs: 0 0.5px 1px rgba(76, 79, 105, 0.04);
   --shadow-sm: 0 1px 3px rgba(76, 79, 105, 0.06), 0 0.5px 1px rgba(76, 79, 105, 0.03);
@@ -114,6 +117,9 @@
 
     /* ── System Purple (Milestone labels) ── */
     --system-purple: #cba6f7;              /* Mauve */
+
+    /* ── Note Dot Pattern ── */
+    --note-grid-color: rgba(205, 214, 244, 0.06);
 
     /* ── Shadows ── */
     --shadow-xs: 0 0.5px 1px rgba(17, 17, 27, 0.2);
