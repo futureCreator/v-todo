@@ -1,11 +1,13 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import fs from "fs/promises";
 import { SCHEDULE_PATH } from "../schedule-store";
+import { DATA_DIR } from "../store";
 
 import { GET, POST } from "@/app/api/schedules/route";
 
 describe("GET /api/schedules", () => {
   beforeEach(async () => {
+    await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.writeFile(SCHEDULE_PATH, JSON.stringify({ schedules: [] }));
   });
 
@@ -19,6 +21,7 @@ describe("GET /api/schedules", () => {
 
 describe("POST /api/schedules", () => {
   beforeEach(async () => {
+    await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.writeFile(SCHEDULE_PATH, JSON.stringify({ schedules: [] }));
   });
 

@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import type { Todo, TodoStore } from "@/types";
 
-export const DATA_DIR = path.join(process.cwd(), "data");
+export const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
 export const TODO_PATH = path.join(DATA_DIR, "todos.json");
 const TMP_PATH = path.join(DATA_DIR, "todos.tmp.json");
 

@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import type { Schedule, ScheduleStore } from "@/types";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
 export const SCHEDULE_PATH = path.join(DATA_DIR, "schedules.json");
 const TMP_PATH = path.join(DATA_DIR, "schedules.tmp.json");
 

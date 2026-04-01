@@ -48,6 +48,7 @@ next-env.d.ts
 
 # data (runtime generated)
 /data/
+/.test-data/
 
 # PM2
 ecosystem.config.js

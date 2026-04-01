@@ -1,20 +1,18 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "fs/promises";
 import path from "path";
-import { readTodos, writeTodos, TODO_PATH } from "../store";
+import { readTodos, writeTodos, TODO_PATH, DATA_DIR } from "../store";
 import type { Todo } from "@/types";
-
-const TEST_DATA_DIR = path.join(process.cwd(), "data");
 
 describe("store", () => {
   beforeEach(async () => {
-    await fs.mkdir(TEST_DATA_DIR, { recursive: true });
+    await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.writeFile(TODO_PATH, JSON.stringify({ todos: [] }));
   });
 
   afterEach(async () => {
     try { await fs.unlink(TODO_PATH); } catch {}
-    try { await fs.unlink(path.join(TEST_DATA_DIR, "todos.tmp.json")); } catch {}
+    try { await fs.unlink(path.join(DATA_DIR, "todos.tmp.json")); } catch {}
   });
 
   it("reads empty todos from file", async () => {

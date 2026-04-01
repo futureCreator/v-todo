@@ -2,19 +2,18 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "fs/promises";
 import path from "path";
 import { readSchedules, writeSchedules, SCHEDULE_PATH } from "../schedule-store";
+import { DATA_DIR } from "../store";
 import type { Schedule } from "@/types";
-
-const TEST_DATA_DIR = path.join(process.cwd(), "data");
 
 describe("schedule-store", () => {
   beforeEach(async () => {
-    await fs.mkdir(TEST_DATA_DIR, { recursive: true });
+    await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.writeFile(SCHEDULE_PATH, JSON.stringify({ schedules: [] }));
   });
 
   afterEach(async () => {
     try { await fs.unlink(SCHEDULE_PATH); } catch {}
-    try { await fs.unlink(path.join(TEST_DATA_DIR, "schedules.tmp.json")); } catch {}
+    try { await fs.unlink(path.join(DATA_DIR, "schedules.tmp.json")); } catch {}
   });
 
   it("reads empty schedules", async () => {

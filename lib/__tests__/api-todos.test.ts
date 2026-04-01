@@ -1,11 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import fs from "fs/promises";
-import { TODO_PATH } from "../store";
+import { TODO_PATH, DATA_DIR } from "../store";
 
 import { GET, POST } from "@/app/api/todos/route";
 
 describe("GET /api/todos", () => {
   beforeEach(async () => {
+    await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.writeFile(TODO_PATH, JSON.stringify({ todos: [] }));
   });
 
@@ -43,6 +44,7 @@ describe("GET /api/todos", () => {
 
 describe("POST /api/todos", () => {
   beforeEach(async () => {
+    await fs.mkdir(DATA_DIR, { recursive: true });
     await fs.writeFile(TODO_PATH, JSON.stringify({ todos: [] }));
   });
 
