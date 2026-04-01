@@ -37,6 +37,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.3.2 - 2026-04-01
+- **Feature**: AI 주간 리뷰 — 매주 일요일 밤 데일리 노트를 분석하여 인사이트를 불릿 포인트로 추출, `weekly-review/` 폴더에 자동 저장
+- **Feature**: 직전 주 리뷰를 LLM에 함께 전달하여 연속성 있는 분석 제공
+- **Fix**: 테스트 실행 시 실제 데이터가 덮어쓰여지는 버그 수정 (테스트 데이터 격리)
+
 ### v0.3.1 - 2026-03-31
 - **Improve**: AI 브리핑에 오늘/어제 데일리 노트 내용을 포함하여 더 풍부한 맥락 제공
 
