@@ -63,3 +63,34 @@ ${dailyNoteBlock}
 ${dailyNoteBlock ? "5. 데일리 노트에 적힌 내용 중 오늘 브리핑에 참고할 만한 사항\n" : ""}
 간결하고 실행 가능한 마크다운 형식으로 응답하세요.`;
 }
+
+export interface DailyNoteEntry {
+  date: string;
+  day: string;
+  content: string;
+}
+
+export function buildWeeklyReviewPrompt(
+  notes: DailyNoteEntry[],
+  previousReview: string | null,
+): string {
+  const prevSection = previousReview
+    ? `\n## 이전 주 리뷰\n${previousReview}\n`
+    : "";
+
+  const noteEntries = notes
+    .map((n) => `--- ${n.day} (${n.date}) ---\n${n.content}`)
+    .join("\n\n");
+
+  return `당신은 개인 생산성 코치입니다. 아래 데일리 노트에서 인사이트를 추출하세요.
+
+규칙:
+- 불릿 포인트만 출력 (서론, 결론, 인삿말 없이)
+- 반복되는 주제, 감정 변화, 숨은 패턴, 주목할 만한 점 중심
+- 직전 주 리뷰가 제공된 경우 참고하여 연속성 있는 관찰을 포함
+- 한국어로 작성
+${prevSection}
+## 이번 주 데일리 노트
+
+${noteEntries}`;
+}
