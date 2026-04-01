@@ -73,6 +73,11 @@ export interface AiBriefingResponse {
   briefing: string;
 }
 
+export interface WeeklyReviewResponse {
+  path: string;
+  content: string;
+}
+
 export interface ApiResponse<T> {
   data?: T;
   error?: string;
