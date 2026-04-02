@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { Todo, Schedule, ScheduleType, RepeatMode, Section, NoteTab } from "@/types";
+import type { Todo, Schedule, ScheduleType, RepeatMode, Section, NoteTab, WishItem, WishCategory } from "@/types";
 import BottomNav from "@/components/BottomNav";
 import SectionTabs from "@/components/SectionTabs";
 import TodoItem from "@/components/TodoItem";
@@ -13,6 +13,8 @@ import ArchiveView from "@/components/ArchiveView";
 import BriefingModal from "@/components/BriefingModal";
 import DailyNoteView from "@/components/DailyNoteView";
 import GeneralNoteView from "@/components/GeneralNoteView";
+import WishlistView from "@/components/WishlistView";
+import AddWishSheet from "@/components/AddWishSheet";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -24,7 +26,12 @@ export default function Home() {
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [wishes, setWishes] = useState<WishItem[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [wishTab, setWishTab] = useState<WishCategory>("item");
+  const [showAddWish, setShowAddWish] = useState(false);
+  const [editWish, setEditWish] = useState<WishItem | null>(null);
 
   const [showArchive, setShowArchive] = useState(false);
   const [showAddSchedule, setShowAddSchedule] = useState(false);
@@ -61,11 +68,21 @@ export default function Home() {
     }
   }, []);
 
+  const fetchWishes = useCallback(async () => {
+    try {
+      const res = await fetch(`${BASE}/api/wishes`);
+      const body = await res.json();
+      if (body.data) setWishes(body.data);
+    } catch (err) {
+      console.error("Failed to fetch wishes:", err);
+    }
+  }, []);
+
   useEffect(() => {
-    Promise.all([fetchTodos(), fetchSchedules()]).finally(() =>
+    Promise.all([fetchTodos(), fetchSchedules(), fetchWishes()]).finally(() =>
       setLoading(false)
     );
-  }, [fetchTodos, fetchSchedules]);
+  }, [fetchTodos, fetchSchedules, fetchWishes]);
 
   // Todo actions
   const addTodo = async (title: string) => {
@@ -161,6 +178,72 @@ export default function Home() {
     await fetch(`${BASE}/api/schedules/${id}`, { method: "DELETE" });
     setShowAddSchedule(false);
     setEditSchedule(null);
+  };
+
+  // Wish actions
+  const saveWish = async (data: {
+    title: string;
+    category: WishCategory;
+    price: number | null;
+    url: string | null;
+    imageUrl: string | null;
+    memo: string | null;
+  }) => {
+    try {
+      if (editWish) {
+        const res = await fetch(`${BASE}/api/wishes/${editWish.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const body = await res.json();
+        if (body.data) {
+          setWishes((prev) =>
+            prev.map((w) => (w.id === editWish.id ? body.data : w))
+          );
+        }
+      } else {
+        const res = await fetch(`${BASE}/api/wishes`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const body = await res.json();
+        if (body.data) setWishes((prev) => [...prev, body.data]);
+      }
+    } catch (err) {
+      console.error("Failed to save wish:", err);
+    }
+    setShowAddWish(false);
+    setEditWish(null);
+  };
+
+  const toggleWish = async (id: string) => {
+    const wish = wishes.find((w) => w.id === id);
+    if (!wish) return;
+    const newCompleted = !wish.completed;
+    setWishes((prev) =>
+      prev.map((w) => (w.id === id ? { ...w, completed: newCompleted } : w))
+    );
+    try {
+      await fetch(`${BASE}/api/wishes/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed: newCompleted }),
+      });
+    } catch (err) {
+      console.error("Failed to toggle wish:", err);
+      setWishes((prev) =>
+        prev.map((w) => (w.id === id ? { ...w, completed: wish.completed } : w))
+      );
+    }
+  };
+
+  const deleteWish = async (id: string) => {
+    setWishes((prev) => prev.filter((w) => w.id !== id));
+    await fetch(`${BASE}/api/wishes/${id}`, { method: "DELETE" });
+    setShowAddWish(false);
+    setEditWish(null);
   };
 
   // Briefing
@@ -264,6 +347,27 @@ export default function Home() {
 
         <button
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
+            section === "wish"
+              ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
+              : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
+          }`}
+          onClick={() => setSection("wish")}
+        >
+          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "wish" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "wish" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
+            {section === "wish" ? (
+              <path d="M11 1.5l2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.6-5 2.6 1-5.6-4.1-4 5.6-.8L11 1.5z" />
+            ) : (
+              <polygon points="11 2 13.9 7.6 20 8.5 15.5 12.9 16.6 19 11 16 5.4 19 6.5 12.9 2 8.5 8.1 7.6" />
+            )}
+          </svg>
+          <span className="text-[15px] font-medium flex-1">위시리스트</span>
+          {wishes.filter((w) => !w.completed).length > 0 && (
+            <span className="text-[13px] text-[var(--label-tertiary)]">{wishes.filter((w) => !w.completed).length}</span>
+          )}
+        </button>
+
+        <button
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
             section === "dday"
               ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
               : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
@@ -322,6 +426,9 @@ export default function Home() {
     } else if (section === "note") {
       if (dir === "left" && noteTab === "daily") setNoteTab("general");
       if (dir === "right" && noteTab === "general") setNoteTab("daily");
+    } else if (section === "wish") {
+      if (dir === "left" && wishTab === "item") setWishTab("experience");
+      if (dir === "right" && wishTab === "experience") setWishTab("item");
     } else {
       if (dir === "left" && ddayTab === "general") setDdayTab("anniversary");
       if (dir === "right" && ddayTab === "anniversary") setDdayTab("general");
@@ -353,7 +460,7 @@ export default function Home() {
       {/* Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-5 pt-3 pb-1 safe-area-pt">
         <h1 className="text-[38px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : section === "note" ? "노트" : "D-day"}
+          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "wish" ? "위시리스트" : "D-day"}
         </h1>
         <div className="flex items-center gap-1">
           {section === "todo" && (
@@ -384,7 +491,7 @@ export default function Home() {
       {/* Desktop Header */}
       <header className="hidden md:flex items-center justify-between px-8 pt-8 pb-2">
         <h1 className="text-[28px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : section === "note" ? "노트" : "D-day"}
+          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "wish" ? "위시리스트" : "D-day"}
         </h1>
       </header>
 
@@ -408,7 +515,7 @@ export default function Home() {
             active={noteTab}
             onChange={(key) => setNoteTab(key as NoteTab)}
           />
-        ) : (
+        ) : section === "wish" ? null : (
           <SectionTabs
             tabs={[
               { key: "general", label: `D-day${ddayCount > 0 ? ` ${ddayCount}` : ""}` },
@@ -431,6 +538,16 @@ export default function Home() {
             <div className="flex-1 flex flex-col min-h-0 md:px-8">
               {noteTab === "daily" ? <DailyNoteView /> : <GeneralNoteView />}
             </div>
+          ) : section === "wish" ? (
+            <WishlistView
+              wishes={wishes}
+              wishTab={wishTab}
+              onTabChange={setWishTab}
+              onToggle={toggleWish}
+              onEdit={(w) => { setEditWish(w); setShowAddWish(true); }}
+              onDelete={deleteWish}
+              onAdd={() => { setEditWish(null); setShowAddWish(true); }}
+            />
           ) : section === "todo" ? (
             <>
               {filteredTodos.length === 0 ? (
@@ -539,6 +656,15 @@ export default function Home() {
             setShowAddSchedule(false);
             setEditSchedule(null);
           }}
+        />
+      )}
+      {showAddWish && (
+        <AddWishSheet
+          wish={editWish}
+          defaultCategory={wishTab}
+          onSave={saveWish}
+          onDelete={editWish ? deleteWish : undefined}
+          onClose={() => { setShowAddWish(false); setEditWish(null); }}
         />
       )}
       {showBriefing && (
