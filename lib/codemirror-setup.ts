@@ -22,7 +22,7 @@ export const mdHighlight = HighlightStyle.define([
   {
     tag: tags.monospace,
     fontFamily: 'var(--font-mono, "JetBrains Mono", monospace)',
-    fontSize: "0.85em",
+    fontSize: "0.75em",
   },
   { tag: tags.url, textDecoration: "underline" },
   { tag: tags.link, textDecoration: "underline" },

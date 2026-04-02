@@ -37,6 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.4.2 - 2026-04-02
+- **Fix**: 노트 에디터 코드 블록 글자 크기를 0.85em에서 0.75em으로 추가 축소
+
 ### v0.4.1 - 2026-04-02
 - **Fix**: 노트 에디터 코드 블록(monospace) 글자 크기를 본문 대비 0.85em으로 축소
 
