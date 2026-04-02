@@ -47,21 +47,17 @@ export default function WishlistView({
         onChange={(key) => onTabChange(key as WishCategory)}
       />
 
-      {/* Active wish items */}
+      {/* Active wish items — 2-column grid */}
       {active.length > 0 && (
-        <div className="mx-4 md:mx-0 mt-3 bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden">
-          {active.map((wish, index) => (
-            <div key={wish.id}>
-              {index > 0 && (
-                <div className="mx-4 h-px bg-[var(--fill-quaternary)]" />
-              )}
-              <WishItemCard
-                wish={wish}
-                onToggle={onToggle}
-                onEdit={onEdit}
-                onDelete={onDelete}
-              />
-            </div>
+        <div className="mx-4 md:mx-0 mt-3 grid grid-cols-2 gap-3">
+          {active.map((wish) => (
+            <WishItemCard
+              key={wish.id}
+              wish={wish}
+              onToggle={onToggle}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
           ))}
         </div>
       )}
@@ -76,23 +72,19 @@ export default function WishlistView({
 
       {/* Completed section */}
       {completed.length > 0 && (
-        <div className="mx-4 md:mx-0 mt-4">
+        <div className="mx-4 md:mx-0 mt-6">
           <div className="text-[15px] font-medium text-[var(--label-tertiary)] mb-2 px-1">
             완료 {completed.length}
           </div>
-          <div className="bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden">
-            {completed.map((wish, index) => (
-              <div key={wish.id}>
-                {index > 0 && (
-                  <div className="mx-4 h-px bg-[var(--fill-quaternary)]" />
-                )}
-                <WishItemCard
-                  wish={wish}
-                  onToggle={onToggle}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                />
-              </div>
+          <div className="grid grid-cols-2 gap-3">
+            {completed.map((wish) => (
+              <WishItemCard
+                key={wish.id}
+                wish={wish}
+                onToggle={onToggle}
+                onEdit={onEdit}
+                onDelete={onDelete}
+              />
             ))}
           </div>
         </div>

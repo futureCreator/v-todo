@@ -37,6 +37,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.5.0 - 2026-04-03
+- **Feature**: 위시리스트 — 사고 싶은 물건과 하고 싶은 경험을 카드형 UI로 관리
+- **Feature**: 위시 카드에 이미지(URL), 가격, 메모, 링크 지원 — 이미지가 상단에 크게 표시되는 2열 그리드 레이아웃
+- **Feature**: 물건/경험 내부 탭으로 카테고리 구분, 완료 토글 및 삭제 지원
+- **Feature**: 메인 탭 순서 변경 (할 일 / 노트 / 위시리스트 / 디데이)
+- **Feature**: 위시 API (`/api/wishes`, `/api/wishes/[id]`) — CRUD 엔드포인트 및 JSON 파일 저장소
+
 ### v0.4.2 - 2026-04-02
 - **Fix**: 노트 에디터 코드 블록 글자 크기를 0.85em에서 0.75em으로 추가 축소
 

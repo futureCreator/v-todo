@@ -13,31 +13,10 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete }: WishItemP
   const categoryEmoji = wish.category === "item" ? "🛍️" : "⭐";
 
   return (
-    <div className={`flex items-center gap-3.5 px-4 min-h-[72px] py-2 ${wish.completed ? "opacity-40" : ""}`}>
-      {/* Checkbox */}
+    <div className={`relative rounded-2xl overflow-hidden bg-[var(--sys-bg-elevated)] transition-opacity ${wish.completed ? "opacity-50" : ""}`}>
+      {/* Image area */}
       <button
-        className="flex-shrink-0 w-[44px] h-[44px] flex items-center justify-center"
-        onClick={() => onToggle(wish.id)}
-        aria-label={wish.completed ? "완료 취소" : "완료 표시"}
-      >
-        <div
-          className={`w-[28px] h-[28px] rounded-full flex items-center justify-center transition-colors ${
-            wish.completed
-              ? "bg-[var(--accent-primary)]"
-              : "border-2 border-[var(--fill-tertiary)]"
-          }`}
-        >
-          {wish.completed && (
-            <svg width="14" height="11" viewBox="0 0 14 11" fill="none">
-              <path d="M1.5 5.5L5.5 9.5L12.5 1.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          )}
-        </div>
-      </button>
-
-      {/* Thumbnail */}
-      <button
-        className="flex-shrink-0 w-[52px] h-[52px] rounded-xl overflow-hidden"
+        className="w-full aspect-[4/3] relative"
         onClick={() => onEdit(wish)}
         aria-label="위시 편집"
       >
@@ -47,52 +26,74 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete }: WishItemP
             style={{ backgroundImage: `url(${wish.imageUrl})` }}
           />
         ) : (
-          <div className="w-full h-full bg-[var(--fill-quaternary)] flex items-center justify-center text-[24px]">
-            {categoryEmoji}
+          <div className="w-full h-full bg-[var(--fill-quaternary)] flex items-center justify-center">
+            <span className="text-[48px] opacity-40">{categoryEmoji}</span>
+          </div>
+        )}
+        {/* Completed overlay */}
+        {wish.completed && (
+          <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <circle cx="20" cy="20" r="18" fill="var(--accent-primary)" />
+              <path d="M12 20L18 26L28 14" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </div>
         )}
       </button>
 
       {/* Content */}
-      <button
-        className="flex-1 min-w-0 text-left"
-        onClick={() => onEdit(wish)}
-        aria-label="위시 편집"
-      >
-        <div
-          className={`text-[20px] leading-[26px] font-semibold text-[var(--label-primary)] truncate ${
-            wish.completed ? "line-through" : ""
-          }`}
+      <div className="px-3 pt-2.5 pb-3">
+        <button
+          className="w-full text-left"
+          onClick={() => onEdit(wish)}
         >
-          {wish.title}
-        </div>
-        <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
+          <div className={`text-[17px] leading-[22px] font-semibold text-[var(--label-primary)] line-clamp-2 ${wish.completed ? "line-through" : ""}`}>
+            {wish.title}
+          </div>
           {wish.price != null && (
-            <span className="text-[15px] text-[var(--accent-primary)] font-medium flex-shrink-0">
+            <div className="text-[15px] text-[var(--accent-primary)] font-medium mt-1">
               {wish.price.toLocaleString("ko-KR")}원
-            </span>
-          )}
-          {wish.price != null && wish.memo && (
-            <span className="text-[15px] text-[var(--label-quaternary)] flex-shrink-0">·</span>
+            </div>
           )}
           {wish.memo && (
-            <span className="text-[15px] text-[var(--label-tertiary)] truncate">
+            <div className="text-[13px] text-[var(--label-tertiary)] mt-0.5 truncate">
               {wish.memo}
-            </span>
+            </div>
           )}
-        </div>
-      </button>
+        </button>
 
-      {/* Delete button */}
-      <button
-        className="flex-shrink-0 w-[44px] h-[44px] flex items-center justify-center"
-        onClick={() => onDelete(wish.id)}
-        aria-label="위시 삭제"
-      >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M2 2L14 14M14 2L2 14" stroke="var(--label-quaternary)" strokeWidth="2" strokeLinecap="round" />
-        </svg>
-      </button>
+        {/* Bottom actions */}
+        <div className="flex items-center justify-between mt-2">
+          <button
+            className="w-[36px] h-[36px] flex items-center justify-center rounded-full"
+            onClick={() => onToggle(wish.id)}
+            aria-label={wish.completed ? "완료 취소" : "완료 표시"}
+          >
+            <div
+              className={`w-[24px] h-[24px] rounded-full flex items-center justify-center transition-colors ${
+                wish.completed
+                  ? "bg-[var(--accent-primary)]"
+                  : "border-2 border-[var(--fill-tertiary)]"
+              }`}
+            >
+              {wish.completed && (
+                <svg width="12" height="9" viewBox="0 0 12 9" fill="none">
+                  <path d="M1 4L4.5 7.5L11 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              )}
+            </div>
+          </button>
+          <button
+            className="w-[36px] h-[36px] flex items-center justify-center rounded-full"
+            onClick={() => onDelete(wish.id)}
+            aria-label="위시 삭제"
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1.5 1.5L12.5 12.5M12.5 1.5L1.5 12.5" stroke="var(--label-quaternary)" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
