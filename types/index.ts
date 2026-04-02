@@ -94,7 +94,7 @@ export const VALID_SCHEDULE_TYPES: ScheduleType[] = ["general", "anniversary"];
 export const VALID_REPEAT_MODES: RepeatMode[] = ["none", "every_100_days", "monthly", "yearly"];
 
 // Notes
-export type Section = "todo" | "note" | "dday";
+export type Section = "todo" | "note" | "wish" | "dday";
 export type NoteTab = "daily" | "general";
 
 export interface FileItem {
@@ -102,3 +102,44 @@ export interface FileItem {
   type: "file" | "directory";
   modifiedAt: string;
 }
+
+// Wishes
+export type WishCategory = "item" | "experience";
+
+export interface WishItem {
+  id: string;
+  title: string;
+  category: WishCategory;
+  price: number | null;
+  url: string | null;
+  imageUrl: string | null;
+  memo: string | null;
+  completed: boolean;
+  completedAt: string | null;
+  createdAt: string;
+}
+
+export interface WishStore {
+  wishes: WishItem[];
+}
+
+export interface CreateWishRequest {
+  title: string;
+  category: WishCategory;
+  price?: number | null;
+  url?: string | null;
+  imageUrl?: string | null;
+  memo?: string | null;
+}
+
+export interface UpdateWishRequest {
+  title?: string;
+  category?: WishCategory;
+  price?: number | null;
+  url?: string | null;
+  imageUrl?: string | null;
+  memo?: string | null;
+  completed?: boolean;
+}
+
+export const VALID_WISH_CATEGORIES: WishCategory[] = ["item", "experience"];
