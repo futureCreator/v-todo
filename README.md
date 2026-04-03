@@ -37,6 +37,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.5.1 - 2026-04-03
+- **Feature**: PWA 지원 — 데스크톱(Windows/Mac)에서 앱으로 설치 가능
+- **Feature**: Web App Manifest, Service Worker, 앱 아이콘(192x192, 512x512) 추가
+- **Feature**: 네트워크 우선 캐시 전략으로 오프라인 폴백 지원
+
 ### v0.5.0 - 2026-04-03
 - **Feature**: 위시리스트 — 사고 싶은 물건과 하고 싶은 경험을 카드형 UI로 관리
 - **Feature**: 위시 카드에 이미지(URL), 가격, 메모, 링크 지원 — 이미지가 상단에 크게 표시되는 2열 그리드 레이아웃

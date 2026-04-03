@@ -1,13 +1,22 @@
 import type { Metadata, Viewport } from "next";
+import ServiceWorkerRegister from "./components/ServiceWorkerRegister";
 import "./globals.css";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export const metadata: Metadata = {
   title: "v-todo",
   description: "아이젠하워 매트릭스 기반 Todo",
+  applicationName: "v-todo",
+  manifest: `${basePath}/manifest.json`,
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "v-todo",
+  },
+  icons: {
+    icon: `${basePath}/favicon.ico`,
+    apple: `${basePath}/icons/apple-touch-icon.png`,
   },
 };
 
@@ -28,7 +37,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body>{children}</body>
+      <body>
+        <ServiceWorkerRegister />
+        {children}
+      </body>
     </html>
   );
 }

@@ -1,0 +1,31 @@
+{
+  "name": "v-todo - 아이젠하워 매트릭스 Todo",
+  "short_name": "v-todo",
+  "description": "아이젠하워 매트릭스 기반 할 일 관리",
+  "start_url": "/proxy/todo/",
+  "scope": "/proxy/todo/",
+  "display": "standalone",
+  "background_color": "#1e1e2e",
+  "theme_color": "#1e1e2e",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/proxy/todo/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/proxy/todo/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/proxy/todo/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
