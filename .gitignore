@@ -46,6 +46,7 @@ next-env.d.ts
 *.png
 *.jpg
 *.jpeg
+!public/icons/*.png
 
 # data (runtime generated)
 /data/

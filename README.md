@@ -37,6 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.5.2 - 2026-04-03
+- **Fix**: PWA 아이콘 파일이 git에 포함되지 않던 문제 수정 (`.gitignore` `*.png` 예외 처리)
+
 ### v0.5.1 - 2026-04-03
 - **Feature**: PWA 지원 — 데스크톱(Windows/Mac)에서 앱으로 설치 가능
 - **Feature**: Web App Manifest, Service Worker, 앱 아이콘(192x192, 512x512) 추가
