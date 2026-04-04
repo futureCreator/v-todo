@@ -6,11 +6,13 @@
 
 ## Display Format
 ```
-2026  ████████░░░░░░░░░░░░░░░░░░░░  25.5%
+┌──────────────────────────────────┐
+│████████░░░░░░ 2026  25.5% ░░░░░░│
+└──────────────────────────────────┘
 ```
-- 왼쪽: 연도 (라벨, `--sys-label-secondary`, 13px)
-- 가운데: 프로그레스 바 (높이 4px, 둥근 끝, 배경 `--sys-fill-secondary`, 채움 `--sys-blue`)
-- 오른쪽: 퍼센트 (소수점 1자리, `--sys-label-secondary`, 13px)
+- 바가 전체 너비를 채움 (full-width)
+- 텍스트 "2026  25.5%"가 바 중앙에 겹쳐서(overlay) 표시
+- 텍스트: `--sys-label-secondary`, 13px, 중앙 정렬
 
 ## Placement
 - **Desktop**: 사이드바 최상단, 네비게이션 버튼 위
@@ -30,9 +32,9 @@
 - 레이아웃 반응형: 사이드바 너비 / 모바일 풀 너비
 
 ## Visual Style
-- 바 높이: 4px
+- 바 높이: 20px (텍스트가 겹치므로 텍스트 높이에 맞춤)
 - 바 모서리: 둥근 끝 (rounded-full)
 - 바 배경: `--sys-fill-secondary`
 - 바 채움: `--sys-blue`
-- 폰트: Pretendard 13px
-- 색상: `--sys-label-secondary`
+- 텍스트: Pretendard 13px, `--sys-label-secondary`, absolute 중앙 배치
+- 구조: relative 컨테이너 > 바(배경+채움) + absolute 텍스트 레이어
