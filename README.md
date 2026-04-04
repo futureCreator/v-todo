@@ -37,6 +37,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.6.0 - 2026-04-04
+- **Feature**: Year Progress Bar — 현재 연도 진행률을 프로그레스 바로 표시, 모든 섹션에서 동일하게 노출
+- **Feature**: 데스크탑 사이드바 상단 + 모바일 헤더 아래에 배치, 라이트/다크 테마 자동 대응
+- **Feature**: Client-only 렌더링으로 SSG hydration mismatch 방지, ARIA progressbar 접근성 지원
+
 ### v0.5.2 - 2026-04-03
 - **Fix**: PWA 아이콘 파일이 git에 포함되지 않던 문제 수정 (`.gitignore` `*.png` 예외 처리)
 
