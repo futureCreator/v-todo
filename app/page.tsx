@@ -15,6 +15,7 @@ import DailyNoteView from "@/components/DailyNoteView";
 import GeneralNoteView from "@/components/GeneralNoteView";
 import WishlistView from "@/components/WishlistView";
 import AddWishSheet from "@/components/AddWishSheet";
+import YearProgress from "@/components/YearProgress";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -296,6 +297,11 @@ export default function Home() {
         <h1 className="text-[22px] font-bold text-[var(--label-primary)]">v-todo</h1>
       </div>
 
+      {/* Year Progress */}
+      <div className="px-5 pb-4">
+        <YearProgress />
+      </div>
+
       {/* Nav items */}
       <nav className="flex-1 px-3 space-y-0.5">
         <button
@@ -494,6 +500,11 @@ export default function Home() {
           {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "wish" ? "위시리스트" : "D-day"}
         </h1>
       </header>
+
+      {/* Year Progress (mobile) */}
+      <div className="md:hidden px-5 pb-2">
+        <YearProgress />
+      </div>
 
       {/* Tabs */}
       <div className="md:px-8 pt-1 pb-2">
