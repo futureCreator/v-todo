@@ -74,7 +74,7 @@ export default function WishlistView({
       {completed.length > 0 && (
         <div className="mx-4 md:mx-0 mt-6">
           <div className="text-[15px] font-medium text-[var(--label-tertiary)] mb-2 px-1">
-            완료 {completed.length}
+            달성 {completed.length}
           </div>
           <div className="grid grid-cols-2 gap-3">
             {completed.map((wish) => (
