@@ -50,6 +50,9 @@ describe("POST /api/wishes", () => {
     expect(body.data.memo).toBe("M4 모델로");
     expect(body.data.completed).toBe(false);
     expect(body.data.completedAt).toBeNull();
+    expect(body.data.actualPrice).toBeNull();
+    expect(body.data.satisfaction).toBeNull();
+    expect(body.data.review).toBeNull();
     expect(body.data.id).toBeDefined();
     expect(body.data.createdAt).toBeDefined();
   });
@@ -118,6 +121,9 @@ describe("PUT /api/wishes/[id]", () => {
             memo: null,
             completed: false,
             completedAt: null,
+            actualPrice: null,
+            satisfaction: null,
+            review: null,
             createdAt: "2026-04-02T00:00:00Z",
           },
         ],
@@ -150,6 +156,66 @@ describe("PUT /api/wishes/[id]", () => {
     expect(body.data.completedAt).not.toBeNull();
   });
 
+  it("saves completion info with completed toggle", async () => {
+    const req = new Request("http://localhost/api/wishes/wish-test-1", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        completed: true,
+        actualPrice: 45000,
+        satisfaction: 4,
+        review: "좋았어요!",
+        completedAt: "2026-04-05T00:00:00+09:00",
+      }),
+    });
+    const res = await PUT(req, { params: Promise.resolve({ id: "wish-test-1" }) });
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.data.completed).toBe(true);
+    expect(body.data.actualPrice).toBe(45000);
+    expect(body.data.satisfaction).toBe(4);
+    expect(body.data.review).toBe("좋았어요!");
+    expect(body.data.completedAt).toBe("2026-04-05T00:00:00+09:00");
+  });
+
+  it("clears completion info when uncompleting", async () => {
+    const completeReq = new Request("http://localhost/api/wishes/wish-test-1", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        completed: true,
+        actualPrice: 45000,
+        satisfaction: 4,
+        review: "좋았어요!",
+      }),
+    });
+    await PUT(completeReq, { params: Promise.resolve({ id: "wish-test-1" }) });
+
+    const uncompleteReq = new Request("http://localhost/api/wishes/wish-test-1", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ completed: false }),
+    });
+    const res = await PUT(uncompleteReq, { params: Promise.resolve({ id: "wish-test-1" }) });
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.data.completed).toBe(false);
+    expect(body.data.completedAt).toBeNull();
+    expect(body.data.actualPrice).toBeNull();
+    expect(body.data.satisfaction).toBeNull();
+    expect(body.data.review).toBeNull();
+  });
+
+  it("rejects invalid satisfaction value", async () => {
+    const req = new Request("http://localhost/api/wishes/wish-test-1", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ satisfaction: 6 }),
+    });
+    const res = await PUT(req, { params: Promise.resolve({ id: "wish-test-1" }) });
+    expect(res.status).toBe(400);
+  });
+
   it("returns 404 for unknown id", async () => {
     const req = new Request("http://localhost/api/wishes/nonexistent", {
       method: "PUT",
@@ -178,6 +244,9 @@ describe("DELETE /api/wishes/[id]", () => {
             memo: null,
             completed: false,
             completedAt: null,
+            actualPrice: null,
+            satisfaction: null,
+            review: null,
             createdAt: "2026-04-02T00:00:00Z",
           },
         ],

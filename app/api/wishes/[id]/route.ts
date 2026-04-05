@@ -52,9 +52,35 @@ export async function PUT(
       wishes[index].memo = body.memo;
     }
 
+    if (body.actualPrice !== undefined) {
+      wishes[index].actualPrice = body.actualPrice;
+    }
+
+    if (body.satisfaction !== undefined) {
+      if (body.satisfaction !== null && (body.satisfaction < 1 || body.satisfaction > 5)) {
+        return NextResponse.json({ error: "만족도는 1~5 사이여야 합니다." }, { status: 400 });
+      }
+      wishes[index].satisfaction = body.satisfaction;
+    }
+
+    if (body.review !== undefined) {
+      wishes[index].review = body.review;
+    }
+
+    if (body.completedAt !== undefined) {
+      wishes[index].completedAt = body.completedAt;
+    }
+
     if (body.completed !== undefined) {
       wishes[index].completed = body.completed;
-      wishes[index].completedAt = body.completed ? new Date().toISOString() : null;
+      if (body.completed) {
+        wishes[index].completedAt = body.completedAt ?? new Date().toISOString();
+      } else {
+        wishes[index].completedAt = null;
+        wishes[index].actualPrice = null;
+        wishes[index].satisfaction = null;
+        wishes[index].review = null;
+      }
     }
 
     await writeWishes(wishes);

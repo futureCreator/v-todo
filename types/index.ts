@@ -116,6 +116,9 @@ export interface WishItem {
   memo: string | null;
   completed: boolean;
   completedAt: string | null;
+  actualPrice: number | null;
+  satisfaction: number | null;
+  review: string | null;
   createdAt: string;
 }
 
@@ -140,6 +143,10 @@ export interface UpdateWishRequest {
   imageUrl?: string | null;
   memo?: string | null;
   completed?: boolean;
+  completedAt?: string | null;
+  actualPrice?: number | null;
+  satisfaction?: number | null;
+  review?: string | null;
 }
 
 export const VALID_WISH_CATEGORIES: WishCategory[] = ["item", "experience"];

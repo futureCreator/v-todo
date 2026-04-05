@@ -37,6 +37,9 @@ export async function POST(
       memo: body.memo ?? null,
       completed: false,
       completedAt: null,
+      actualPrice: null,
+      satisfaction: null,
+      review: null,
       createdAt: new Date().toISOString(),
     };
 
