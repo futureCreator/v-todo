@@ -7,10 +7,11 @@ interface ArchiveViewProps {
   todos: Todo[];
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  onEdit: (id: string, title: string) => void;
   onClose: () => void;
 }
 
-export default function ArchiveView({ todos, onToggle, onDelete, onClose }: ArchiveViewProps) {
+export default function ArchiveView({ todos, onToggle, onDelete, onEdit, onClose }: ArchiveViewProps) {
   const archived = todos.filter((t) => t.stage === "archive" && !t.completed);
 
   return (
@@ -51,6 +52,7 @@ export default function ArchiveView({ todos, onToggle, onDelete, onClose }: Arch
                   todo={todo}
                   onToggle={onToggle}
                   onDelete={onDelete}
+                  onEdit={onEdit}
                 />
               ))}
             </div>

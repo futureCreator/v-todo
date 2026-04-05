@@ -126,6 +126,17 @@ export default function Home() {
     setUndoItem(null);
   };
 
+  const editTodo = async (id: string, title: string) => {
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, title } : t))
+    );
+    await fetch(`${BASE}/api/todos/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title }),
+    });
+  };
+
   const deleteTodo = async (id: string) => {
     setTodos((prev) => prev.filter((t) => t.id !== id));
     await fetch(`${BASE}/api/todos/${id}`, { method: "DELETE" });
@@ -584,6 +595,7 @@ export default function Home() {
                         todo={todo}
                         onToggle={toggleTodo}
                         onDelete={deleteTodo}
+                        onEdit={editTodo}
                       />
                     </div>
                   ))}
@@ -654,6 +666,7 @@ export default function Home() {
           todos={todos}
           onToggle={toggleTodo}
           onDelete={deleteTodo}
+          onEdit={editTodo}
           onClose={() => setShowArchive(false)}
         />
       )}

@@ -37,6 +37,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.6.1 - 2026-04-05
+- **Feature**: 할 일 인라인 편집 — 데스크톱 더블클릭 / 모바일 롱프레스(500ms)로 제목 즉시 수정
+- **Feature**: Enter로 저장, Escape로 취소, 바깥 클릭 시 자동 저장, 낙관적 업데이트 적용
+- **Feature**: 보관함에서도 동일한 인라인 편집 지원
+
 ### v0.6.0 - 2026-04-04
 - **Feature**: Year Progress Bar — 현재 연도 진행률을 프로그레스 바로 표시, 모든 섹션에서 동일하게 노출
 - **Feature**: 데스크탑 사이드바 상단 + 모바일 헤더 아래에 배치, 라이트/다크 테마 자동 대응

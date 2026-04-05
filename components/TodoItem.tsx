@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import type { Todo } from "@/types";
 
 interface TodoItemProps {
   todo: Todo;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  onEdit: (id: string, title: string) => void;
 }
 
 function ageLabel(stageMovedAt: string): string {
@@ -20,12 +21,65 @@ function ageLabel(stageMovedAt: string): string {
   return `${days}일 전`;
 }
 
-export default function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
+export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
   const [completing, setCompleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(todo.title);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+  const didLongPress = useRef(false);
 
   const handleToggle = () => {
     setCompleting(true);
     setTimeout(() => onToggle(todo.id), 350);
+  };
+
+  const startEditing = useCallback(() => {
+    setEditText(todo.title);
+    setIsEditing(true);
+  }, [todo.title]);
+
+  const commitEdit = useCallback(() => {
+    const trimmed = editText.trim();
+    if (trimmed && trimmed !== todo.title) {
+      onEdit(todo.id, trimmed);
+    }
+    setIsEditing(false);
+  }, [editText, todo.id, todo.title, onEdit]);
+
+  const cancelEdit = useCallback(() => {
+    setEditText(todo.title);
+    setIsEditing(false);
+  }, [todo.title]);
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+      inputRef.current.select();
+    }
+  }, [isEditing]);
+
+  // Long press for mobile
+  const onTouchStart = () => {
+    didLongPress.current = false;
+    longPressTimer.current = setTimeout(() => {
+      didLongPress.current = true;
+      startEditing();
+    }, 500);
+  };
+
+  const onTouchEnd = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
+  const onTouchMove = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
   };
 
   return (
@@ -61,13 +115,35 @@ export default function TodoItem({ todo, onToggle, onDelete }: TodoItemProps) {
       </button>
 
       {/* Content */}
-      <div className="flex-1 flex items-center min-h-[56px] py-3.5">
-        <span className="flex-1 text-[20px] leading-[26px] text-[var(--label-primary)]">
-          {todo.title}
-        </span>
-        <span className="text-[15px] text-[var(--label-tertiary)] ml-3 flex-shrink-0">
-          {ageLabel(todo.stageMovedAt)}
-        </span>
+      <div
+        className="flex-1 flex items-center min-h-[56px] py-3.5"
+        onDoubleClick={startEditing}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        onTouchMove={onTouchMove}
+      >
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            className="flex-1 text-[20px] leading-[26px] text-[var(--label-primary)] bg-transparent outline-none border-b-2 border-[var(--accent-primary)] caret-[var(--accent-primary)]"
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") commitEdit();
+              if (e.key === "Escape") cancelEdit();
+            }}
+            onBlur={commitEdit}
+          />
+        ) : (
+          <>
+            <span className="flex-1 text-[20px] leading-[26px] text-[var(--label-primary)]">
+              {todo.title}
+            </span>
+            <span className="text-[15px] text-[var(--label-tertiary)] ml-3 flex-shrink-0">
+              {ageLabel(todo.stageMovedAt)}
+            </span>
+          </>
+        )}
       </div>
 
       {/* Delete — 44pt tap target */}
