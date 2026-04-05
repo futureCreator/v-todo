@@ -37,6 +37,15 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.8.0 - 2026-04-05
+- **Feature**: 습관 트래커 — "할 일" 섹션에 3번째 탭("습관")으로 매일/요일/N일 간격 반복 습관 관리
+- **Feature**: 습관 체크 시 연속 달성일(스트릭) 불꽃 아이콘 표시, 탭하면 GitHub 잔디 스타일 히트맵 펼침
+- **Feature**: 히트맵 — 12px 고정 셀, 30주 렌더링 + overflow-hidden으로 카드 전체 너비 채움
+- **Feature**: 습관 추가/편집 시트 — 제목 + 반복 주기(매일/요일 선택/2~7일 간격) 설정
+- **Feature**: 감사 일기 — 데일리노트 상단에 "오늘의 감사" 3칸 입력 필드 (항상 펼침, 1초 디바운스 자동 저장)
+- **Feature**: AI 브리핑 연동 — 오늘의 습관(스트릭 포함) + 어제의 감사 일기 리마인드 섹션 추가
+- **Feature**: 습관/감사 데이터 저장소 (habits.json, habit-logs.json, gratitude.json) + API 엔드포인트
+
 ### v0.7.0 - 2026-04-05
 - **Feature**: 위시 완료 경험 개선 — 완료 토글 시 축하 시트(컨페티 애니메이션 + 카테고리별 메시지)가 열리며 완료 정보 입력
 - **Feature**: 완료 정보 기록 — 실제 구매 가격, 만족도(별 1~5), 한줄 후기, 완료일을 위시 달성 시 저장
