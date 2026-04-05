@@ -219,7 +219,8 @@ export default function HabitView() {
       {todayHabits.length === 0 && habits.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-[var(--label-tertiary)]">
           <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth="1.2" className="mb-5 opacity-30">
-            <path d="M28 8C28 8 16 22 16 32C16 38.6 21.4 44 28 44S40 38.6 40 32C40 22 28 8 28 8Z" />
+            <path d="M28 6C28 6 18 18 18 28c0 5.5 4.5 10 10 10s10-4.5 10-10C38 18 28 6 28 6z" />
+            <path d="M28 18c0 0-5 6-5 10c0 2.8 2.2 5 5 5s5-2.2 5-5c0-4-5-10-5-10z" />
           </svg>
           <p className="text-[20px]">반복하는 습관을 등록해 보세요</p>
           <p className="text-[15px] text-[var(--label-quaternary)] mt-1.5">
