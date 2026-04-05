@@ -26,9 +26,9 @@ export default function HabitHeatmap({ habit, logs, bestStreak }: HabitHeatmapPr
   const createdDate = new Date(habit.createdAt);
   createdDate.setHours(0, 0, 0, 0);
 
-  // Build 12 weeks of data (84 days ending today)
+  // Build 18 weeks of data (126 days ending today)
   const days: { date: Date; dateStr: string; scheduled: boolean; completed: boolean }[] = [];
-  for (let i = 83; i >= 0; i--) {
+  for (let i = 125; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
     const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -54,7 +54,7 @@ export default function HabitHeatmap({ habit, logs, bestStreak }: HabitHeatmapPr
   return (
     <div className="px-4 pb-4 pt-2">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-[13px] text-[var(--label-tertiary)]">최근 12주</span>
+        <span className="text-[13px] text-[var(--label-tertiary)]">최근 18주</span>
         <span className="text-[13px] text-[var(--label-tertiary)]">
           최장 연속 <span className="font-semibold text-[var(--sys-orange)]">{bestStreak}일</span>
         </span>
