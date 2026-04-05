@@ -26,9 +26,9 @@ export default function HabitHeatmap({ habit, logs, bestStreak }: HabitHeatmapPr
   const createdDate = new Date(habit.createdAt);
   createdDate.setHours(0, 0, 0, 0);
 
-  // Build 18 weeks of data (126 days ending today)
+  // Build 30 weeks of data (210 days) — overflow-hidden clips the left
   const days: { date: Date; dateStr: string; scheduled: boolean; completed: boolean }[] = [];
-  for (let i = 125; i >= 0; i--) {
+  for (let i = 209; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
     const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -54,35 +54,37 @@ export default function HabitHeatmap({ habit, logs, bestStreak }: HabitHeatmapPr
   return (
     <div className="px-4 pb-4 pt-2">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-[13px] text-[var(--label-tertiary)]">최근 18주</span>
+        <span className="text-[13px] text-[var(--label-tertiary)]">히트맵</span>
         <span className="text-[13px] text-[var(--label-tertiary)]">
           최장 연속 <span className="font-semibold text-[var(--sys-orange)]">{bestStreak}일</span>
         </span>
       </div>
-      <div className="flex gap-[3px]">
-        {weeks.map((week, wi) => (
-          <div key={wi} className="flex-1 flex flex-col gap-[3px]">
-            {week.map((day, di) => {
-              let bg: string;
-              if (day === null) {
-                bg = "transparent";
-              } else if (day.completed) {
-                bg = "var(--accent-primary)";
-              } else if (day.scheduled) {
-                bg = "var(--sys-separator-opaque)";
-              } else {
-                bg = "var(--sys-bg-secondary)";
-              }
-              return (
-                <div
-                  key={di}
-                  className="aspect-square w-full rounded-[2px]"
-                  style={{ backgroundColor: bg }}
-                />
-              );
-            })}
-          </div>
-        ))}
+      <div className="overflow-hidden">
+        <div className="flex gap-[3px] justify-end">
+          {weeks.map((week, wi) => (
+            <div key={wi} className="flex flex-col gap-[3px] flex-shrink-0">
+              {week.map((day, di) => {
+                let bg: string;
+                if (day === null) {
+                  bg = "transparent";
+                } else if (day.completed) {
+                  bg = "var(--accent-primary)";
+                } else if (day.scheduled) {
+                  bg = "var(--sys-separator-opaque)";
+                } else {
+                  bg = "var(--sys-bg-secondary)";
+                }
+                return (
+                  <div
+                    key={di}
+                    className="rounded-[2px]"
+                    style={{ width: 12, height: 12, backgroundColor: bg }}
+                  />
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
