@@ -59,9 +59,9 @@ export default function HabitHeatmap({ habit, logs, bestStreak }: HabitHeatmapPr
           최장 연속 <span className="font-semibold text-[var(--sys-orange)]">{bestStreak}일</span>
         </span>
       </div>
-      <div className="flex gap-[2px]">
+      <div className="flex gap-[3px]">
         {weeks.map((week, wi) => (
-          <div key={wi} className="flex-1 flex flex-col gap-[2px]">
+          <div key={wi} className="flex-1 flex flex-col gap-[3px]">
             {week.map((day, di) => {
               let bg: string;
               if (day === null) {
