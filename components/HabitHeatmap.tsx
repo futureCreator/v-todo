@@ -64,24 +64,25 @@ export default function HabitHeatmap({ habit, logs, bestStreak }: HabitHeatmapPr
       <div className="flex gap-[3px] overflow-x-auto">
         {weeks.map((week, wi) => (
           <div key={wi} className="flex flex-col gap-[3px]">
-            {week.map((day, di) => (
-              <div
-                key={di}
-                className="rounded-[2px]"
-                style={{
-                  width: cellSize,
-                  height: cellSize,
-                  backgroundColor: day === null
-                    ? "transparent"
-                    : !day.scheduled
-                      ? "var(--fill-quaternary)"
-                      : day.completed
-                        ? "var(--accent-primary)"
-                        : "var(--fill-tertiary)",
-                  opacity: day === null ? 0 : day.scheduled && day.completed ? 1 : day.scheduled ? 0.4 : 0.2,
-                }}
-              />
-            ))}
+            {week.map((day, di) => {
+              let className = "rounded-[2px]";
+              if (day === null) {
+                className += " bg-transparent";
+              } else if (!day.scheduled) {
+                className += " bg-[var(--fill-quaternary)]";
+              } else if (day.completed) {
+                className += " bg-[var(--accent-primary)]";
+              } else {
+                className += " bg-[var(--fill-secondary)]";
+              }
+              return (
+                <div
+                  key={di}
+                  className={className}
+                  style={{ width: cellSize, height: cellSize }}
+                />
+              );
+            })}
           </div>
         ))}
       </div>

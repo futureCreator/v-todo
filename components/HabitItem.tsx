@@ -114,8 +114,8 @@ export default function HabitItem({
           {/* Streak badge */}
           {streak > 0 && (
             <span className="flex items-center gap-1 text-[15px] text-[var(--sys-orange)] ml-3 flex-shrink-0">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="var(--sys-orange)">
-                <path d="M7 0C7 0 3 5 3 8.5C3 10.7 4.8 12.5 7 12.5S11 10.7 11 8.5C11 5 7 0 7 0Z" />
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="var(--sys-orange)">
+                <path d="M8 1C8 1 4 5.5 4 9c0 1.5.7 2.8 1.8 3.5C5.3 11.8 5 10.9 5 10c0-2 2-4.5 3-5.5c1 1 3 3.5 3 5.5c0 .9-.3 1.8-.8 2.5C11.3 11.8 12 10.5 12 9c0-3.5-4-8-4-8z" />
               </svg>
               {streak}
             </span>

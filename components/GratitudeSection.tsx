@@ -10,7 +10,6 @@ interface GratitudeSectionProps {
 
 export default function GratitudeSection({ date }: GratitudeSectionProps) {
   const [items, setItems] = useState<[string, string, string]>(["", "", ""]);
-  const [expanded, setExpanded] = useState(true);
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "idle">("idle");
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const itemsRef = useRef<[string, string, string]>(["", "", ""]);
@@ -29,7 +28,6 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
       dirtyRef.current = false;
       const hasContent = loaded.some((s: string) => s.trim().length > 0);
       setSaveStatus(hasContent ? "saved" : "idle");
-      setExpanded(!hasContent);
     } catch {
       setItems(["", "", ""]);
       itemsRef.current = ["", "", ""];
@@ -87,10 +85,7 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
     <div className="mx-5 md:mx-0 mb-3">
       <div className="bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden">
         {/* Header */}
-        <button
-          className="w-full flex items-center justify-between px-4 py-3"
-          onClick={() => setExpanded((prev) => !prev)}
-        >
+        <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="var(--sys-orange)">
               <path d="M9 1.5l2 4.1 4.5.7-3.3 3.2.8 4.5L9 11.8 5 14l.8-4.5L2.5 6.3l4.5-.7L9 1.5z" />
@@ -98,31 +93,17 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
             <span className="text-[17px] font-semibold text-[var(--label-primary)]">오늘의 감사</span>
           </div>
           <div className="flex items-center gap-2">
-            {!expanded && (
-              <span className="text-[13px] text-[var(--label-tertiary)]">
-                {filledCount > 0 ? `${filledCount}/3 작성됨` : "아직 작성하지 않았어요"}
-              </span>
-            )}
             {saveStatus === "saving" && (
               <span className="text-[13px] text-[var(--label-tertiary)]">저장 중...</span>
             )}
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="var(--label-quaternary)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              className={`transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
-            >
-              <polyline points="4 6 8 10 12 6" />
-            </svg>
+            {saveStatus === "saved" && (
+              <span className="text-[13px] text-[var(--label-tertiary)]">저장됨</span>
+            )}
           </div>
-        </button>
+        </div>
 
-        {/* Content */}
-        <div className={`transition-all duration-200 overflow-hidden ${expanded ? "max-h-[240px]" : "max-h-0"}`}>
+        {/* Content — always visible */}
+        <div>
           <div className="px-4 pb-4 flex flex-col gap-2.5">
             {[0, 1, 2].map((i) => (
               <div key={i} className="flex items-center gap-3">
