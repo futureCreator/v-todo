@@ -202,6 +202,9 @@ export default function Home() {
     url: string | null;
     imageUrl: string | null;
     memo: string | null;
+    actualPrice?: number | null;
+    satisfaction?: number | null;
+    review?: string | null;
   }) => {
     try {
       if (editWish) {
@@ -736,6 +739,11 @@ export default function Home() {
           defaultCategory={wishTab}
           onSave={saveWish}
           onDelete={editWish ? deleteWish : undefined}
+          onUncomplete={editWish?.completed ? (id: string) => {
+            toggleWish(id);
+            setShowAddWish(false);
+            setEditWish(null);
+          } : undefined}
           onClose={() => { setShowAddWish(false); setEditWish(null); }}
         />
       )}

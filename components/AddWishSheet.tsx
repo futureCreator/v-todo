@@ -13,8 +13,12 @@ interface AddWishSheetProps {
     url: string | null;
     imageUrl: string | null;
     memo: string | null;
+    actualPrice?: number | null;
+    satisfaction?: number | null;
+    review?: string | null;
   }) => void;
   onDelete?: (id: string) => void;
+  onUncomplete?: (id: string) => void;
   onClose: () => void;
 }
 
@@ -23,6 +27,7 @@ export default function AddWishSheet({
   defaultCategory,
   onSave,
   onDelete,
+  onUncomplete,
   onClose,
 }: AddWishSheetProps) {
   const [title, setTitle] = useState(wish?.title ?? "");
@@ -33,12 +38,18 @@ export default function AddWishSheet({
   const [url, setUrl] = useState(wish?.url ?? "");
   const [imageUrl, setImageUrl] = useState(wish?.imageUrl ?? "");
   const [memo, setMemo] = useState(wish?.memo ?? "");
+  const [actualPriceInput, setActualPriceInput] = useState(
+    wish?.actualPrice != null ? String(wish.actualPrice) : ""
+  );
+  const [satisfaction, setSatisfaction] = useState<number | null>(wish?.satisfaction ?? null);
+  const [reviewInput, setReviewInput] = useState(wish?.review ?? "");
 
   const canSave = title.trim().length > 0;
 
   const handleSave = () => {
     if (!canSave) return;
     const priceNum = priceInput.length > 0 ? parseInt(priceInput, 10) : null;
+    const actualPriceNum = actualPriceInput.length > 0 ? parseInt(actualPriceInput, 10) : null;
     onSave({
       title: title.trim(),
       category,
@@ -46,12 +57,22 @@ export default function AddWishSheet({
       url: url.trim() || null,
       imageUrl: imageUrl.trim() || null,
       memo: memo.trim() || null,
+      ...(wish?.completed && {
+        actualPrice: isNaN(actualPriceNum as number) ? null : actualPriceNum,
+        satisfaction,
+        review: reviewInput.trim() || null,
+      }),
     });
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const digits = e.target.value.replace(/\D/g, "");
     setPriceInput(digits);
+  };
+
+  const handleActualPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const digits = e.target.value.replace(/\D/g, "");
+    setActualPriceInput(digits);
   };
 
   return (
@@ -178,6 +199,91 @@ export default function AddWishSheet({
             className="w-full px-4 py-3.5 rounded-xl bg-[var(--fill-quaternary)] text-[20px] text-[var(--label-primary)] placeholder:text-[var(--label-quaternary)] outline-none resize-none"
           />
         </div>
+
+        {/* Completion info (completed wishes only) */}
+        {wish?.completed && (
+          <>
+            <div className="h-px bg-[var(--separator)] my-4" />
+            <div className="text-[15px] font-medium text-[var(--label-secondary)] mb-3">
+              완료 정보
+            </div>
+
+            {/* Actual price */}
+            <div className="mb-4">
+              <label className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
+                실제 가격
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={actualPriceInput}
+                  onChange={handleActualPriceChange}
+                  placeholder="0"
+                  className="w-full px-4 py-3.5 pr-12 rounded-xl bg-[var(--fill-quaternary)] text-[20px] text-[var(--label-primary)] placeholder:text-[var(--label-quaternary)] outline-none"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[20px] text-[var(--label-tertiary)] pointer-events-none">
+                  원
+                </span>
+              </div>
+            </div>
+
+            {/* Satisfaction */}
+            <div className="mb-4">
+              <label className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
+                만족도
+              </label>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    className="flex-1 py-3 rounded-xl text-[24px] transition-colors"
+                    style={{
+                      backgroundColor:
+                        satisfaction != null && star <= satisfaction
+                          ? "var(--accent-primary)"
+                          : "var(--fill-quaternary)",
+                    }}
+                    onClick={() => setSatisfaction(star === satisfaction ? null : star)}
+                  >
+                    <span style={{
+                      filter: satisfaction != null && star <= satisfaction
+                        ? "brightness(0) invert(1)"
+                        : "none",
+                    }}>
+                      ★
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Review */}
+            <div className="mb-4">
+              <label className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
+                한줄 후기
+              </label>
+              <input
+                type="text"
+                value={reviewInput}
+                onChange={(e) => setReviewInput(e.target.value)}
+                placeholder="어떠셨나요?"
+                className="w-full px-4 py-3.5 rounded-xl bg-[var(--fill-quaternary)] text-[20px] text-[var(--label-primary)] placeholder:text-[var(--label-quaternary)] outline-none"
+              />
+            </div>
+          </>
+        )}
+
+        {/* Uncomplete button (completed wishes) */}
+        {wish?.completed && onUncomplete && (
+          <button
+            className="w-full py-3.5 mt-2 rounded-xl text-[20px] font-medium text-[var(--sys-orange)] bg-[var(--sys-orange)]/10"
+            onClick={() => onUncomplete(wish.id)}
+          >
+            완료 취소
+          </button>
+        )}
 
         {/* Delete button (edit mode only) */}
         {wish && onDelete && (
