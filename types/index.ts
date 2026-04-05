@@ -94,7 +94,7 @@ export const VALID_SCHEDULE_TYPES: ScheduleType[] = ["general", "anniversary"];
 export const VALID_REPEAT_MODES: RepeatMode[] = ["none", "every_100_days", "monthly", "yearly"];
 
 // Notes
-export type Section = "todo" | "note" | "wish" | "dday";
+export type Section = "todo" | "note" | "timer" | "wish" | "dday";
 export type NoteTab = "daily" | "general";
 
 export interface FileItem {
@@ -202,4 +202,17 @@ export interface GratitudeEntry {
 
 export interface GratitudeStore {
   entries: GratitudeEntry[];
+}
+
+// Pomodoro
+export interface PomodoroLog {
+  id: string;
+  date: string;
+  completedAt: string;
+  type: "focus";
+  duration: number;
+}
+
+export interface PomodoroLogStore {
+  logs: PomodoroLog[];
 }
