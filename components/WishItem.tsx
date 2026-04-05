@@ -9,11 +9,74 @@ interface WishItemProps {
   onDelete: (id: string) => void;
 }
 
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr);
+  return `${d.getMonth() + 1}/${d.getDate()}`;
+}
+
 export default function WishItem({ wish, onToggle, onEdit, onDelete }: WishItemProps) {
   const categoryEmoji = wish.category === "item" ? "🛍️" : "⭐";
 
+  const renderPrice = () => {
+    if (wish.completed && wish.actualPrice != null) {
+      if (wish.price != null && wish.price !== wish.actualPrice) {
+        return (
+          <div className="text-[15px] font-medium mt-1 flex items-center gap-1.5 flex-wrap">
+            <span className="line-through text-[var(--label-quaternary)]">
+              {wish.price.toLocaleString("ko-KR")}원
+            </span>
+            <span className="text-[var(--accent-primary)]">
+              → {wish.actualPrice.toLocaleString("ko-KR")}원
+            </span>
+          </div>
+        );
+      }
+      return (
+        <div className="text-[15px] text-[var(--accent-primary)] font-medium mt-1">
+          {wish.actualPrice.toLocaleString("ko-KR")}원
+        </div>
+      );
+    }
+    if (wish.price != null) {
+      return (
+        <div className="text-[15px] text-[var(--accent-primary)] font-medium mt-1">
+          {wish.price.toLocaleString("ko-KR")}원
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const renderMeta = () => {
+    if (wish.completed) {
+      return (
+        <>
+          {wish.satisfaction != null && (
+            <div className="text-[13px] text-[var(--sys-orange)] mt-0.5 flex items-center gap-0.5">
+              <span>★</span>
+              <span>{wish.satisfaction}</span>
+            </div>
+          )}
+          {(wish.review || wish.memo) && (
+            <div className="text-[13px] text-[var(--label-tertiary)] mt-0.5 truncate">
+              {wish.review ?? wish.memo}
+            </div>
+          )}
+        </>
+      );
+    }
+    if (wish.memo) {
+      return (
+        <div className="text-[13px] text-[var(--label-tertiary)] mt-0.5 truncate">
+          {wish.memo}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
-    <div className={`relative rounded-2xl overflow-hidden bg-[var(--sys-bg-elevated)] transition-opacity ${wish.completed ? "opacity-50" : ""}`}>
+    <div className="relative rounded-2xl overflow-hidden bg-[var(--sys-bg-elevated)]">
       {/* Image area */}
       <button
         className="w-full aspect-[4/3] relative"
@@ -39,6 +102,12 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete }: WishItemP
             </svg>
           </div>
         )}
+        {/* Completed date badge */}
+        {wish.completed && wish.completedAt && (
+          <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/50 text-white text-[11px] font-medium">
+            {formatDate(wish.completedAt)} 달성
+          </div>
+        )}
       </button>
 
       {/* Content */}
@@ -50,16 +119,8 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete }: WishItemP
           <div className={`text-[17px] leading-[22px] font-semibold text-[var(--label-primary)] line-clamp-2 ${wish.completed ? "line-through" : ""}`}>
             {wish.title}
           </div>
-          {wish.price != null && (
-            <div className="text-[15px] text-[var(--accent-primary)] font-medium mt-1">
-              {wish.price.toLocaleString("ko-KR")}원
-            </div>
-          )}
-          {wish.memo && (
-            <div className="text-[13px] text-[var(--label-tertiary)] mt-0.5 truncate">
-              {wish.memo}
-            </div>
-          )}
+          {renderPrice()}
+          {renderMeta()}
         </button>
 
         {/* Bottom actions */}
