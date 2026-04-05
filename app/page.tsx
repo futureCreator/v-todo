@@ -16,6 +16,7 @@ import GeneralNoteView from "@/components/GeneralNoteView";
 import WishlistView from "@/components/WishlistView";
 import AddWishSheet from "@/components/AddWishSheet";
 import YearProgress from "@/components/YearProgress";
+import WishCompletionSheet from "@/components/WishCompletionSheet";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -33,6 +34,7 @@ export default function Home() {
   const [wishTab, setWishTab] = useState<WishCategory>("item");
   const [showAddWish, setShowAddWish] = useState(false);
   const [editWish, setEditWish] = useState<WishItem | null>(null);
+  const [completingWish, setCompletingWish] = useState<WishItem | null>(null);
 
   const [showArchive, setShowArchive] = useState(false);
   const [showAddSchedule, setShowAddSchedule] = useState(false);
@@ -233,20 +235,66 @@ export default function Home() {
   const toggleWish = async (id: string) => {
     const wish = wishes.find((w) => w.id === id);
     if (!wish) return;
-    const newCompleted = !wish.completed;
+
+    if (!wish.completed) {
+      // Not completed → open CompletionSheet
+      setCompletingWish(wish);
+    } else {
+      // Completed → uncomplete immediately (clear completion info)
+      setWishes((prev) =>
+        prev.map((w) =>
+          w.id === id
+            ? { ...w, completed: false, completedAt: null, actualPrice: null, satisfaction: null, review: null }
+            : w
+        )
+      );
+      try {
+        await fetch(`${BASE}/api/wishes/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ completed: false }),
+        });
+      } catch (err) {
+        console.error("Failed to toggle wish:", err);
+        setWishes((prev) =>
+          prev.map((w) => (w.id === id ? wish : w))
+        );
+      }
+    }
+  };
+
+  const completeWish = async (data: {
+    actualPrice: number | null;
+    satisfaction: number | null;
+    review: string | null;
+    completedAt: string;
+  }) => {
+    if (!completingWish) return;
+    const id = completingWish.id;
     setWishes((prev) =>
-      prev.map((w) => (w.id === id ? { ...w, completed: newCompleted } : w))
+      prev.map((w) =>
+        w.id === id
+          ? { ...w, completed: true, completedAt: data.completedAt, actualPrice: data.actualPrice, satisfaction: data.satisfaction, review: data.review }
+          : w
+      )
     );
+    setCompletingWish(null);
     try {
       await fetch(`${BASE}/api/wishes/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ completed: newCompleted }),
+        body: JSON.stringify({
+          completed: true,
+          completedAt: data.completedAt,
+          actualPrice: data.actualPrice,
+          satisfaction: data.satisfaction,
+          review: data.review,
+        }),
       });
     } catch (err) {
-      console.error("Failed to toggle wish:", err);
+      console.error("Failed to complete wish:", err);
       setWishes((prev) =>
-        prev.map((w) => (w.id === id ? { ...w, completed: wish.completed } : w))
+        prev.map((w) => (w.id === id ? completingWish : w))
       );
     }
   };
@@ -689,6 +737,13 @@ export default function Home() {
           onSave={saveWish}
           onDelete={editWish ? deleteWish : undefined}
           onClose={() => { setShowAddWish(false); setEditWish(null); }}
+        />
+      )}
+      {completingWish && (
+        <WishCompletionSheet
+          wish={completingWish}
+          onComplete={completeWish}
+          onClose={() => setCompletingWish(null)}
         />
       )}
       {showBriefing && (
