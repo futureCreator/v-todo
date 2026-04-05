@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import DateNavigator from "@/components/DateNavigator";
 import NoteEditor from "@/components/NoteEditor";
+import GratitudeSection from "@/components/GratitudeSection";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -107,6 +108,7 @@ export default function DailyNoteView() {
           </span>
         </div>
       )}
+      <GratitudeSection date={dateToString(date)} />
       <NoteEditor
         content={content}
         onChange={handleChange}

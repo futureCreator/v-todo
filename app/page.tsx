@@ -17,12 +17,14 @@ import WishlistView from "@/components/WishlistView";
 import AddWishSheet from "@/components/AddWishSheet";
 import YearProgress from "@/components/YearProgress";
 import WishCompletionSheet from "@/components/WishCompletionSheet";
+import HabitView from "@/components/HabitView";
+import type { TodoTab } from "@/types";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export default function Home() {
   const [section, setSection] = useState<Section>("todo");
-  const [todoTab, setTodoTab] = useState<"now" | "soon">("now");
+  const [todoTab, setTodoTab] = useState<TodoTab>("now");
   const [ddayTab, setDdayTab] = useState<"general" | "anniversary">("general");
   const [noteTab, setNoteTab] = useState<NoteTab>("daily");
 
@@ -489,8 +491,10 @@ export default function Home() {
 
   const handleSwipe = (dir: "left" | "right") => {
     if (section === "todo") {
-      if (dir === "left" && todoTab === "now") setTodoTab("soon");
-      if (dir === "right" && todoTab === "soon") setTodoTab("now");
+      const tabs: TodoTab[] = ["now", "soon", "habit"];
+      const idx = tabs.indexOf(todoTab);
+      if (dir === "left" && idx < tabs.length - 1) setTodoTab(tabs[idx + 1]);
+      if (dir === "right" && idx > 0) setTodoTab(tabs[idx - 1]);
     } else if (section === "note") {
       if (dir === "left" && noteTab === "daily") setNoteTab("general");
       if (dir === "right" && noteTab === "general") setNoteTab("daily");
@@ -575,9 +579,10 @@ export default function Home() {
             tabs={[
               { key: "now", label: `지금${nowCount > 0 ? ` ${nowCount}` : ""}` },
               { key: "soon", label: `곧${soonCount > 0 ? ` ${soonCount}` : ""}` },
+              { key: "habit", label: "습관" },
             ]}
             active={todoTab}
-            onChange={(key) => setTodoTab(key as "now" | "soon")}
+            onChange={(key) => setTodoTab(key as TodoTab)}
           />
         ) : section === "note" ? (
           <SectionTabs
@@ -621,6 +626,8 @@ export default function Home() {
               onDelete={deleteWish}
               onAdd={() => { setEditWish(null); setShowAddWish(true); }}
             />
+          ) : section === "todo" && todoTab === "habit" ? (
+            <HabitView />
           ) : section === "todo" ? (
             <>
               {filteredTodos.length === 0 ? (
