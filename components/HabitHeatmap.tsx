@@ -51,8 +51,6 @@ export default function HabitHeatmap({ habit, logs, bestStreak }: HabitHeatmapPr
   }
   weeks.push(currentWeek);
 
-  const cellSize = 12;
-
   return (
     <div className="px-4 pb-4 pt-2">
       <div className="flex items-center justify-between mb-3">
@@ -61,9 +59,9 @@ export default function HabitHeatmap({ habit, logs, bestStreak }: HabitHeatmapPr
           최장 연속 <span className="font-semibold text-[var(--sys-orange)]">{bestStreak}일</span>
         </span>
       </div>
-      <div className="flex gap-[3px] justify-end">
+      <div className="flex gap-[2px]">
         {weeks.map((week, wi) => (
-          <div key={wi} className="flex flex-col gap-[3px]">
+          <div key={wi} className="flex-1 flex flex-col gap-[2px]">
             {week.map((day, di) => {
               let bg: string;
               if (day === null) {
@@ -78,8 +76,8 @@ export default function HabitHeatmap({ habit, logs, bestStreak }: HabitHeatmapPr
               return (
                 <div
                   key={di}
-                  className="rounded-[2px]"
-                  style={{ width: cellSize, height: cellSize, backgroundColor: bg }}
+                  className="aspect-square w-full rounded-[2px]"
+                  style={{ backgroundColor: bg }}
                 />
               );
             })}
