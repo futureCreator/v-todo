@@ -57,6 +57,28 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
           <span className="text-[12px] font-medium">노트</span>
         </button>
 
+        {/* 타이머 */}
+        <button
+          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+            active === "timer"
+              ? "text-[var(--accent-primary)]"
+              : "text-[var(--label-tertiary)]"
+          }`}
+          onClick={() => onChange("timer")}
+        >
+          <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "timer" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "timer" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
+            {active === "timer" ? (
+              <path d="M12.5 3C7.3 3 3 7.3 3 12.5S7.3 22 12.5 22 22 17.7 22 12.5 17.7 3 12.5 3zm-1.5 6l6 3.5-6 3.5V9z" />
+            ) : (
+              <>
+                <circle cx="12.5" cy="12.5" r="9" />
+                <polygon points="11 9 11 16 17 12.5" />
+              </>
+            )}
+          </svg>
+          <span className="text-[12px] font-medium">타이머</span>
+        </button>
+
         {/* 위시 */}
         <button
           className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${

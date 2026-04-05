@@ -18,6 +18,7 @@ import AddWishSheet from "@/components/AddWishSheet";
 import YearProgress from "@/components/YearProgress";
 import WishCompletionSheet from "@/components/WishCompletionSheet";
 import HabitView from "@/components/HabitView";
+import PomodoroView from "@/components/PomodoroView";
 import type { TodoTab } from "@/types";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -417,6 +418,27 @@ export default function Home() {
 
         <button
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
+            section === "timer"
+              ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
+              : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
+          }`}
+          onClick={() => setSection("timer")}
+        >
+          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "timer" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "timer" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
+            {section === "timer" ? (
+              <path d="M11 1C5.5 1 1 5.5 1 11s4.5 10 10 10 10-4.5 10-10S16.5 1 11 1zm-1.5 5.5l6 4.5-6 4.5v-9z" />
+            ) : (
+              <>
+                <circle cx="11" cy="11" r="9" />
+                <polygon points="9.5 6.5 9.5 15.5 15.5 11" />
+              </>
+            )}
+          </svg>
+          <span className="text-[15px] font-medium flex-1">타이머</span>
+        </button>
+
+        <button
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
             section === "wish"
               ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
               : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
@@ -532,7 +554,7 @@ export default function Home() {
       {/* Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-5 pt-3 pb-1 safe-area-pt">
         <h1 className="text-[38px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "wish" ? "위시리스트" : "D-day"}
+          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "timer" ? "타이머" : section === "wish" ? "위시리스트" : "D-day"}
         </h1>
         <div className="flex items-center gap-1">
           {section === "todo" && (
@@ -563,7 +585,7 @@ export default function Home() {
       {/* Desktop Header */}
       <header className="hidden md:flex items-center justify-between px-8 pt-8 pb-2">
         <h1 className="text-[28px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "wish" ? "위시리스트" : "D-day"}
+          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "timer" ? "타이머" : section === "wish" ? "위시리스트" : "D-day"}
         </h1>
       </header>
 
@@ -593,7 +615,7 @@ export default function Home() {
             active={noteTab}
             onChange={(key) => setNoteTab(key as NoteTab)}
           />
-        ) : section === "wish" ? null : (
+        ) : section === "timer" ? null : section === "wish" ? null : (
           <SectionTabs
             tabs={[
               { key: "general", label: `D-day${ddayCount > 0 ? ` ${ddayCount}` : ""}` },
@@ -615,6 +637,10 @@ export default function Home() {
           {section === "note" ? (
             <div className="flex-1 flex flex-col min-h-0 md:px-8">
               {noteTab === "daily" ? <DailyNoteView /> : <GeneralNoteView />}
+            </div>
+          ) : section === "timer" ? (
+            <div className="md:px-8">
+              <PomodoroView />
             </div>
           ) : section === "wish" ? (
             <WishlistView
