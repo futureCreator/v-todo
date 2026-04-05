@@ -65,21 +65,21 @@ export default function HabitHeatmap({ habit, logs, bestStreak }: HabitHeatmapPr
         {weeks.map((week, wi) => (
           <div key={wi} className="flex flex-col gap-[3px]">
             {week.map((day, di) => {
-              let className = "rounded-[2px]";
+              let bg: string;
               if (day === null) {
-                className += " bg-transparent";
-              } else if (!day.scheduled) {
-                className += " bg-[var(--fill-quaternary)]";
+                bg = "transparent";
               } else if (day.completed) {
-                className += " bg-[var(--accent-primary)]";
+                bg = "var(--accent-primary)";
+              } else if (day.scheduled) {
+                bg = "var(--sys-separator-opaque)";
               } else {
-                className += " bg-[var(--fill-secondary)]";
+                bg = "var(--sys-bg-secondary)";
               }
               return (
                 <div
                   key={di}
-                  className={className}
-                  style={{ width: cellSize, height: cellSize }}
+                  className="rounded-[2px]"
+                  style={{ width: cellSize, height: cellSize, backgroundColor: bg }}
                 />
               );
             })}
