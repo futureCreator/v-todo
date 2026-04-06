@@ -276,10 +276,7 @@ export default function GeneralNoteView() {
       <div className="flex-1 overflow-y-auto">
         {files.length === 0 && !showNameInput ? (
           <div className="flex flex-col items-center justify-center py-24 text-[var(--label-tertiary)]">
-            <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth="1.2" className="mb-5 opacity-30">
-              <path d="M14 10h16l10 10v26a2 2 0 01-2 2H14a2 2 0 01-2-2V12a2 2 0 012-2z" />
-              <polyline points="30 10 30 20 40 20" />
-            </svg>
+            <span className="text-[56px] mb-5 opacity-30">📝</span>
             <p className="text-[20px]">노트가 없습니다</p>
             <p className="text-[15px] text-[var(--label-quaternary)] mt-1.5">
               + 버튼으로 새 노트를 만들어보세요

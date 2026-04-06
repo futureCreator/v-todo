@@ -36,11 +36,7 @@ export default function ArchiveView({ todos, onToggle, onDelete, onEdit, onClose
         <div className="flex-1 overflow-y-auto">
           {archived.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-[var(--label-tertiary)]">
-              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="1.5" className="mb-4 opacity-40">
-                <path d="M6 12h36l-3 24H9L6 12z" />
-                <path d="M4 12h40" />
-                <path d="M18 20h12" />
-              </svg>
+              <span className="text-[56px] mb-5 opacity-30">📦</span>
               <p className="text-[20px]">보관함이 비어 있습니다</p>
               <p className="text-[15px] mt-1.5 text-[var(--label-quaternary)]">30일 후 자동 삭제됩니다</p>
             </div>

@@ -632,10 +632,7 @@ export default function Home() {
             <div className="flex-1 flex flex-col">
               {filteredTodos.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-[var(--label-tertiary)]">
-                  <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth="1.2" className="mb-5 opacity-30">
-                    <rect x="10" y="10" width="36" height="36" rx="8" />
-                    <path d="M20 28l6 6 10-10" />
-                  </svg>
+                  <span className="text-[56px] mb-5 opacity-30">✅</span>
                   <p className="text-[20px]">
                     {todoTab === "now" ? "할 일을 추가해보세요" : "곧 처리할 일이 없습니다"}
                   </p>
@@ -669,10 +666,7 @@ export default function Home() {
             <div className="flex-1 flex flex-col">
               {filteredSchedules.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-[var(--label-tertiary)]">
-                  <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth="1.2" className="mb-5 opacity-30">
-                    <circle cx="28" cy="28" r="20" />
-                    <polyline points="28 16 28 28 36 33" />
-                  </svg>
+                  <span className="text-[56px] mb-5 opacity-30">📅</span>
                   <p className="text-[20px]">
                     {ddayTab === "general" ? "일정을 추가해보세요" : "기념일을 추가해보세요"}
                   </p>
