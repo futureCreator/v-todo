@@ -196,7 +196,7 @@ export default function HabitView() {
   };
 
   return (
-    <>
+    <div className="flex-1 flex flex-col">
       {/* Progress bar */}
       <div className="mx-5 md:mx-0 mb-4">
         <div className="flex items-center justify-between mb-2">
@@ -273,7 +273,7 @@ export default function HabitView() {
       )}
 
       {/* Add button */}
-      <div className="mx-5 md:mx-0 mt-4">
+      <div className="mx-5 md:mx-0 mt-auto pt-4">
         <button
           className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
           onClick={() => {
@@ -293,6 +293,6 @@ export default function HabitView() {
           onClose={() => { setShowSheet(false); setEditHabit(null); }}
         />
       )}
-    </>
+    </div>
   );
 }

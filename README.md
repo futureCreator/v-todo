@@ -37,6 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.9.2 - 2026-04-06
+- **Fix**: 습관 탭 "새 습관 추가" 버튼 화면 하단으로 이동 — 위시리스트와 동일한 레이아웃 패턴 적용
+
 ### v0.9.1 - 2026-04-06
 - **Fix**: 빈 화면 아이콘 통일 — SVG 아이콘을 이모지로 교체 (할 일 ✅, 일정 📅, 노트 📝, 습관 🔥, 보관함 📦)
 
