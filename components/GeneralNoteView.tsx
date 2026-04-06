@@ -343,12 +343,12 @@ export default function GeneralNoteView() {
       </div>
 
       {/* + Button */}
-      <div className="relative px-5 md:px-0 pb-2 md:pb-4 pt-2">
+      <div className="relative mx-5 md:mx-0 mt-auto pt-4">
         <button
           className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
           onClick={() => setShowNewMenu(!showNewMenu)}
         >
-          + 새로 만들기
+          새로 만들기
         </button>
 
         {showNewMenu && (

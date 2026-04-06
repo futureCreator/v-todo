@@ -39,7 +39,7 @@ export default function WishlistView({
   const emptyMessage = wishTab === "item" ? "아직 담긴 물건이 없어요" : "아직 계획된 경험이 없어요";
 
   return (
-    <div className="pb-6">
+    <div className="flex-1 flex flex-col">
       {/* Internal tabs */}
       <SectionTabs
         tabs={tabs}
@@ -91,9 +91,9 @@ export default function WishlistView({
       )}
 
       {/* Add button */}
-      <div className="mx-4 md:mx-0 mt-4">
+      <div className="mx-5 md:mx-0 mt-auto pt-4">
         <button
-          className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold"
+          className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
           onClick={onAdd}
         >
           새 위시 추가

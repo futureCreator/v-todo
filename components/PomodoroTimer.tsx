@@ -176,10 +176,10 @@ export default function PomodoroTimer({ onComplete }: PomodoroTimerProps) {
       <div className="flex items-center gap-5">
         {state !== "idle" && (
           <button onClick={reset}
-            className="w-[48px] h-[48px] rounded-full bg-[var(--fill-tertiary)] flex items-center justify-center transition-transform active:scale-95">
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="var(--label-secondary)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 10a6 6 0 1 1 1.5-3.5" />
-              <polyline points="2 3 4 6.5 7.5 5" />
+            className="w-[64px] h-[64px] rounded-full bg-[var(--fill-tertiary)] flex items-center justify-center transition-transform active:scale-95">
+            <svg width="22" height="22" viewBox="1 1 22 22" fill="none" className="text-[var(--label-secondary)]" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 12a8 8 0 1 1 2.34 5.66" />
+              <path d="M4 4v5h5" />
             </svg>
           </button>
         )}

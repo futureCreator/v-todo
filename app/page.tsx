@@ -629,11 +629,11 @@ export default function Home() {
 
       {/* Main Content */}
       <main
-        className={`flex-1 overflow-y-auto ${section === "note" ? "pb-[70px] md:pb-0 flex flex-col min-h-0" : "pb-20 md:pb-8"}`}
+        className={`flex-1 overflow-y-auto ${section === "note" ? "pb-20 md:pb-0 flex flex-col min-h-0" : "pb-20 md:pb-8"}`}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <div className={`${section === "note" ? "flex-1 flex flex-col min-h-0" : "md:px-8"}`}>
+        <div className={`${section === "note" ? "flex-1 flex flex-col min-h-0" : "md:px-8 flex flex-col min-h-full"}`}>
           {section === "note" ? (
             <div className="flex-1 flex flex-col min-h-0 md:px-8">
               {noteTab === "daily" ? <DailyNoteView /> : <GeneralNoteView />}
@@ -655,7 +655,7 @@ export default function Home() {
           ) : section === "todo" && todoTab === "habit" ? (
             <HabitView />
           ) : section === "todo" ? (
-            <>
+            <div className="flex-1 flex flex-col">
               {filteredTodos.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-[var(--label-tertiary)]">
                   <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth="1.2" className="mb-5 opacity-30">
@@ -686,13 +686,13 @@ export default function Home() {
                 </div>
               )}
               {todoTab === "now" && (
-                <div className="mx-5 md:mx-0 mt-2.5">
+                <div className="mx-5 md:mx-0 mt-auto pt-2.5">
                   <TodoInput onAdd={addTodo} />
                 </div>
               )}
-            </>
+            </div>
           ) : (
-            <>
+            <div className="flex-1 flex flex-col">
               {filteredSchedules.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 text-[var(--label-tertiary)]">
                   <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth="1.2" className="mb-5 opacity-30">
@@ -721,7 +721,7 @@ export default function Home() {
                   ))}
                 </div>
               )}
-              <div className="mx-5 md:mx-0 mt-4">
+              <div className="mx-5 md:mx-0 mt-auto pt-4">
                 <button
                   className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
                   onClick={() => {
@@ -732,7 +732,7 @@ export default function Home() {
                   새 일정 추가
                 </button>
               </div>
-            </>
+            </div>
           )}
         </div>
       </main>

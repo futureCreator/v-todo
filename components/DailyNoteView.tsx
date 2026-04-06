@@ -101,6 +101,7 @@ export default function DailyNoteView() {
   return (
     <div className="flex flex-col flex-1 min-h-0">
       <DateNavigator date={date} onChange={handleDateChange} />
+      <GratitudeSection date={dateToString(date)} />
       {saveStatus !== "idle" && (
         <div className="px-5 md:px-0 -mt-1 mb-1 text-right">
           <span className="text-[13px] text-[var(--label-tertiary)]">
@@ -108,7 +109,6 @@ export default function DailyNoteView() {
           </span>
         </div>
       )}
-      <GratitudeSection date={dateToString(date)} />
       <NoteEditor
         content={content}
         onChange={handleChange}
