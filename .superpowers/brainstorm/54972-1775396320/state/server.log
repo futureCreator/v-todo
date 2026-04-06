@@ -1,0 +1,4 @@
+{"type":"server-started","port":57701,"host":"0.0.0.0","url_host":"imac.tail6f34d2.ts.net","url":"http://imac.tail6f34d2.ts.net:57701","screen_dir":"/Users/handongho/.openclaw/workspace/projects/v-todo/.superpowers/brainstorm/54972-1775396320/content","state_dir":"/Users/handongho/.openclaw/workspace/projects/v-todo/.superpowers/brainstorm/54972-1775396320/state"}
+{"type":"screen-added","file":"/Users/handongho/.openclaw/workspace/projects/v-todo/.superpowers/brainstorm/54972-1775396320/content/timer-ui-style.html"}
+{"type":"server-stopped","reason":"owner process exited"}
+{"source":"user-event","type":"click","text":"18:42\n          집중 중\n        \n      \n    \n    \n      A. 원형 프로그레스\n      Apple Watch 스타일. 남은 시간이 링으로 시각화. 깔끔하고 직관적.","choice":"circular","id":null,"timestamp":1775396401178}

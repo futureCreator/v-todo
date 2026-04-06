@@ -1,0 +1,68 @@
+<h2>타이머 UI 스타일</h2>
+<p class="subtitle">집중 타이머의 핵심 비주얼을 골라주세요</p>
+
+<div class="cards">
+  <div class="card" data-choice="circular" onclick="toggleSelect(this)">
+    <div class="card-image" style="display:flex;align-items:center;justify-content:center;padding:32px;background:var(--bg-secondary)">
+      <div style="position:relative;width:200px;height:200px;">
+        <!-- Circular progress ring -->
+        <svg width="200" height="200" viewBox="0 0 200 200" style="transform:rotate(-90deg)">
+          <circle cx="100" cy="100" r="88" fill="none" stroke="var(--border)" stroke-width="6"/>
+          <circle cx="100" cy="100" r="88" fill="none" stroke="#FF6B35" stroke-width="6"
+            stroke-dasharray="553" stroke-dashoffset="138" stroke-linecap="round"/>
+        </svg>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <span style="font-size:48px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-2px;color:var(--text-primary)">18:42</span>
+          <span style="font-size:14px;color:var(--text-secondary);margin-top:4px">집중 중</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. 원형 프로그레스</h3>
+      <p>Apple Watch 스타일. 남은 시간이 링으로 시각화. 깔끔하고 직관적.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="minimal" onclick="toggleSelect(this)">
+    <div class="card-image" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;background:var(--bg-secondary);gap:16px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+        <span style="font-size:64px;font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:-3px;color:var(--text-primary)">18:42</span>
+        <span style="font-size:14px;color:var(--text-secondary);">집중 중 — 3/4 뽀모도로</span>
+      </div>
+      <!-- Linear progress bar -->
+      <div style="width:80%;height:4px;background:var(--border);border-radius:2px;overflow:hidden;">
+        <div style="width:75%;height:100%;background:#FF6B35;border-radius:2px;"></div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 미니멀 카운트다운</h3>
+      <p>큰 숫자 + 얇은 프로그레스 바. 타이포그래피 중심. 군더더기 없음.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="blocks" onclick="toggleSelect(this)">
+    <div class="card-image" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px;background:var(--bg-secondary);gap:20px">
+      <span style="font-size:48px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-2px;color:var(--text-primary)">18:42</span>
+      <!-- Pomodoro blocks -->
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div style="width:40px;height:40px;border-radius:10px;background:#FF6B35;display:flex;align-items:center;justify-content:center;">
+          <span style="color:white;font-size:13px;font-weight:600">1</span>
+        </div>
+        <div style="width:40px;height:40px;border-radius:10px;background:#FF6B35;display:flex;align-items:center;justify-content:center;">
+          <span style="color:white;font-size:13px;font-weight:600">2</span>
+        </div>
+        <div style="width:40px;height:40px;border-radius:10px;background:#FF6B35;opacity:0.7;display:flex;align-items:center;justify-content:center;">
+          <span style="color:white;font-size:13px;font-weight:600">3</span>
+        </div>
+        <div style="width:40px;height:40px;border-radius:10px;background:var(--border);display:flex;align-items:center;justify-content:center;">
+          <span style="color:var(--text-secondary);font-size:13px;font-weight:600">4</span>
+        </div>
+      </div>
+      <span style="font-size:14px;color:var(--text-secondary)">3번째 집중 중</span>
+    </div>
+    <div class="card-body">
+      <h3>C. 블록 카운터</h3>
+      <p>4개 뽀모도로 블록이 하나씩 채워지는 방식. 진행 상황이 한눈에 보임.</p>
+    </div>
+  </div>
+</div>

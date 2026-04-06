@@ -1,0 +1,73 @@
+<h2>통계 — 어떻게 보여줄까요?</h2>
+<p class="subtitle">타이머 화면 아래에 표시될 통계 영역의 스타일을 골라주세요</p>
+
+<div class="cards">
+  <div class="card" data-choice="today-summary" onclick="toggleSelect(this)">
+    <div class="card-image" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:var(--bg-secondary)">
+      <div style="width:90%;background:var(--bg-primary);border-radius:12px;padding:16px;display:flex;justify-content:space-around;">
+        <div style="text-align:center;">
+          <div style="font-size:28px;font-weight:700;color:#FF6B35">6</div>
+          <div style="font-size:12px;color:var(--text-secondary)">오늘 완료</div>
+        </div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center;">
+          <div style="font-size:28px;font-weight:700;color:var(--text-primary)">2h 30m</div>
+          <div style="font-size:12px;color:var(--text-secondary)">집중 시간</div>
+        </div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center;">
+          <div style="font-size:28px;font-weight:700;color:var(--text-primary)">3</div>
+          <div style="font-size:12px;color:var(--text-secondary)">연속일</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. 오늘 요약 카드</h3>
+      <p>오늘 완료 수 + 집중 시간 + 연속일 스트릭. 타이머 아래에 간결하게 표시.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="today-plus-heatmap" onclick="toggleSelect(this)">
+    <div class="card-image" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:var(--bg-secondary);gap:12px">
+      <div style="width:90%;background:var(--bg-primary);border-radius:12px;padding:12px;display:flex;justify-content:space-around;">
+        <div style="text-align:center;">
+          <div style="font-size:22px;font-weight:700;color:#FF6B35">6</div>
+          <div style="font-size:11px;color:var(--text-secondary)">완료</div>
+        </div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center;">
+          <div style="font-size:22px;font-weight:700;color:var(--text-primary)">2h 30m</div>
+          <div style="font-size:11px;color:var(--text-secondary)">집중</div>
+        </div>
+        <div style="width:1px;background:var(--border)"></div>
+        <div style="text-align:center;">
+          <div style="font-size:22px;font-weight:700;color:var(--text-primary)">3</div>
+          <div style="font-size:11px;color:var(--text-secondary)">연속일</div>
+        </div>
+      </div>
+      <div style="width:90%;background:var(--bg-primary);border-radius:12px;padding:12px;">
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">최근 활동</div>
+        <div style="display:flex;gap:3px;flex-wrap:wrap;">
+          <div style="width:12px;height:12px;border-radius:2px;background:var(--border)"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:var(--border)"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:#FF6B35;opacity:0.3"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:#FF6B35;opacity:0.5"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:#FF6B35;opacity:0.7"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:var(--border)"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:#FF6B35;opacity:0.9"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:#FF6B35"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:#FF6B35;opacity:0.5"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:var(--border)"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:#FF6B35;opacity:0.3"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:#FF6B35;opacity:0.7"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:#FF6B35"></div>
+          <div style="width:12px;height:12px;border-radius:2px;background:#FF6B35;opacity:0.9"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 요약 + 히트맵</h3>
+      <p>오늘 요약 카드 아래에 습관 탭과 같은 스타일의 히트맵. 꾸준함이 시각적으로 보임.</p>
+    </div>
+  </div>
+</div>
