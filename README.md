@@ -37,6 +37,20 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.11.0 - 2026-04-07
+- **Feature**: 링크 아카이브 — 텔레그램 봇으로 받은 링크를 자동 저장하는 새 메인 섹션 ("링크" 탭)
+- **Feature**: 텔레그램 봇 long polling 워커 — `instrumentation.ts`에서 부팅 시 시작, 공개 URL/webhook 불필요, `TELEGRAM_ALLOWED_CHAT_ID`로 본인만 접근
+- **Feature**: 봇 동작 모델 — 봇에 보낸 모든 메시지가 곧 저장. URL이 있으면 전체 텍스트를 메모로 저장하고 URL 추출, 없으면 "URL을 찾지 못했어요" 응답
+- **Feature**: LinkCard — 메모 본문 안의 URL을 자동 linkify, 해시태그는 인라인 chip + 별도 chip row, 도메인 라벨과 상대 시간, 카드 탭으로 첫 URL 열기, [✓ 읽음 / 📤 공유 / 🗑] 액션 행 (삭제는 2-tap 확인)
+- **Feature**: LinkSection — 읽지 않음 / 읽음 두 탭 + 카운트 배지 + 빈 상태 메시지
+- **Feature**: 다중 URL 지원 — 한 메시지 = 한 항목, `urls: string[]` 모델로 메모 안의 모든 URL 보존
+- **Feature**: Web Share API 공유 — 모바일은 네이티브 공유 시트, 데스크톱은 클립보드 폴백
+- **Feature**: API `/api/links` (GET) + `/api/links/[id]` (PUT/DELETE) — `data/links.json` atomic store, `lastUpdateId` + `telegramMessageId` 이중 idempotency
+- **Feature**: 새 API/스토어/유틸 (`lib/url-extract.ts`, `lib/link-store.ts`, `lib/telegram-poller.ts`) — TDD로 작성, 41개 신규 단위 테스트 (총 105개 통과)
+- **Fix**: 링크 섹션에서 D-day/기념일 탭이 잘못 보이고 스와이프 시 ddayTab이 토글되던 문제 — `app/page.tsx`의 탭/스와이프 fallback이 무조건 dday로 떨어지던 패턴을 명시적 분기로 수정
+- **Fix**: Node 18+의 Happy Eyeballs 버그 우회 — `instrumentation.ts`에서 `dns.setDefaultResultOrder("ipv4first")` + `net.setDefaultAutoSelectFamily(false)`로 IPv6 EHOSTUNREACH가 IPv4 fetch까지 망가뜨리는 문제 회피 (nodejs/node#47644)
+- **Docs**: `docs/superpowers/specs/2026-04-07-link-archive-design.md` 설계서, `docs/superpowers/plans/2026-04-07-link-archive.md` 12-task 구현 계획서, CLAUDE.md "텔레그램 링크 봇 설정" 가이드 추가
+
 ### v0.10.0 - 2026-04-07
 - **Feature**: 인라인 해시태그 시스템 — 할 일, 위시리스트, D-day 제목에 `#태그`를 입력하면 자동 인식하여 accent 색상 pill로 렌더링
 - **Feature**: 크로스 섹션 태그 뷰 — 태그 pill을 탭하면 모든 섹션(할 일, 위시, D-day)에서 해당 태그가 포함된 항목을 통합 뷰로 표시
