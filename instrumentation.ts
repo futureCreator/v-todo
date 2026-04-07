@@ -28,6 +28,17 @@ export async function register(): Promise<void> {
     return;
   }
 
+  // Workaround for Node 18+ Happy Eyeballs bug: when IPv6 fails fast with
+  // EHOSTUNREACH (typical home/office networks without IPv6 transit), the
+  // parallel IPv4 connect can be left in a broken state and time out, even
+  // though a plain IPv4 socket succeeds. Prefer IPv4 and disable autoSelectFamily
+  // so fetch() goes straight to a working IPv4 connection.
+  // See: https://github.com/nodejs/node/issues/47644
+  const dns = await import("node:dns");
+  const net = await import("node:net");
+  dns.setDefaultResultOrder("ipv4first");
+  net.setDefaultAutoSelectFamily(false);
+
   // Survive HMR / module reloads in dev by parking the instance on globalThis.
   type Singleton = { __linkPoller?: { stop: () => void } };
   const g = globalThis as unknown as Singleton;
