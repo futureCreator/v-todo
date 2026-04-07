@@ -57,6 +57,25 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
           <span className="text-[12px] font-medium">노트</span>
         </button>
 
+        {/* 링크 */}
+        <button
+          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+            active === "link"
+              ? "text-[var(--accent-primary)]"
+              : "text-[var(--label-tertiary)]"
+          }`}
+          onClick={() => onChange("link")}
+        >
+          <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "link" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "link" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
+            {active === "link" ? (
+              <path d="M18 2H7C5.9 2 5 2.9 5 4v18l7-3 7 3V4c0-1.1-.9-2-2-2z" />
+            ) : (
+              <path d="M18 2H7C5.9 2 5 2.9 5 4v18l7-3 7 3V4c0-1.1-.9-2-2-2z" />
+            )}
+          </svg>
+          <span className="text-[12px] font-medium">링크</span>
+        </button>
+
         {/* 위시 */}
         <button
           className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
