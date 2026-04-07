@@ -42,7 +42,7 @@ export const cmTheme = EditorView.theme({
     display: "flex",
     flexDirection: "column",
     fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, sans-serif',
-    fontSize: "20px",
+    fontSize: "16px",
     backgroundColor: "transparent",
     backgroundImage:
       "linear-gradient(var(--note-grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--note-grid-color) 1px, transparent 1px)",
@@ -56,7 +56,7 @@ export const cmTheme = EditorView.theme({
   ".cm-scroller::-webkit-scrollbar": { width: "0", background: "transparent" },
   ".cm-content": {
     padding: "12px 20px 40px",
-    lineHeight: "1.7",
+    lineHeight: "1.6",
     caretColor: "var(--accent-primary)",
     color: "var(--label-primary)",
     minHeight: "100%",

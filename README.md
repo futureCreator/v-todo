@@ -37,6 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.11.1 - 2026-04-08
+- **Fix**: 노트 에디터 폰트 크기 축소 (20px → 16px) 및 줄 간격 조정 (1.7 → 1.6)
+
 ### v0.11.0 - 2026-04-07
 - **Feature**: 링크 아카이브 — 텔레그램 봇으로 받은 링크를 자동 저장하는 새 메인 섹션 ("링크" 탭)
 - **Feature**: 텔레그램 봇 long polling 워커 — `instrumentation.ts`에서 부팅 시 시작, 공개 URL/webhook 불필요, `TELEGRAM_ALLOWED_CHAT_ID`로 본인만 접근
