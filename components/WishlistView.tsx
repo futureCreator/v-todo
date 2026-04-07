@@ -12,6 +12,7 @@ interface WishlistViewProps {
   onEdit: (wish: WishItem) => void;
   onDelete: (id: string) => void;
   onAdd: () => void;
+  onTagClick?: (tag: string) => void;
 }
 
 export default function WishlistView({
@@ -22,6 +23,7 @@ export default function WishlistView({
   onEdit,
   onDelete,
   onAdd,
+  onTagClick,
 }: WishlistViewProps) {
   const itemCount = wishes.filter((w) => w.category === "item" && !w.completed).length;
   const experienceCount = wishes.filter((w) => w.category === "experience" && !w.completed).length;
@@ -57,6 +59,7 @@ export default function WishlistView({
               onToggle={onToggle}
               onEdit={onEdit}
               onDelete={onDelete}
+              onTagClick={onTagClick}
             />
           ))}
         </div>

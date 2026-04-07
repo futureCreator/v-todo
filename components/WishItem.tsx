@@ -1,12 +1,14 @@
 "use client";
 
 import type { WishItem as WishItemType } from "@/types";
+import { splitParts } from "@/lib/tags";
 
 interface WishItemProps {
   wish: WishItemType;
   onToggle: (id: string) => void;
   onEdit: (wish: WishItemType) => void;
   onDelete: (id: string) => void;
+  onTagClick?: (tag: string) => void;
 }
 
 function formatDate(dateStr: string): string {
@@ -14,7 +16,7 @@ function formatDate(dateStr: string): string {
   return `${d.getMonth() + 1}/${d.getDate()}`;
 }
 
-export default function WishItem({ wish, onToggle, onEdit, onDelete }: WishItemProps) {
+export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick }: WishItemProps) {
   const categoryEmoji = wish.category === "item" ? "🛍️" : "⭐";
 
   const renderPrice = () => {
@@ -116,8 +118,21 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete }: WishItemP
           className="w-full text-left"
           onClick={() => onEdit(wish)}
         >
-          <div className={`text-[17px] leading-[22px] font-semibold text-[var(--label-primary)] line-clamp-2 ${wish.completed ? "line-through" : ""}`}>
-            {wish.title}
+          <div className={`text-[17px] leading-[22px] font-semibold text-[var(--label-primary)] ${wish.completed ? "line-through" : ""} flex items-center flex-wrap gap-1`}>
+            {splitParts(wish.title).map((part, i) =>
+              part.type === "tag" ? (
+                <button
+                  key={i}
+                  className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-[var(--accent-primary)]/12 text-[var(--accent-primary)] text-[11px] font-medium leading-tight no-underline"
+                  onClick={(e) => { e.stopPropagation(); e.preventDefault(); onTagClick?.(part.value); }}
+                  style={{ textDecoration: "none" }}
+                >
+                  #{part.value}
+                </button>
+              ) : (
+                <span key={i}>{part.value}</span>
+              )
+            )}
           </div>
           {renderPrice()}
           {renderMeta()}

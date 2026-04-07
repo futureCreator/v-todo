@@ -1,10 +1,12 @@
 "use client";
 
 import type { Schedule } from "@/types";
+import { splitParts } from "@/lib/tags";
 
 interface ScheduleItemProps {
   schedule: Schedule;
   onEdit: (schedule: Schedule) => void;
+  onTagClick?: (tag: string) => void;
 }
 
 /** Compute next occurrence date, days left, and milestone for any schedule */
@@ -117,7 +119,7 @@ function ddayColor(days: number): string {
   return "text-[var(--accent-primary)]";
 }
 
-export default function ScheduleItem({ schedule, onEdit }: ScheduleItemProps) {
+export default function ScheduleItem({ schedule, onEdit, onTagClick }: ScheduleItemProps) {
   const { displayDate, daysLeft, milestone } = getDisplayInfo(schedule);
   const month = displayDate.getMonth() + 1;
   const day = displayDate.getDate();
@@ -148,8 +150,20 @@ export default function ScheduleItem({ schedule, onEdit }: ScheduleItemProps) {
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <div className="text-[20px] leading-[26px] font-semibold text-[var(--label-primary)] truncate">
-          {schedule.name}
+        <div className="text-[20px] leading-[26px] font-semibold text-[var(--label-primary)] truncate flex items-center flex-wrap gap-1">
+          {splitParts(schedule.name).map((part, i) =>
+            part.type === "tag" ? (
+              <button
+                key={i}
+                className="inline-flex items-center px-2 py-0.5 rounded-full bg-[var(--accent-primary)]/12 text-[var(--accent-primary)] text-[13px] font-medium leading-tight"
+                onClick={(e) => { e.stopPropagation(); e.preventDefault(); onTagClick?.(part.value); }}
+              >
+                #{part.value}
+              </button>
+            ) : (
+              <span key={i}>{part.value}</span>
+            )
+          )}
         </div>
         {subtitleParts.length > 0 && (
           <div className="text-[15px] leading-[20px] text-[var(--label-tertiary)] mt-0.5">

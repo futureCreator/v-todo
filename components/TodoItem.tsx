@@ -2,12 +2,14 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import type { Todo } from "@/types";
+import { splitParts } from "@/lib/tags";
 
 interface TodoItemProps {
   todo: Todo;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit: (id: string, title: string) => void;
+  onTagClick?: (tag: string) => void;
 }
 
 function ageLabel(stageMovedAt: string): string {
@@ -21,7 +23,7 @@ function ageLabel(stageMovedAt: string): string {
   return `${days}일 전`;
 }
 
-export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
+export default function TodoItem({ todo, onToggle, onDelete, onEdit, onTagClick }: TodoItemProps) {
   const [completing, setCompleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.title);
@@ -136,8 +138,20 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemP
           />
         ) : (
           <>
-            <span className="flex-1 text-[20px] leading-[26px] text-[var(--label-primary)]">
-              {todo.title}
+            <span className="flex-1 text-[20px] leading-[26px] text-[var(--label-primary)] flex items-center flex-wrap gap-1">
+              {splitParts(todo.title).map((part, i) =>
+                part.type === "tag" ? (
+                  <button
+                    key={i}
+                    className="inline-flex items-center px-2 py-0.5 rounded-full bg-[var(--accent-primary)]/12 text-[var(--accent-primary)] text-[13px] font-medium leading-tight"
+                    onClick={(e) => { e.stopPropagation(); onTagClick?.(part.value); }}
+                  >
+                    #{part.value}
+                  </button>
+                ) : (
+                  <span key={i}>{part.value}</span>
+                )
+              )}
             </span>
             <span className="text-[15px] text-[var(--label-tertiary)] ml-3 flex-shrink-0">
               {ageLabel(todo.stageMovedAt)}

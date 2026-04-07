@@ -18,6 +18,7 @@ import AddWishSheet from "@/components/AddWishSheet";
 import YearProgress from "@/components/YearProgress";
 import WishCompletionSheet from "@/components/WishCompletionSheet";
 import HabitView from "@/components/HabitView";
+import TagView from "@/components/TagView";
 import type { TodoTab } from "@/types";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -38,6 +39,7 @@ export default function Home() {
   const [editWish, setEditWish] = useState<WishItem | null>(null);
   const [completingWish, setCompletingWish] = useState<WishItem | null>(null);
 
+  const [activeTag, setActiveTag] = useState<string | null>(null);
   const [showArchive, setShowArchive] = useState(false);
   const [showAddSchedule, setShowAddSchedule] = useState(false);
   const [editSchedule, setEditSchedule] = useState<Schedule | null>(null);
@@ -625,6 +627,7 @@ export default function Home() {
               onEdit={(w) => { setEditWish(w); setShowAddWish(true); }}
               onDelete={deleteWish}
               onAdd={() => { setEditWish(null); setShowAddWish(true); }}
+              onTagClick={setActiveTag}
             />
           ) : section === "todo" && todoTab === "habit" ? (
             <HabitView />
@@ -651,6 +654,7 @@ export default function Home() {
                         onToggle={toggleTodo}
                         onDelete={deleteTodo}
                         onEdit={editTodo}
+                        onTagClick={setActiveTag}
                       />
                     </div>
                   ))}
@@ -684,6 +688,7 @@ export default function Home() {
                           setEditSchedule(s);
                           setShowAddSchedule(true);
                         }}
+                        onTagClick={setActiveTag}
                       />
                     </div>
                   ))}
@@ -763,6 +768,15 @@ export default function Home() {
               : briefingText
           }
           onClose={() => setShowBriefing(false)}
+        />
+      )}
+      {activeTag && (
+        <TagView
+          tag={activeTag}
+          todos={todos}
+          schedules={schedules}
+          wishes={wishes}
+          onClose={() => setActiveTag(null)}
         />
       )}
       {undoItem && (

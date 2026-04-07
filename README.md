@@ -37,6 +37,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.10.0 - 2026-04-07
+- **Feature**: 인라인 해시태그 시스템 — 할 일, 위시리스트, D-day 제목에 `#태그`를 입력하면 자동 인식하여 accent 색상 pill로 렌더링
+- **Feature**: 크로스 섹션 태그 뷰 — 태그 pill을 탭하면 모든 섹션(할 일, 위시, D-day)에서 해당 태그가 포함된 항목을 통합 뷰로 표시
+- **Feature**: 태그 파싱 유틸리티 (`lib/tags.ts`) — `extractTags`, `splitParts` 함수로 `#태그` 자동 추출 및 렌더링 분리
+
 ### v0.9.2 - 2026-04-06
 - **Fix**: 습관 탭 "새 습관 추가" 버튼 화면 하단으로 이동 — 위시리스트와 동일한 레이아웃 패턴 적용
 
