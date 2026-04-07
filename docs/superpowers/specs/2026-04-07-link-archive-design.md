@@ -132,13 +132,16 @@ export interface LinkStore {
 
 ## 3. API 라우트
 
-`app/api/links/route.ts` — v-todo의 다른 라우트와 동일한 패턴.
+v-todo의 다른 라우트와 동일한 패턴 — 컬렉션은 `route.ts`, 개별 항목은 `[id]/route.ts` 동적 세그먼트.
+
+- `app/api/links/route.ts` — `GET`
+- `app/api/links/[id]/route.ts` — `PUT`, `DELETE`
 
 | 메소드 | 경로 | 동작 |
 |---|---|---|
 | `GET` | `/api/links` | 전체 링크 반환 (createdAt 내림차순 정렬) |
-| `PATCH` | `/api/links?id={id}` | 읽음 상태 토글 (`{ read: boolean }` 바디) |
-| `DELETE` | `/api/links?id={id}` | 항목 삭제 |
+| `PUT` | `/api/links/[id]` | 읽음 상태 토글 (`{ read: boolean }` 바디). `read=true`이면 `readAt` 자동 설정, `false`이면 `readAt`을 null로 |
+| `DELETE` | `/api/links/[id]` | 항목 삭제 |
 
 - **POST 없음**: 첫 버전에선 텔레그램만이 입력 채널. 수동 추가는 첫 버전 범위에서 제외.
 - **PUT/메모 편집 없음**: 인라인 편집도 첫 버전 범위에서 제외. 수정하려면 텔레그램에서 다시 보내고 옛 항목을 삭제.
