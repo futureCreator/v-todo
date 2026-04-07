@@ -565,10 +565,13 @@ export default function Home() {
     } else if (section === "note") {
       if (dir === "left" && noteTab === "daily") setNoteTab("general");
       if (dir === "right" && noteTab === "general") setNoteTab("daily");
+    } else if (section === "link") {
+      if (dir === "left" && linkTab === "unread") setLinkTab("read");
+      if (dir === "right" && linkTab === "read") setLinkTab("unread");
     } else if (section === "wish") {
       if (dir === "left" && wishTab === "item") setWishTab("experience");
       if (dir === "right" && wishTab === "experience") setWishTab("item");
-    } else {
+    } else if (section === "dday") {
       if (dir === "left" && ddayTab === "general") setDdayTab("anniversary");
       if (dir === "right" && ddayTab === "anniversary") setDdayTab("general");
     }
@@ -660,7 +663,7 @@ export default function Home() {
             active={noteTab}
             onChange={(key) => setNoteTab(key as NoteTab)}
           />
-        ) : section === "wish" ? null : (
+        ) : section === "dday" ? (
           <SectionTabs
             tabs={[
               { key: "general", label: `D-day${ddayCount > 0 ? ` ${ddayCount}` : ""}` },
@@ -669,7 +672,7 @@ export default function Home() {
             active={ddayTab}
             onChange={(key) => setDdayTab(key as "general" | "anniversary")}
           />
-        )}
+        ) : null}
       </div>
 
       {/* Main Content */}
