@@ -49,6 +49,7 @@
   --sys-indigo: #8839ef;   /* Mauve */
   --sys-purple: #ea76cb;   /* Pink */
   --sys-gray: #9ca0b0;     /* Overlay0 */
+  --sys-yellow: #df8e1d;   /* Yellow */
 
   /* ── System Purple (Milestone labels) ── */
   --system-purple: #8839ef;              /* Mauve */
@@ -114,6 +115,7 @@
     --sys-indigo: #cba6f7;   /* Mauve */
     --sys-purple: #f5c2e7;   /* Pink */
     --sys-gray: #9399b2;     /* Overlay2 */
+    --sys-yellow: #f9e2af;   /* Yellow */
 
     /* ── System Purple (Milestone labels) ── */
     --system-purple: #cba6f7;              /* Mauve */
