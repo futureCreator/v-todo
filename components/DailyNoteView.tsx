@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import DateNavigator from "@/components/DateNavigator";
 import NoteEditor from "@/components/NoteEditor";
 import GratitudeSection from "@/components/GratitudeSection";
+import MoodInput from "@/components/MoodInput";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -101,6 +102,7 @@ export default function DailyNoteView() {
   return (
     <div className="flex flex-col flex-1 min-h-0">
       <DateNavigator date={date} onChange={handleDateChange} />
+      <MoodInput date={dateToString(date)} />
       <GratitudeSection date={dateToString(date)} />
       {saveStatus !== "idle" && (
         <div className="px-5 md:px-0 -mt-1 mb-1 text-right">
