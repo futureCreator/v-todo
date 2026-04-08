@@ -16,6 +16,7 @@ import GeneralNoteView from "@/components/GeneralNoteView";
 import MoodYearView from "@/components/MoodYearView";
 import WishlistView from "@/components/WishlistView";
 import AddWishSheet from "@/components/AddWishSheet";
+import HealingAddSheet from "@/components/HealingAddSheet";
 import YearProgress from "@/components/YearProgress";
 import WishCompletionSheet from "@/components/WishCompletionSheet";
 import HabitView from "@/components/HabitView";
@@ -36,7 +37,7 @@ export default function Home() {
   const [wishes, setWishes] = useState<WishItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [wishTab, setWishTab] = useState<WishCategory>("item");
+  const [wishTab, setWishTab] = useState<WishCategory>("healing");
   const [showAddWish, setShowAddWish] = useState(false);
   const [editWish, setEditWish] = useState<WishItem | null>(null);
   const [completingWish, setCompletingWish] = useState<WishItem | null>(null);
@@ -224,6 +225,7 @@ export default function Home() {
     actualPrice?: number | null;
     satisfaction?: number | null;
     review?: string | null;
+    healingType?: "image" | "text" | "link";
   }) => {
     try {
       if (editWish) {
@@ -498,7 +500,7 @@ export default function Home() {
               <polygon points="11 2 13.9 7.6 20 8.5 15.5 12.9 16.6 19 11 16 5.4 19 6.5 12.9 2 8.5 8.1 7.6" />
             )}
           </svg>
-          <span className="text-[15px] font-medium flex-1">위시리스트</span>
+          <span className="text-[15px] font-medium flex-1">위시</span>
           {wishes.filter((w) => !w.completed).length > 0 && (
             <span className="text-[13px] text-[var(--label-tertiary)]">{wishes.filter((w) => !w.completed).length}</span>
           )}
@@ -572,8 +574,10 @@ export default function Home() {
       if (dir === "left" && linkTab === "unread") setLinkTab("read");
       if (dir === "right" && linkTab === "read") setLinkTab("unread");
     } else if (section === "wish") {
-      if (dir === "left" && wishTab === "item") setWishTab("experience");
-      if (dir === "right" && wishTab === "experience") setWishTab("item");
+      const wishTabs: WishCategory[] = ["healing", "item", "experience"];
+      const wi = wishTabs.indexOf(wishTab);
+      if (dir === "left" && wi < wishTabs.length - 1) setWishTab(wishTabs[wi + 1]);
+      if (dir === "right" && wi > 0) setWishTab(wishTabs[wi - 1]);
     } else if (section === "dday") {
       if (dir === "left" && ddayTab === "general") setDdayTab("anniversary");
       if (dir === "right" && ddayTab === "anniversary") setDdayTab("general");
@@ -605,7 +609,7 @@ export default function Home() {
       {/* Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-5 pt-3 pb-1 safe-area-pt">
         <h1 className="text-[38px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "link" ? "링크" : section === "wish" ? "위시리스트" : "D-day"}
+          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "link" ? "링크" : section === "wish" ? "위시" : "D-day"}
         </h1>
         <div className="flex items-center gap-1">
           {section === "todo" && (
@@ -636,7 +640,7 @@ export default function Home() {
       {/* Desktop Header */}
       <header className="hidden md:flex items-center justify-between px-8 pt-8 pb-2">
         <h1 className="text-[28px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "link" ? "링크" : section === "wish" ? "위시리스트" : "D-day"}
+          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "link" ? "링크" : section === "wish" ? "위시" : "D-day"}
         </h1>
       </header>
 
@@ -826,20 +830,25 @@ export default function Home() {
           }}
         />
       )}
-      {showAddWish && (
-        <AddWishSheet
-          wish={editWish}
-          defaultCategory={wishTab}
-          onSave={saveWish}
-          onDelete={editWish ? deleteWish : undefined}
-          onUncomplete={editWish?.completed ? (id: string) => {
-            toggleWish(id);
-            setShowAddWish(false);
-            setEditWish(null);
-          } : undefined}
-          onClose={() => { setShowAddWish(false); setEditWish(null); }}
-        />
-      )}
+      {showAddWish && wishTab === "healing" ? (
+          <HealingAddSheet
+            onSave={saveWish}
+            onClose={() => { setShowAddWish(false); setEditWish(null); }}
+          />
+        ) : showAddWish ? (
+          <AddWishSheet
+            wish={editWish}
+            defaultCategory={wishTab}
+            onSave={saveWish}
+            onDelete={editWish ? deleteWish : undefined}
+            onUncomplete={editWish?.completed ? (id: string) => {
+              toggleWish(id);
+              setShowAddWish(false);
+              setEditWish(null);
+            } : undefined}
+            onClose={() => { setShowAddWish(false); setEditWish(null); }}
+          />
+        ) : null}
       {completingWish && (
         <WishCompletionSheet
           wish={completingWish}
