@@ -110,9 +110,15 @@ export interface DailyNoteEntry {
 export function buildWeeklyReviewPrompt(
   notes: DailyNoteEntry[],
   previousReview: string | null,
+  weekMoods?: { date: string; value: number }[],
 ): string {
   const prevSection = previousReview
     ? `\n## 이전 주 리뷰\n${previousReview}\n`
+    : "";
+
+  const moodEmojis: Record<number, string> = { 1: "😢", 2: "😔", 3: "😐", 4: "😊", 5: "😄" };
+  const moodSection = weekMoods && weekMoods.length > 0
+    ? `\n## 이번 주 기분 기록\n${weekMoods.map((m) => `- ${m.date}: ${moodEmojis[m.value] ?? "?"}`).join("\n")}\n`
     : "";
 
   const noteEntries = notes
@@ -124,9 +130,10 @@ export function buildWeeklyReviewPrompt(
 규칙:
 - 불릿 포인트만 출력 (서론, 결론, 인삿말 없이)
 - 반복되는 주제, 감정 변화, 숨은 패턴, 주목할 만한 점 중심
+- 기분 기록이 제공된 경우 노트 내용과 기분 사이의 상관관계를 분석
 - 직전 주 리뷰가 제공된 경우 참고하여 연속성 있는 관찰을 포함
 - 한국어로 작성
-${prevSection}
+${prevSection}${moodSection}
 ## 이번 주 데일리 노트
 
 ${noteEntries}`;

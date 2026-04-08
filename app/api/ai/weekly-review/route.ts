@@ -7,6 +7,7 @@ import { buildWeeklyReviewPrompt } from "@/lib/prompts";
 import type { DailyNoteEntry } from "@/lib/prompts";
 import { getWeekDateRange, getWeekFilename, getPreviousWeekFilename, getISOWeek } from "@/lib/week";
 import type { WeeklyReviewResponse, ApiResponse } from "@/types";
+import { readMoods } from "@/lib/mood-store";
 
 const DAY_LABELS = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
 
@@ -47,8 +48,18 @@ export async function POST(): Promise<NextResponse<ApiResponse<WeeklyReviewRespo
     const prevReview = await readFile(prevReviewPath);
     const prevReviewContent = prevReview.trim() || null;
 
+    // Collect week's mood data
+    const allMoods = await readMoods();
+    const weekMoods: { date: string; value: number }[] = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(mondayDate);
+      d.setDate(mondayDate.getDate() + i);
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      if (allMoods[dateStr]) weekMoods.push({ date: dateStr, value: allMoods[dateStr] });
+    }
+
     // 3. Gemini 호출
-    const prompt = buildWeeklyReviewPrompt(notes, prevReviewContent);
+    const prompt = buildWeeklyReviewPrompt(notes, prevReviewContent, weekMoods.length > 0 ? weekMoods : undefined);
     const insights = await generateText(prompt);
 
     // 4. 마크다운 파일 생성
