@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { readWishes, writeWishes } from "@/lib/wish-store";
 import type { UpdateWishRequest, WishItem, ApiResponse } from "@/types";
 
-const VALID_CATEGORIES = ["item", "experience"];
+const VALID_CATEGORIES = ["healing", "item", "experience"];
 
 export async function PUT(
   request: Request,
@@ -31,7 +31,7 @@ export async function PUT(
 
     if (body.category !== undefined) {
       if (!VALID_CATEGORIES.includes(body.category)) {
-        return NextResponse.json({ error: "카테고리는 item 또는 experience여야 합니다." }, { status: 400 });
+        return NextResponse.json({ error: "유효하지 않은 카테고리입니다." }, { status: 400 });
       }
       wishes[index].category = body.category;
     }

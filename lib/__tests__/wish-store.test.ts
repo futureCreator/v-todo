@@ -32,6 +32,9 @@ describe("wish-store", () => {
       memo: null,
       completed: false,
       completedAt: null,
+      actualPrice: null,
+      satisfaction: null,
+      review: null,
       createdAt: "2026-04-02T00:00:00Z",
     };
     await writeWishes([wish]);
