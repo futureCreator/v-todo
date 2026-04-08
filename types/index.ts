@@ -104,7 +104,7 @@ export interface FileItem {
 }
 
 // Wishes
-export type WishCategory = "item" | "experience";
+export type WishCategory = "healing" | "item" | "experience";
 
 export interface WishItem {
   id: string;
@@ -119,6 +119,8 @@ export interface WishItem {
   actualPrice: number | null;
   satisfaction: number | null;
   review: string | null;
+  healingType?: "image" | "text" | "link";
+  linkTitle?: string;
   createdAt: string;
 }
 
@@ -133,6 +135,8 @@ export interface CreateWishRequest {
   url?: string | null;
   imageUrl?: string | null;
   memo?: string | null;
+  healingType?: "image" | "text" | "link";
+  linkTitle?: string;
 }
 
 export interface UpdateWishRequest {
@@ -147,9 +151,11 @@ export interface UpdateWishRequest {
   actualPrice?: number | null;
   satisfaction?: number | null;
   review?: string | null;
+  healingType?: "image" | "text" | "link";
+  linkTitle?: string;
 }
 
-export const VALID_WISH_CATEGORIES: WishCategory[] = ["item", "experience"];
+export const VALID_WISH_CATEGORIES: WishCategory[] = ["healing", "item", "experience"];
 
 // Habits
 export type HabitRepeatMode = "daily" | "weekdays" | "interval";
