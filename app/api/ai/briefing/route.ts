@@ -5,6 +5,7 @@ import { readDailyNote } from "@/lib/note-store";
 import { readHabits } from "@/lib/habit-store";
 import { readHabitLogs } from "@/lib/habit-log-store";
 import { readGratitudeByDate } from "@/lib/gratitude-store";
+import { readMoods } from "@/lib/mood-store";
 import { generateText } from "@/lib/gemini";
 import { buildBriefingPrompt } from "@/lib/prompts";
 import type { AiBriefingResponse, ApiResponse } from "@/types";
@@ -17,7 +18,7 @@ export async function GET(): Promise<NextResponse<ApiResponse<AiBriefingResponse
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, "0")}-${String(yesterday.getDate()).padStart(2, "0")}`;
 
-    const [todos, schedules, todayNote, yesterdayNote, habits, allLogs, yesterdayGratitude] = await Promise.all([
+    const [todos, schedules, todayNote, yesterdayNote, habits, allLogs, yesterdayGratitude, allMoods] = await Promise.all([
       readTodos(),
       readSchedules(),
       readDailyNote(todayStr),
@@ -25,6 +26,7 @@ export async function GET(): Promise<NextResponse<ApiResponse<AiBriefingResponse
       readHabits(),
       readHabitLogs(),
       readGratitudeByDate(yesterdayStr),
+      readMoods(),
     ]);
 
     const incompleteTodos = todos.filter((t) => !t.completed);
@@ -83,6 +85,15 @@ export async function GET(): Promise<NextResponse<ApiResponse<AiBriefingResponse
       });
     }
 
+    // Collect last 7 days of moods
+    const recentMoods: { date: string; value: number }[] = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(now);
+      d.setDate(d.getDate() - i);
+      const ds = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      if (allMoods[ds]) recentMoods.push({ date: ds, value: allMoods[ds] });
+    }
+
     const prompt = buildBriefingPrompt(
       incompleteTodos,
       upcomingSchedules,
@@ -91,6 +102,7 @@ export async function GET(): Promise<NextResponse<ApiResponse<AiBriefingResponse
       yesterdayStr,
       habitData.length > 0 ? habitData : undefined,
       gratitudeItems.length > 0 ? gratitudeItems : undefined,
+      recentMoods.length > 0 ? recentMoods : undefined,
     );
     const briefing = await generateText(prompt);
 

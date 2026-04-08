@@ -16,6 +16,7 @@ export function buildBriefingPrompt(
   yesterdayDate?: string,
   habits?: { title: string; streak: number }[],
   yesterdayGratitude?: string[],
+  recentMoods?: { date: string; value: number }[],
 ): string {
   const now = new Date();
   const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
@@ -56,6 +57,11 @@ export function buildBriefingPrompt(
     ? `\n## 어제의 감사\n${yesterdayGratitude.filter((s) => s.trim()).map((s, i) => `${i + 1}. ${s}`).join("\n")}\n`
     : "";
 
+  const moodEmojis: Record<number, string> = { 1: "😢", 2: "😔", 3: "😐", 4: "😊", 5: "😄" };
+  const moodSection = recentMoods && recentMoods.length > 0
+    ? `\n## 최근 기분 추이\n${recentMoods.map((m) => `- ${m.date}: ${moodEmojis[m.value] ?? "?"}`).join("\n")}\n`
+    : "";
+
   const reqItems: string[] = [
     "1. 오늘 집중해야 할 항목 (\"지금\" 단계의 할 일 우선)",
     "2. 곧 단계로 넘어갈 위험이 있는 항목 (3일 임박)",
@@ -75,6 +81,10 @@ export function buildBriefingPrompt(
     reqItems.push(`${reqNum}. 어제 감사했던 것을 리마인드하여 긍정적으로 하루 시작`);
     reqNum++;
   }
+  if (moodSection) {
+    reqItems.push(`${reqNum}. 최근 기분 추이를 분석하고, 3일 이상 하락세면 격려 메시지 포함`);
+    reqNum++;
+  }
 
   return `당신은 일일 업무 브리핑 도우미입니다.
 오늘 날짜: ${today}
@@ -84,7 +94,7 @@ ${todoList || "(할 일이 없습니다)"}
 
 ## D-day / 일정
 ${scheduleList || "(등록된 일정이 없습니다)"}
-${dailyNoteBlock}${habitSection}${gratitudeSection}
+${dailyNoteBlock}${habitSection}${gratitudeSection}${moodSection}
 위 내용을 종합하여 오늘의 브리핑을 작성해주세요:
 ${reqItems.join("\n")}
 
