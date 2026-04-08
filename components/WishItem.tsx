@@ -79,38 +79,36 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick 
 
   return (
     <div className="relative rounded-2xl overflow-hidden bg-[var(--sys-bg-elevated)]">
-      {/* Image area */}
-      <button
-        className="w-full aspect-[4/3] relative"
-        onClick={() => onEdit(wish)}
-        aria-label="위시 편집"
-      >
-        {wish.imageUrl ? (
-          <div
-            className="w-full h-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${wish.imageUrl})` }}
+      {/* Image area — only if image exists */}
+      {wish.imageUrl ? (
+        <button
+          className="w-full relative"
+          onClick={() => onEdit(wish)}
+          aria-label="위시 편집"
+        >
+          <img
+            src={wish.imageUrl}
+            alt=""
+            className="w-full block rounded-t-2xl"
+            loading="lazy"
           />
-        ) : (
-          <div className="w-full h-full bg-[var(--fill-quaternary)] flex items-center justify-center">
-            <span className="text-[48px] opacity-40">{categoryEmoji}</span>
-          </div>
-        )}
-        {/* Completed overlay */}
-        {wish.completed && (
-          <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-              <circle cx="20" cy="20" r="18" fill="var(--accent-primary)" />
-              <path d="M12 20L18 26L28 14" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-        )}
-        {/* Completed date badge */}
-        {wish.completed && wish.completedAt && (
-          <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/50 text-white text-[11px] font-medium">
-            {formatDate(wish.completedAt)} 달성
-          </div>
-        )}
-      </button>
+          {/* Completed overlay */}
+          {wish.completed && (
+            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="18" fill="var(--accent-primary)" />
+                <path d="M12 20L18 26L28 14" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          )}
+          {/* Completed date badge */}
+          {wish.completed && wish.completedAt && (
+            <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-black/50 text-white text-[11px] font-medium">
+              {formatDate(wish.completedAt)} 달성
+            </div>
+          )}
+        </button>
+      ) : null}
 
       {/* Content */}
       <div className="px-3 pt-2.5 pb-3">
