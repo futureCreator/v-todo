@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, type ReactNode } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 
 interface MasonryGridProps {
   children: ReactNode[];
@@ -8,30 +8,37 @@ interface MasonryGridProps {
 }
 
 export default function MasonryGrid({ children, gap = 12 }: MasonryGridProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [columns, setColumns] = useState<[number[], number[]]>([[], []]);
+  const [colCount, setColCount] = useState(2);
 
   useEffect(() => {
-    // Simple distribution: alternate items between columns
-    const left: number[] = [];
-    const right: number[] = [];
-    for (let i = 0; i < children.length; i++) {
-      if (i % 2 === 0) left.push(i);
-      else right.push(i);
-    }
-    setColumns([left, right]);
-  }, [children.length]);
+    const mq = window.matchMedia("(min-width: 768px)");
+    const handler = (e: MediaQueryListEvent | MediaQueryList) => {
+      setColCount(e.matches ? 3 : 2);
+    };
+    handler(mq);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   const items = Array.isArray(children) ? children : [children];
 
+  // Distribute items across columns alternately
+  const columns: number[][] = Array.from({ length: colCount }, () => []);
+  for (let i = 0; i < items.length; i++) {
+    columns[i % colCount].push(i);
+  }
+
   return (
     <div
-      ref={containerRef}
-      className="flex"
-      style={{ gap }}
+      className="grid"
+      style={{
+        gridTemplateColumns: `repeat(${colCount}, minmax(0, 1fr))`,
+        gap,
+        alignItems: "start",
+      }}
     >
       {columns.map((col, ci) => (
-        <div key={ci} className="flex-1 flex flex-col" style={{ gap }}>
+        <div key={ci} className="flex flex-col min-w-0" style={{ gap }}>
           {col.map((idx) => (
             <div key={idx}>{items[idx]}</div>
           ))}

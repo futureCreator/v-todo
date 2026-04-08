@@ -37,6 +37,18 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.13.0 - 2026-04-09
+- **Feature**: 힐링 컬렉션 — 위시 섹션에 "힐링" 탭 추가, 기분이 좋아지는 이미지/글/링크를 모아두는 공간
+- **Feature**: 힐링 아이템 3종 — 이미지 업로드, 텍스트 직접 입력(인용문 스타일), 링크 저장(도메인+타이틀 자동 추출)
+- **Feature**: Masonry 레이아웃 — 위시 전체 탭(힐링/물건/경험)을 Pinterest 스타일 2열(모바일)/3열(데스크톱) 동적 높이 그리드로 전환
+- **Feature**: 이미지 업로드 API (`/api/wishes/upload`) — JPEG/PNG/WebP/GIF, 10MB 제한, `data/healing/`에 저장
+- **Feature**: 이미지 서빙 API (`/api/wishes/image/[filename]`) — immutable 캐시, Content-Type 자동 설정
+- **Feature**: 링크 타이틀 자동 추출 — URL 저장 시 `<title>` 태그 크롤링 (5초 타임아웃, 50KB 제한)
+- **Rename**: "위시리스트" → "위시" (헤더, 사이드바)
+- **Improve**: WishItem 카드 — 이미지 없는 카드는 이미지 영역 생략, 텍스트 only 카드로 표시
+- **Docs**: 힐링 컬렉션 설계서 및 11-task 구현 계획서
+- **Test**: 링크 타이틀 추출 테스트 5개 추가 (총 118개 통과)
+
 ### v0.12.0 - 2026-04-08
 - **Feature**: 무드 트래커 — 데일리 노트 상단에서 하루 기분을 5단계 이모지(😢😔😐😊😄)로 기록
 - **Feature**: Year in Pixels — 노트 섹션 "무드" 탭에서 1년 전체 기분을 세로 스트립 그리드(12월×31일)로 시각화, 셀 탭 시 날짜+이모지 토스트
