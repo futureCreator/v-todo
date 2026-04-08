@@ -102,20 +102,24 @@ export default function DailyNoteView() {
   return (
     <div className="flex flex-col flex-1 min-h-0">
       <DateNavigator date={date} onChange={handleDateChange} />
-      <MoodInput date={dateToString(date)} />
-      <GratitudeSection date={dateToString(date)} />
-      {saveStatus !== "idle" && (
-        <div className="px-5 md:px-0 -mt-1 mb-1 text-right">
-          <span className="text-[13px] text-[var(--label-tertiary)]">
-            {saveStatus === "saving" ? "저장 중..." : "저장됨"}
-          </span>
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        <MoodInput date={dateToString(date)} />
+        <GratitudeSection date={dateToString(date)} />
+        {saveStatus !== "idle" && (
+          <div className="px-5 md:px-0 -mt-1 mb-1 text-right">
+            <span className="text-[13px] text-[var(--label-tertiary)]">
+              {saveStatus === "saving" ? "저장 중..." : "저장됨"}
+            </span>
+          </div>
+        )}
+        <div className="flex flex-col" style={{ height: "max(calc(100dvh - 200px), 400px)" }}>
+          <NoteEditor
+            content={content}
+            onChange={handleChange}
+            placeholder="오늘의 노트를 작성하세요..."
+          />
         </div>
-      )}
-      <NoteEditor
-        content={content}
-        onChange={handleChange}
-        placeholder="오늘의 노트를 작성하세요..."
-      />
+      </div>
     </div>
   );
 }

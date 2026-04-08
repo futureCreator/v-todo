@@ -37,6 +37,17 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.12.0 - 2026-04-08
+- **Feature**: 무드 트래커 — 데일리 노트 상단에서 하루 기분을 5단계 이모지(😢😔😐😊😄)로 기록
+- **Feature**: Year in Pixels — 노트 섹션 "무드" 탭에서 1년 전체 기분을 세로 스트립 그리드(12월×31일)로 시각화, 셀 탭 시 날짜+이모지 토스트
+- **Feature**: 무드 데이터 AI 연동 — 일일 브리핑에 최근 7일 기분 추이 분석, 주간 리뷰에 기분-노트 상관관계 분석 포함
+- **Feature**: 노트 섹션 탭 확장 (데일리 / 노트 / 무드), 스와이프 제스처 3탭 지원
+- **Feature**: 무드 API (`/api/moods`) — GET(날짜별/연도별 조회), POST(기록/덮어쓰기), `data/moods.json` atomic store
+- **Feature**: Catppuccin Yellow (`--sys-yellow`) CSS 변수 추가 (Latte #df8e1d / Mocha #f9e2af)
+- **Improve**: 데일리 노트 레이아웃 — 무드+감사일기가 스크롤로 올라가도록 변경, 노트 에디터 영역 확대
+- **Docs**: `docs/superpowers/specs/2026-04-08-mood-tracker-design.md` 설계서, `docs/superpowers/plans/2026-04-08-mood-tracker.md` 10-task 구현 계획서
+- **Test**: 무드 스토어 단위 테스트 8개 추가 (총 113개 통과)
+
 ### v0.11.1 - 2026-04-08
 - **Fix**: 노트 에디터 폰트 크기 축소 (20px → 16px) 및 줄 간격 조정 (1.7 → 1.6)
 
