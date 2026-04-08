@@ -95,7 +95,7 @@ export const VALID_REPEAT_MODES: RepeatMode[] = ["none", "every_100_days", "mont
 
 // Notes
 export type Section = "todo" | "note" | "link" | "wish" | "dday";
-export type NoteTab = "daily" | "general";
+export type NoteTab = "daily" | "general" | "mood";
 
 export interface FileItem {
   name: string;
@@ -203,6 +203,10 @@ export interface GratitudeEntry {
 export interface GratitudeStore {
   entries: GratitudeEntry[];
 }
+
+// Mood
+export type MoodValue = 1 | 2 | 3 | 4 | 5;
+export type MoodMap = Record<string, MoodValue>;
 
 // Links
 export interface Link {
