@@ -7,6 +7,7 @@ import SectionTabs from "@/components/SectionTabs";
 import TodoItem from "@/components/TodoItem";
 import TodoInput from "@/components/TodoInput";
 import ScheduleItem, { getDisplayInfo } from "@/components/ScheduleItem";
+import TimelineView from "@/components/TimelineView";
 import AddScheduleSheet from "@/components/AddScheduleSheet";
 import UndoToast from "@/components/UndoToast";
 import ArchiveView from "@/components/ArchiveView";
@@ -29,7 +30,7 @@ const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 export default function Home() {
   const [section, setSection] = useState<Section>("todo");
   const [todoTab, setTodoTab] = useState<TodoTab>("now");
-  const [ddayTab, setDdayTab] = useState<"general" | "anniversary">("general");
+  const [ddayTab, setDdayTab] = useState<"timeline" | "general" | "anniversary">("timeline");
   const [noteTab, setNoteTab] = useState<NoteTab>("daily");
 
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -385,9 +386,11 @@ export default function Home() {
   );
   const filteredSchedules = schedules
     .filter((s) =>
-      ddayTab === "general"
-        ? s.type === "general"
-        : s.type === "anniversary"
+      ddayTab === "timeline"
+        ? true
+        : ddayTab === "general"
+          ? s.type === "general"
+          : s.type === "anniversary"
     )
     .sort((a, b) => getDisplayInfo(a).daysLeft - getDisplayInfo(b).daysLeft);
 
@@ -579,8 +582,10 @@ export default function Home() {
       if (dir === "left" && wi < wishTabs.length - 1) setWishTab(wishTabs[wi + 1]);
       if (dir === "right" && wi > 0) setWishTab(wishTabs[wi - 1]);
     } else if (section === "dday") {
-      if (dir === "left" && ddayTab === "general") setDdayTab("anniversary");
-      if (dir === "right" && ddayTab === "anniversary") setDdayTab("general");
+      const ddayTabs: ("timeline" | "general" | "anniversary")[] = ["timeline", "general", "anniversary"];
+      const di = ddayTabs.indexOf(ddayTab);
+      if (dir === "left" && di < ddayTabs.length - 1) setDdayTab(ddayTabs[di + 1]);
+      if (dir === "right" && di > 0) setDdayTab(ddayTabs[di - 1]);
     }
   };
 
@@ -674,11 +679,12 @@ export default function Home() {
         ) : section === "dday" ? (
           <SectionTabs
             tabs={[
+              { key: "timeline", label: "타임라인" },
               { key: "general", label: `D-day${ddayCount > 0 ? ` ${ddayCount}` : ""}` },
               { key: "anniversary", label: `기념일${annivCount > 0 ? ` ${annivCount}` : ""}` },
             ]}
             active={ddayTab}
-            onChange={(key) => setDdayTab(key as "general" | "anniversary")}
+            onChange={(key) => setDdayTab(key as "timeline" | "general" | "anniversary")}
           />
         ) : null}
       </div>
@@ -757,6 +763,28 @@ export default function Home() {
                 </div>
               )}
             </div>
+          ) : ddayTab === "timeline" ? (
+            <div className="flex-1 flex flex-col">
+              <TimelineView
+                schedules={schedules}
+                onEdit={(s) => {
+                  setEditSchedule(s);
+                  setShowAddSchedule(true);
+                }}
+                onTagClick={setActiveTag}
+              />
+              <div className="mx-5 md:mx-0 mt-auto pt-4">
+                <button
+                  className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
+                  onClick={() => {
+                    setEditSchedule(null);
+                    setShowAddSchedule(true);
+                  }}
+                >
+                  새 일정 추가
+                </button>
+              </div>
+            </div>
           ) : (
             <div className="flex-1 flex flex-col">
               {filteredSchedules.length === 0 ? (
@@ -821,7 +849,7 @@ export default function Home() {
       {showAddSchedule && (
         <AddScheduleSheet
           schedule={editSchedule}
-          defaultType={ddayTab === "anniversary" ? "anniversary" : "general"}
+          defaultType={ddayTab === "anniversary" ? "anniversary" : "general" as ScheduleType}
           onSave={saveSchedule}
           onDelete={editSchedule ? deleteSchedule : undefined}
           onClose={() => {
