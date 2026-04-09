@@ -18,6 +18,7 @@ import MoodYearView from "@/components/MoodYearView";
 import WishlistView from "@/components/WishlistView";
 import AddWishSheet from "@/components/AddWishSheet";
 import HealingAddSheet from "@/components/HealingAddSheet";
+import AddLinkSheet from "@/components/AddLinkSheet";
 import YearProgress from "@/components/YearProgress";
 import WishCompletionSheet from "@/components/WishCompletionSheet";
 import HabitView from "@/components/HabitView";
@@ -45,6 +46,7 @@ export default function Home() {
 
   const [links, setLinks] = useState<Link[]>([]);
   const [linkTab, setLinkTab] = useState<"unread" | "read">("unread");
+  const [showAddLink, setShowAddLink] = useState(false);
 
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [showArchive, setShowArchive] = useState(false);
@@ -361,6 +363,23 @@ export default function Home() {
       console.error("Failed to delete link:", err);
       fetchLinks();
     }
+  };
+
+  const saveNewLink = async (data: { url: string; memo: string }) => {
+    try {
+      const res = await fetch(`${BASE}/api/links`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const body = await res.json();
+      if (body.data) {
+        setLinks((prev) => [body.data, ...prev]);
+      }
+    } catch (err) {
+      console.error("Failed to add link:", err);
+    }
+    setShowAddLink(false);
   };
 
   // Briefing
@@ -714,6 +733,7 @@ export default function Home() {
               onToggleRead={toggleLinkRead}
               onDelete={deleteLink}
               onTagClick={(tag) => setActiveTag(tag)}
+              onAdd={() => setShowAddLink(true)}
             />
           ) : section === "wish" ? (
             <WishlistView
@@ -877,6 +897,12 @@ export default function Home() {
             onClose={() => { setShowAddWish(false); setEditWish(null); }}
           />
         ) : null}
+      {showAddLink && (
+        <AddLinkSheet
+          onSave={saveNewLink}
+          onClose={() => setShowAddLink(false)}
+        />
+      )}
       {completingWish && (
         <WishCompletionSheet
           wish={completingWish}
