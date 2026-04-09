@@ -37,6 +37,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.15.0 - 2026-04-09
+- **Improve**: 무드 Year in Pixels 반응형 — 고정 20px 셀에서 컨테이너 너비 기반 동적 셀 크기로 변경, 가로 스크롤 제거
+- **Improve**: 무드 색상 블루 계열 그라데이션으로 변경 — 5단계(연한 블루 → 진한 블루)
+- **Feature**: 무드 이미지 저장 — 1년 전체 그리드를 PNG로 캡처 (3x 해상도), 모바일 Web Share API / 데스크톱 다운로드 지원
+- **Dependency**: `html-to-image` 추가
+
 ### v0.14.0 - 2026-04-09
 - **Feature**: 디데이 타임라인 탭 — 모든 일정(D-day + 기념일)을 월별 그룹으로 시간순 정렬하여 한눈에 조감
 - **Feature**: 타임라인 월 헤더에 항목 수 표시, 날짜 원형 배지 + 요일, D-day/기념일 구분 태그 (색상 분리)
