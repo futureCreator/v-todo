@@ -37,6 +37,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.17.0 - 2026-04-10
+- **Feature**: 노트 에디터 마크다운 단축키 — Bold(⌘B), Italic(⌘I), 취소선(⌘⇧S), 인라인 코드(⌘E), 코드 블록(⌘⇧E), 링크(⌘K), 제목 순환(⌘⇧H), 번호 목록(⌘⇧7), 글머리 기호(⌘⇧8), 체크리스트(⌘⇧9), 인용(⌘⇧.)
+- **Feature**: 서식 토글 — 선택 영역이 이미 감싸져 있으면 해제, 줄 접두사도 토글 동작
+- **Fix**: Undo/Redo 미동작 — `history()` 확장 누락으로 ⌘Z/⌘⇧Z가 작동하지 않던 문제 수정
+
 ### v0.16.0 - 2026-04-09
 - **Feature**: 링크 직접 추가 — 링크 탭 하단 "링크 추가" 버튼 + 바텀 시트로 URL과 메모를 입력해 수동 저장 (기존 텔레그램 봇 외 추가 경로)
 - **Feature**: `POST /api/links` 엔드포인트 — `{ url, memo? }` 요청으로 `source: "manual"` 링크 생성, URL 추출·도메인 파싱 자동 처리
