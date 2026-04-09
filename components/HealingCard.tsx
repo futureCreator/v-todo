@@ -45,11 +45,9 @@ export default function HealingCard({ item, onDelete }: HealingCardProps) {
   if (item.healingType === "text") {
     return (
       <div className="rounded-2xl overflow-hidden bg-[var(--sys-bg-elevated)] p-4 relative group">
-        <div className="border-l-3 border-[var(--sys-teal)] pl-3">
-          <p className="text-[17px] leading-relaxed text-[var(--label-primary)] whitespace-pre-wrap">
-            {item.title}
-          </p>
-        </div>
+        <p className="text-[17px] leading-relaxed text-[var(--label-primary)] whitespace-pre-wrap">
+          {item.title}
+        </p>
         <button
           className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--fill-tertiary)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={handleDelete}

@@ -37,6 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.17.1 - 2026-04-10
+- **Fix**: 힐링 텍스트 카드 왼쪽 세로 줄(border-left) 장식 제거 — 깔끔한 텍스트만 표시
+
 ### v0.17.0 - 2026-04-10
 - **Feature**: 노트 에디터 마크다운 단축키 — Bold(⌘B), Italic(⌘I), 취소선(⌘⇧S), 인라인 코드(⌘E), 코드 블록(⌘⇧E), 링크(⌘K), 제목 순환(⌘⇧H), 번호 목록(⌘⇧7), 글머리 기호(⌘⇧8), 체크리스트(⌘⇧9), 인용(⌘⇧.)
 - **Feature**: 서식 토글 — 선택 영역이 이미 감싸져 있으면 해제, 줄 접두사도 토글 동작
