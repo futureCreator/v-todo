@@ -37,6 +37,12 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.16.0 - 2026-04-09
+- **Feature**: 링크 직접 추가 — 링크 탭 하단 "링크 추가" 버튼 + 바텀 시트로 URL과 메모를 입력해 수동 저장 (기존 텔레그램 봇 외 추가 경로)
+- **Feature**: `POST /api/links` 엔드포인트 — `{ url, memo? }` 요청으로 `source: "manual"` 링크 생성, URL 추출·도메인 파싱 자동 처리
+- **Feature**: AddLinkSheet 컴포넌트 — HealingAddSheet와 동일한 바텀 시트 패턴, URL 자동 포커스, Enter 단축키, 해시태그 메모 지원
+- **Improve**: 링크 빈 상태 텍스트 업데이트 — 직접 추가 안내 문구 반영
+
 ### v0.15.0 - 2026-04-09
 - **Improve**: 무드 Year in Pixels 반응형 — 고정 20px 셀에서 컨테이너 너비 기반 동적 셀 크기로 변경, 가로 스크롤 제거
 - **Improve**: 무드 색상 블루 계열 그라데이션으로 변경 — 5단계(연한 블루 → 진한 블루)
