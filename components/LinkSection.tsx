@@ -13,6 +13,7 @@ interface LinkSectionProps {
   onToggleRead: (id: string, read: boolean) => void;
   onDelete: (id: string) => void;
   onTagClick?: (tag: string) => void;
+  onAdd?: () => void;
 }
 
 export default function LinkSection({
@@ -22,6 +23,7 @@ export default function LinkSection({
   onToggleRead,
   onDelete,
   onTagClick,
+  onAdd,
 }: LinkSectionProps) {
   const unread = links.filter((l) => !l.read);
   const read = links.filter((l) => l.read);
@@ -58,6 +60,17 @@ export default function LinkSection({
           ))}
         </div>
       )}
+
+      {onAdd && (
+        <div className="mx-5 md:mx-0 mt-auto pt-4">
+          <button
+            className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
+            onClick={onAdd}
+          >
+            링크 추가
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -74,9 +87,9 @@ function EmptyState({
       <div className="flex flex-col items-center justify-center py-16 gap-3">
         <span className="text-[56px] opacity-30">🔗</span>
         <p className="text-[20px] text-[var(--label-tertiary)] text-center px-8">
-          텔레그램에서 봇으로 링크를 보내면
+          텔레그램 봇으로 링크를 보내거나
           <br />
-          여기에 모입니다.
+          아래 버튼으로 직접 추가해보세요.
         </p>
       </div>
     );
@@ -96,8 +109,6 @@ function EmptyState({
       <span className="text-[56px] opacity-30">📬</span>
       <p className="text-[20px] text-[var(--label-tertiary)] text-center">
         모두 읽었어요!
-        <br />
-        새 링크는 텔레그램 봇으로 보내주세요.
       </p>
     </div>
   );
