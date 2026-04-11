@@ -6,7 +6,7 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export const metadata: Metadata = {
   title: "v-todo",
-  description: "아이젠하워 매트릭스 기반 Todo",
+  description: "할 일, 일정, 노트, 습관까지 한곳에서 관리하는 데일리 플래너",
   applicationName: "v-todo",
   manifest: `${basePath}/manifest.json`,
   appleWebApp: {

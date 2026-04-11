@@ -37,6 +37,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.17.2 - 2026-04-12
+- **Change**: PWA 앱 이름 변경 — `v-todo - 아이젠하워 매트릭스 Todo` → `v-todo`, 설명을 현재 기능에 맞게 업데이트
+- **Change**: 앱 아이콘 교체 — 아이젠하워 4분면 디자인 → 미니멀 체크마크 (Catppuccin Green on Dark), favicon 포함 전체 교체
+
 ### v0.17.1 - 2026-04-10
 - **Fix**: 힐링 텍스트 카드 왼쪽 세로 줄(border-left) 장식 제거 — 깔끔한 텍스트만 표시
 

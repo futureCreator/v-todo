@@ -1,7 +1,7 @@
 {
-  "name": "v-todo - 아이젠하워 매트릭스 Todo",
+  "name": "v-todo",
   "short_name": "v-todo",
-  "description": "아이젠하워 매트릭스 기반 할 일 관리",
+  "description": "할 일, 일정, 노트, 습관까지 한곳에서 관리하는 데일리 플래너",
   "start_url": "/proxy/todo/",
   "scope": "/proxy/todo/",
   "display": "standalone",
