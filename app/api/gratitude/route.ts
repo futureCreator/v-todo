@@ -35,12 +35,14 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const items = Array.isArray(body.items) ? body.items : ["", "", ""];
+    const items = Array.isArray(body.items) ? body.items : [];
 
-    const sanitized: [string, string, string] = [
+    const sanitized: [string, string, string, string, string] = [
       typeof items[0] === "string" ? items[0].slice(0, 200) : "",
       typeof items[1] === "string" ? items[1].slice(0, 200) : "",
       typeof items[2] === "string" ? items[2].slice(0, 200) : "",
+      typeof items[3] === "string" ? items[3].slice(0, 200) : "",
+      typeof items[4] === "string" ? items[4].slice(0, 200) : "",
     ];
 
     const entry = await writeGratitudeByDate(date, sanitized);

@@ -9,10 +9,11 @@ interface GratitudeSectionProps {
 }
 
 export default function GratitudeSection({ date }: GratitudeSectionProps) {
-  const [items, setItems] = useState<[string, string, string]>(["", "", ""]);
+  const empty: [string, string, string, string, string] = ["", "", "", "", ""];
+  const [items, setItems] = useState<[string, string, string, string, string]>(empty);
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "idle">("idle");
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
-  const itemsRef = useRef<[string, string, string]>(["", "", ""]);
+  const itemsRef = useRef<[string, string, string, string, string]>(empty);
   const dirtyRef = useRef(false);
   const dateRef = useRef(date);
 
@@ -22,15 +23,18 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
       const res = await fetch(`${BASE}/api/gratitude?date=${d}`);
       const body = await res.json();
       const entry = body.data;
-      const loaded: [string, string, string] = entry?.items ?? ["", "", ""];
+      const raw = entry?.items ?? [];
+      const loaded: [string, string, string, string, string] = [
+        raw[0] ?? "", raw[1] ?? "", raw[2] ?? "", raw[3] ?? "", raw[4] ?? "",
+      ];
       setItems(loaded);
       itemsRef.current = loaded;
       dirtyRef.current = false;
       const hasContent = loaded.some((s: string) => s.trim().length > 0);
       setSaveStatus(hasContent ? "saved" : "idle");
     } catch {
-      setItems(["", "", ""]);
-      itemsRef.current = ["", "", ""];
+      setItems(empty);
+      itemsRef.current = [...empty];
     }
   }, []);
 
@@ -66,7 +70,7 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
   }, [saveGratitude]);
 
   const handleChange = (index: number, value: string) => {
-    const updated: [string, string, string] = [...items] as [string, string, string];
+    const updated = [...items] as [string, string, string, string, string];
     updated[index] = value;
     setItems(updated);
     itemsRef.current = updated;
@@ -105,7 +109,7 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
         {/* Content — always visible */}
         <div>
           <div className="px-4 pb-4 flex flex-col gap-2.5">
-            {[0, 1, 2].map((i) => (
+            {[0, 1, 2, 3, 4].map((i) => (
               <div key={i} className="flex items-center gap-3">
                 <span className="w-6 h-6 flex items-center justify-center rounded-full bg-[var(--fill-quaternary)] text-[13px] font-semibold text-[var(--label-tertiary)] flex-shrink-0">
                   {i + 1}

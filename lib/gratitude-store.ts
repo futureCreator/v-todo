@@ -39,7 +39,7 @@ export async function readGratitudeByDate(date: string): Promise<GratitudeEntry 
   return entries.find((e) => e.date === date) ?? null;
 }
 
-export async function writeGratitudeByDate(date: string, items: [string, string, string]): Promise<GratitudeEntry> {
+export async function writeGratitudeByDate(date: string, items: [string, string, string, string, string]): Promise<GratitudeEntry> {
   const entries = await readGratitudeEntries();
   const hasContent = items.some((item) => item.trim().length > 0);
 

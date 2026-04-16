@@ -37,6 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.17.3 - 2026-04-16
+- **Change**: 감사 일기 항목 수 확장 — 3개에서 5개로 증가, 기존 데이터 하위 호환 유지
+
 ### v0.17.2 - 2026-04-12
 - **Change**: PWA 앱 이름 변경 — `v-todo - 아이젠하워 매트릭스 Todo` → `v-todo`, 설명을 현재 기능에 맞게 업데이트
 - **Change**: 앱 아이콘 교체 — 아이젠하워 4분면 디자인 → 미니멀 체크마크 (Catppuccin Green on Dark), favicon 포함 전체 교체
@@ -132,7 +135,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - **Feature**: 습관 체크 시 연속 달성일(스트릭) 불꽃 아이콘 표시, 탭하면 GitHub 잔디 스타일 히트맵 펼침
 - **Feature**: 히트맵 — 12px 고정 셀, 30주 렌더링 + overflow-hidden으로 카드 전체 너비 채움
 - **Feature**: 습관 추가/편집 시트 — 제목 + 반복 주기(매일/요일 선택/2~7일 간격) 설정
-- **Feature**: 감사 일기 — 데일리노트 상단에 "오늘의 감사" 3칸 입력 필드 (항상 펼침, 1초 디바운스 자동 저장)
+- **Feature**: 감사 일기 — 데일리노트 상단에 "오늘의 감사" 5칸 입력 필드 (항상 펼침, 1초 디바운스 자동 저장)
 - **Feature**: AI 브리핑 연동 — 오늘의 습관(스트릭 포함) + 어제의 감사 일기 리마인드 섹션 추가
 - **Feature**: 습관/감사 데이터 저장소 (habits.json, habit-logs.json, gratitude.json) + API 엔드포인트
 

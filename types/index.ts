@@ -201,9 +201,11 @@ export interface UpdateHabitRequest {
 export const VALID_HABIT_REPEAT_MODES: HabitRepeatMode[] = ["daily", "weekdays", "interval"];
 
 // Gratitude
+export type GratitudeItems = [string, string, string, string, string];
+
 export interface GratitudeEntry {
   date: string;
-  items: [string, string, string];
+  items: GratitudeItems;
 }
 
 export interface GratitudeStore {
