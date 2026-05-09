@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import DateNavigator from "@/components/DateNavigator";
 import MoodInput from "@/components/MoodInput";
 import GratitudeSection from "@/components/GratitudeSection";
@@ -15,13 +15,9 @@ function dateToString(d: Date): string {
 export default function CheckinView() {
   const [date, setDate] = useState(() => new Date());
 
-  const handleDateChange = useCallback((newDate: Date) => {
-    setDate(newDate);
-  }, []);
-
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <DateNavigator date={date} onChange={handleDateChange} />
+      <DateNavigator date={date} onChange={setDate} />
       <div className="flex-1 min-h-0 overflow-y-auto">
         <MoodInput date={dateToString(date)} />
         <GratitudeSection date={dateToString(date)} />
