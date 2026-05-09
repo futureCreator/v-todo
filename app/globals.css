@@ -141,6 +141,7 @@
   }
   html {
     height: 100%;
+    overflow: hidden;
   }
   body {
     font-family: var(--font-sans);
@@ -148,7 +149,9 @@
     color: var(--sys-label);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    min-height: 100dvh;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
   }
   ::-webkit-scrollbar {
     width: 0;
