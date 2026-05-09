@@ -647,11 +647,11 @@ export default function Home() {
 
       {/* Main Content */}
       <main
-        className={`flex-1 overflow-y-auto ${section === "note" ? "pb-20 md:pb-0 flex flex-col min-h-0" : "pb-20 md:pb-8"}`}
+        className={`flex-1 overflow-y-auto ${(section === "note" || section === "checkin") ? "pb-20 md:pb-0 flex flex-col min-h-0" : "pb-20 md:pb-8"}`}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <div className={`${section === "note" ? "flex-1 flex flex-col min-h-0" : "md:px-8 flex flex-col min-h-full"}`}>
+        <div className={`${(section === "note" || section === "checkin") ? "flex-1 flex flex-col min-h-0" : "md:px-8 flex flex-col min-h-full"}`}>
           {section === "note" ? (
             <div className="flex-1 flex flex-col min-h-0 md:px-8">
               {noteTab === "daily" ? (
@@ -663,7 +663,9 @@ export default function Home() {
               )}
             </div>
           ) : section === "checkin" ? (
-            <CheckinView />
+            <div className="flex-1 flex flex-col min-h-0 md:px-8">
+              <CheckinView />
+            </div>
           ) : section === "wish" ? (
             <WishlistView
               wishes={wishes}
