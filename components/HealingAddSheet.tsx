@@ -91,9 +91,9 @@ export default function HealingAddSheet({ onSave, onClose }: HealingAddSheetProp
           <button className="text-[var(--label-tertiary)] text-[20px]" onClick={onClose}>
             취소
           </button>
-          <h2 className="text-[20px] font-bold text-[var(--label-primary)]">힐링 추가</h2>
+          <h2 className="text-[20px] font-semibold text-[var(--label-primary)]">힐링 추가</h2>
           <button
-            className={`text-[20px] font-bold ${canSave ? "text-[var(--accent-primary)]" : "text-[var(--label-quaternary)]"}`}
+            className={`text-[20px] font-semibold ${canSave ? "text-[var(--accent-primary)]" : "text-[var(--label-quaternary)]"}`}
             onClick={handleSave}
             disabled={!canSave}
           >

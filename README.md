@@ -37,6 +37,14 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.17.6 - 2026-05-09
+- **Refactor**: 중첩 컴포넌트 정의 제거 — `app/page.tsx`의 `Sidebar`/`Content`를 JSX 변수로 변환해 매 렌더마다 state가 파괴되던 문제 해결
+- **Fix**: `WishCompletionSheet` 하이드레이션 mismatch 수정 — `Math.random()`을 `useEffect`로 옮겨 SSR/CSR 차이 제거
+- **Performance**: API 라우트 병렬화 — `params`/`request.json()`/store read를 `Promise.all`로 묶어 todos/[id], schedules/[id], wishes/[id], wishes POST 응답 단축
+- **Refactor**: Tailwind `w-N h-N` → `size-N` shorthand 적용
+- **Refactor**: heading `font-bold` → `font-semibold` — Apple HIG 권장에 맞춰 카운터 shape 보존
+- **Cleanup**: 미사용 export 제거 — `VALID_STAGES`, `VALID_SCHEDULE_TYPES`, `VALID_REPEAT_MODES`, `VALID_WISH_CATEGORIES`, `GratitudeItems`
+
 ### v0.17.5 - 2026-05-09
 - **Change**: 다크 테마를 Catppuccin Mocha → Apple HIG Dark로 교체 — 배경 true black(#000)/elevated #1C1C1E, system colors(Blue #0A84FF, Red #FF453A, Green #30D158 등), 라벨 alpha 단계(0.6/0.3/0.18) 적용
 - **Change**: PWA themeColor 다크 모드 #1e1e2e → #000000

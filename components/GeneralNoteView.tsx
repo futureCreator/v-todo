@@ -300,7 +300,7 @@ export default function GeneralNoteView() {
         {/* Name input for new file/folder */}
         {showNameInput && (
           <div className="px-5 md:px-0 py-3 flex items-center gap-3">
-            <div className="w-8 h-8 flex items-center justify-center text-[var(--label-tertiary)]">
+            <div className="size-8 flex items-center justify-center text-[var(--label-tertiary)]">
               {showNameInput === "directory" ? (
                 <svg width="22" height="22" viewBox="0 0 22 22" fill="var(--accent-primary)" opacity="0.8">
                   <path d="M3 4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V8a2 2 0 00-2-2h-7l-2-2H3z" />

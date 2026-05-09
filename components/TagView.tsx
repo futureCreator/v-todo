@@ -80,7 +80,7 @@ export default function TagView({ tag, todos, schedules, wishes, onClose }: TagV
                         key={todo.id}
                         className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--fill-quaternary)]"
                       >
-                        <span className="w-[18px] h-[18px] rounded-full border-2 border-[var(--sys-gray)] flex-shrink-0" />
+                        <span className="size-[18px] rounded-full border-2 border-[var(--sys-gray)] flex-shrink-0" />
                         <span className="text-[17px] text-[var(--label-primary)] flex-1 truncate">
                           {todo.title.replace(/#[^\s#]+/g, "").trim()}
                         </span>
@@ -140,7 +140,7 @@ export default function TagView({ tag, todos, schedules, wishes, onClose }: TagV
                           <span className="text-[17px] text-[var(--label-primary)] flex-1 truncate">
                             {schedule.name.replace(/#[^\s#]+/g, "").trim()}
                           </span>
-                          <span className={`text-[15px] font-bold flex-shrink-0 ${
+                          <span className={`text-[15px] font-semibold flex-shrink-0 ${
                             daysLeft <= 14 ? "text-[var(--system-red)]" : "text-[var(--accent-primary)]"
                           }`}>
                             {ddayLabel(daysLeft)}

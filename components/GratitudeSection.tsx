@@ -108,7 +108,7 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
           <div className="px-4 pb-4 flex flex-col gap-2.5">
             {[0, 1, 2, 3, 4].map((i) => (
               <div key={i} className="flex items-center gap-3">
-                <span className="w-6 h-6 flex items-center justify-center rounded-full bg-[var(--fill-quaternary)] text-[13px] font-semibold text-[var(--label-tertiary)] flex-shrink-0">
+                <span className="size-6 flex items-center justify-center rounded-full bg-[var(--fill-quaternary)] text-[13px] font-semibold text-[var(--label-tertiary)] flex-shrink-0">
                   {i + 1}
                 </span>
                 <input

@@ -126,11 +126,11 @@ export default function AddScheduleSheet({
           <button className="text-[var(--label-tertiary)] text-[20px]" onClick={onClose}>
             취소
           </button>
-          <h2 className="text-[20px] font-bold text-[var(--label-primary)]">
+          <h2 className="text-[20px] font-semibold text-[var(--label-primary)]">
             {schedule ? "일정 수정" : "새 일정"}
           </h2>
           <button
-            className={`text-[20px] font-bold ${canSave ? "text-[var(--accent-primary)]" : "text-[var(--label-quaternary)]"}`}
+            className={`text-[20px] font-semibold ${canSave ? "text-[var(--accent-primary)]" : "text-[var(--label-quaternary)]"}`}
             onClick={handleSave}
             disabled={!canSave}
           >

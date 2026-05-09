@@ -89,10 +89,6 @@ export const STAGE_LABELS: Record<Stage, string> = {
   archive: "보관함",
 };
 
-export const VALID_STAGES: Stage[] = ["now", "soon", "archive"];
-export const VALID_SCHEDULE_TYPES: ScheduleType[] = ["general", "anniversary"];
-export const VALID_REPEAT_MODES: RepeatMode[] = ["none", "every_100_days", "monthly", "yearly"];
-
 // Notes
 export type Section = "todo" | "note" | "checkin" | "wish" | "dday";
 export type NoteTab = "daily" | "general" | "mood";
@@ -155,16 +151,12 @@ export interface UpdateWishRequest {
   linkTitle?: string;
 }
 
-export const VALID_WISH_CATEGORIES: WishCategory[] = ["healing", "item", "experience"];
-
 export type TodoTab = "now" | "soon" | "archive";
 
 // Gratitude
-export type GratitudeItems = [string, string, string, string, string];
-
 export interface GratitudeEntry {
   date: string;
-  items: GratitudeItems;
+  items: [string, string, string, string, string];
 }
 
 export interface GratitudeStore {

@@ -147,7 +147,7 @@ export default function MoodYearView() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className="text-[18px]">{"\u{1FAE7}"}</span>
-          <span className="text-[20px] font-bold text-[var(--label-primary)]">
+          <span className="text-[20px] font-semibold text-[var(--label-primary)]">
             {year}년 무드
           </span>
         </div>
@@ -182,7 +182,7 @@ export default function MoodYearView() {
           className="justify-center mb-3 hidden"
           data-capture-header
         >
-          <span className="text-[22px] font-bold text-[var(--label-primary)]">
+          <span className="text-[22px] font-semibold text-[var(--label-primary)]">
             {year}
           </span>
         </div>

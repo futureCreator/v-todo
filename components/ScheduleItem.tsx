@@ -139,11 +139,11 @@ export default function ScheduleItem({ schedule, onEdit, onTagClick }: ScheduleI
       onClick={() => onEdit(schedule)}
     >
       {/* Calendar block */}
-      <div className="w-[60px] h-[60px] rounded-[12px] bg-[var(--fill-quaternary)] flex flex-col items-center justify-center flex-shrink-0">
+      <div className="size-[60px] rounded-[12px] bg-[var(--fill-quaternary)] flex flex-col items-center justify-center flex-shrink-0">
         <span className="text-[14px] font-medium text-[var(--label-tertiary)] leading-tight">
           {month}월
         </span>
-        <span className="text-[26px] font-bold text-[var(--label-primary)] leading-tight">
+        <span className="text-[26px] font-semibold text-[var(--label-primary)] leading-tight">
           {day}
         </span>
       </div>
@@ -187,7 +187,7 @@ export default function ScheduleItem({ schedule, onEdit, onTagClick }: ScheduleI
 
       {/* D-day */}
       <span
-        className={`text-[24px] font-bold flex-shrink-0 ${ddayColor(daysLeft)}`}
+        className={`text-[24px] font-semibold flex-shrink-0 ${ddayColor(daysLeft)}`}
       >
         {ddayLabel(daysLeft)}
       </span>

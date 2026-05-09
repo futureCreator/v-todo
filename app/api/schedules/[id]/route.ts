@@ -11,9 +11,11 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<Schedule>>> {
   try {
-    const { id } = await params;
-    const body: UpdateScheduleRequest = await request.json();
-    const schedules = await readSchedules();
+    const [{ id }, body, schedules] = await Promise.all([
+      params,
+      request.json() as Promise<UpdateScheduleRequest>,
+      readSchedules(),
+    ]);
     const index = schedules.findIndex((s) => s.id === id);
 
     if (index === -1) {
@@ -66,8 +68,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<null>>> {
   try {
-    const { id } = await params;
-    const schedules = await readSchedules();
+    const [{ id }, schedules] = await Promise.all([params, readSchedules()]);
     const index = schedules.findIndex((s) => s.id === id);
 
     if (index === -1) {

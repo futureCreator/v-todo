@@ -334,17 +334,17 @@ export default function Home() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-dvh bg-[var(--bg-primary)]">
-        <div className="w-8 h-8 border-[3px] border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
+        <div className="size-8 border-[3px] border-[var(--accent-primary)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   /* ── Desktop Sidebar ── */
-  const Sidebar = () => (
+  const sidebar = (
     <aside className="hidden md:flex flex-col w-[260px] h-dvh border-r border-[var(--separator)] bg-[var(--sys-bg-secondary)] flex-shrink-0">
       {/* App title */}
       <div className="px-5 pt-6 pb-4">
-        <h1 className="text-[22px] font-bold text-[var(--label-primary)]">v-todo</h1>
+        <h1 className="text-[22px] font-semibold text-[var(--label-primary)]">v-todo</h1>
       </div>
 
       {/* Year Progress */}
@@ -517,7 +517,7 @@ export default function Home() {
   };
 
   /* ── Content Area ── */
-  const Content = () => (
+  const content = (
     <div className="flex-1 flex flex-col h-dvh overflow-hidden">
       {/* Year Progress (mobile) */}
       <div className="md:hidden px-5 pt-3 pb-2 safe-area-pt">
@@ -720,8 +720,8 @@ export default function Home() {
 
   return (
     <div className="flex bg-[var(--bg-primary)]">
-      <Sidebar />
-      <Content />
+      {sidebar}
+      {content}
       <BottomNav active={section} onChange={setSection} />
 
       {showAddSchedule && (

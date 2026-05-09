@@ -29,7 +29,7 @@ export default function HealingCard({ item, onDelete }: HealingCardProps) {
           loading="lazy"
         />
         <button
-          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute top-2 right-2 size-7 rounded-full bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={handleDelete}
           aria-label="삭제"
         >
@@ -49,7 +49,7 @@ export default function HealingCard({ item, onDelete }: HealingCardProps) {
           {item.title}
         </p>
         <button
-          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--fill-tertiary)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+          className="absolute top-2 right-2 size-7 rounded-full bg-[var(--fill-tertiary)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
           onClick={handleDelete}
           aria-label="삭제"
         >
@@ -74,7 +74,7 @@ export default function HealingCard({ item, onDelete }: HealingCardProps) {
         {item.linkTitle || item.url || ""}
       </div>
       <button
-        className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--fill-tertiary)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute top-2 right-2 size-7 rounded-full bg-[var(--fill-tertiary)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
         onClick={(e) => { e.stopPropagation(); handleDelete(); }}
         aria-label="삭제"
       >

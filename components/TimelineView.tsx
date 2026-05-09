@@ -86,7 +86,7 @@ export default function TimelineView({ schedules, onEdit, onTagClick }: Timeline
         <div key={group.key}>
           {/* Month header */}
           <div className="flex items-center gap-3 mb-3 px-1">
-            <h3 className="text-[17px] font-bold text-[var(--label-primary)]">
+            <h3 className="text-[17px] font-semibold text-[var(--label-primary)]">
               {group.label}
             </h3>
             <span className="text-[13px] text-[var(--label-tertiary)]">
@@ -119,7 +119,7 @@ export default function TimelineView({ schedules, onEdit, onTagClick }: Timeline
                       ? "bg-[var(--accent-primary)] text-white"
                       : "bg-[var(--fill-quaternary)]"
                   }`}>
-                    <span className={`text-[18px] font-bold leading-tight ${
+                    <span className={`text-[18px] font-semibold leading-tight ${
                       isToday ? "" : "text-[var(--label-primary)]"
                     }`}>
                       {day}
@@ -161,7 +161,7 @@ export default function TimelineView({ schedules, onEdit, onTagClick }: Timeline
                   </div>
 
                   {/* D-day */}
-                  <span className={`text-[20px] font-bold flex-shrink-0 ${ddayColor(item.daysLeft)}`}>
+                  <span className={`text-[20px] font-semibold flex-shrink-0 ${ddayColor(item.daysLeft)}`}>
                     {ddayLabel(item.daysLeft)}
                   </span>
                 </button>

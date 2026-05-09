@@ -95,11 +95,11 @@ export default function AddWishSheet({
           >
             취소
           </button>
-          <h2 className="text-[20px] font-bold text-[var(--label-primary)]">
+          <h2 className="text-[20px] font-semibold text-[var(--label-primary)]">
             {wish ? "위시 수정" : "새 위시"}
           </h2>
           <button
-            className={`text-[20px] font-bold ${
+            className={`text-[20px] font-semibold ${
               canSave
                 ? "text-[var(--accent-primary)]"
                 : "text-[var(--label-quaternary)]"

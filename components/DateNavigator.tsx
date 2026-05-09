@@ -63,7 +63,7 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
     <div className="flex items-center justify-between px-5 md:px-0 py-3">
       {/* Prev button */}
       <button
-        className="w-11 h-11 flex items-center justify-center text-[var(--label-tertiary)] active:text-[var(--label-primary)] transition-colors"
+        className="size-11 flex items-center justify-center text-[var(--label-tertiary)] active:text-[var(--label-primary)] transition-colors"
         onClick={goToPrev}
       >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -88,14 +88,14 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
       <input
         ref={inputRef}
         type="date"
-        className="absolute opacity-0 w-0 h-0 pointer-events-none"
+        className="absolute opacity-0 size-0 pointer-events-none"
         value={dateToInputValue(date)}
         onChange={handleDatePick}
       />
 
       {/* Next button */}
       <button
-        className="w-11 h-11 flex items-center justify-center text-[var(--label-tertiary)] active:text-[var(--label-primary)] transition-colors"
+        className="size-11 flex items-center justify-center text-[var(--label-tertiary)] active:text-[var(--label-primary)] transition-colors"
         onClick={goToNext}
       >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

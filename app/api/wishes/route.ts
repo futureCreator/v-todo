@@ -29,11 +29,15 @@ export async function POST(
       return NextResponse.json({ error: "카테고리는 item 또는 experience여야 합니다." }, { status: 400 });
     }
 
-    // For healing link type, fetch page title
-    let linkTitle: string | null = null;
-    if (isHealing && body.healingType === "link" && body.url) {
-      linkTitle = await fetchPageTitle(body.url);
-    }
+    const linkTitlePromise: Promise<string | null> =
+      isHealing && body.healingType === "link" && body.url
+        ? fetchPageTitle(body.url)
+        : Promise.resolve(null);
+
+    const [linkTitle, wishes] = await Promise.all([
+      linkTitlePromise,
+      readWishes(),
+    ]);
 
     const wish: WishItem = {
       id: uuidv4(),
@@ -55,7 +59,6 @@ export async function POST(
       }),
     };
 
-    const wishes = await readWishes();
     wishes.push(wish);
     await writeWishes(wishes);
 

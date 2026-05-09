@@ -9,9 +9,11 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<WishItem>>> {
   try {
-    const { id } = await params;
-    const body: UpdateWishRequest = await request.json();
-    const wishes = await readWishes();
+    const [{ id }, body, wishes] = await Promise.all([
+      params,
+      request.json() as Promise<UpdateWishRequest>,
+      readWishes(),
+    ]);
     const index = wishes.findIndex((w) => w.id === id);
 
     if (index === -1) {
@@ -95,8 +97,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<NextResponse<ApiResponse<null>>> {
   try {
-    const { id } = await params;
-    const wishes = await readWishes();
+    const [{ id }, wishes] = await Promise.all([params, readWishes()]);
     const index = wishes.findIndex((w) => w.id === id);
 
     if (index === -1) {

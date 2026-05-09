@@ -22,30 +22,60 @@ function getTodayKST(): string {
   return `${y}-${m}-${d}`;
 }
 
+const CONFETTI_COLORS = [
+  "var(--accent-primary)",
+  "var(--sys-orange)",
+  "#FFD700",
+  "#FF6B8A",
+  "#7B68EE",
+  "#50E3C2",
+];
+
+interface ConfettiParticle {
+  id: number;
+  width: number;
+  height: number;
+  color: string;
+  left: number;
+  top: number;
+  duration: number;
+  delay: number;
+  round: boolean;
+}
+
 function ConfettiParticles() {
-  const colors = [
-    "var(--accent-primary)",
-    "var(--sys-orange)",
-    "#FFD700",
-    "#FF6B8A",
-    "#7B68EE",
-    "#50E3C2",
-  ];
+  const [particles, setParticles] = useState<ConfettiParticle[]>([]);
+
+  useEffect(() => {
+    const next: ConfettiParticle[] = Array.from({ length: 24 }, (_, i) => ({
+      id: i,
+      width: 6 + Math.random() * 6,
+      height: 6 + Math.random() * 6,
+      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+      left: 8 + Math.random() * 84,
+      top: -10 + Math.random() * 30,
+      duration: 1.2 + Math.random() * 0.8,
+      delay: Math.random() * 0.3,
+      round: Math.random() > 0.5,
+    }));
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only random init to avoid SSR hydration mismatch
+    setParticles(next);
+  }, []);
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {Array.from({ length: 24 }).map((_, i) => (
+      {particles.map((p) => (
         <div
-          key={i}
-          className="absolute rounded-sm"
+          key={p.id}
+          className="absolute"
           style={{
-            width: `${6 + Math.random() * 6}px`,
-            height: `${6 + Math.random() * 6}px`,
-            backgroundColor: colors[i % colors.length],
-            left: `${8 + Math.random() * 84}%`,
-            top: `${-10 + Math.random() * 30}%`,
-            animation: `confettiFall ${1.2 + Math.random() * 0.8}s ease-in ${Math.random() * 0.3}s forwards`,
-            borderRadius: Math.random() > 0.5 ? "50%" : "2px",
+            width: `${p.width}px`,
+            height: `${p.height}px`,
+            backgroundColor: p.color,
+            left: `${p.left}%`,
+            top: `${p.top}%`,
+            animation: `confettiFall ${p.duration}s ease-in ${p.delay}s forwards`,
+            borderRadius: p.round ? "50%" : "2px",
           }}
         />
       ))}
@@ -109,7 +139,7 @@ export default function WishCompletionSheet({
         {/* Celebration header */}
         <div className="flex flex-col items-center mb-8 relative">
           <div
-            className="w-[72px] h-[72px] rounded-full bg-[var(--accent-primary)] flex items-center justify-center mb-4"
+            className="size-[72px] rounded-full bg-[var(--accent-primary)] flex items-center justify-center mb-4"
             style={{ animation: "celebrationCheck 0.6s cubic-bezier(0.32, 0.72, 0, 1) forwards" }}
           >
             <svg width="32" height="24" viewBox="0 0 32 24" fill="none">
@@ -122,7 +152,7 @@ export default function WishCompletionSheet({
               />
             </svg>
           </div>
-          <h2 className="text-[22px] font-bold text-[var(--label-primary)]">
+          <h2 className="text-[22px] font-semibold text-[var(--label-primary)]">
             위시 달성!
           </h2>
           <p className="text-[17px] text-[var(--label-secondary)] mt-1">

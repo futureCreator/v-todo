@@ -139,12 +139,12 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick 
         {/* Bottom actions */}
         <div className="flex items-center justify-between mt-2">
           <button
-            className="w-[36px] h-[36px] flex items-center justify-center rounded-full"
+            className="size-[36px] flex items-center justify-center rounded-full"
             onClick={() => onToggle(wish.id)}
             aria-label={wish.completed ? "완료 취소" : "완료 표시"}
           >
             <div
-              className={`w-[24px] h-[24px] rounded-full flex items-center justify-center transition-colors ${
+              className={`size-[24px] rounded-full flex items-center justify-center transition-colors ${
                 wish.completed
                   ? "bg-[var(--accent-primary)]"
                   : "border-2 border-[var(--fill-tertiary)]"
@@ -158,7 +158,7 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick 
             </div>
           </button>
           <button
-            className="w-[36px] h-[36px] flex items-center justify-center rounded-full"
+            className="size-[36px] flex items-center justify-center rounded-full"
             onClick={() => onDelete(wish.id)}
             aria-label="위시 삭제"
           >

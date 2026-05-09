@@ -39,7 +39,7 @@ export default function TodoInput({ onAdd }: TodoInputProps) {
       {title.trim() && (
         <button
           onClick={handleSubmit}
-          className="w-11 h-11 flex items-center justify-center rounded-full bg-[var(--accent-primary)] text-white flex-shrink-0 active:scale-95 transition-transform"
+          className="size-11 flex items-center justify-center rounded-full bg-[var(--accent-primary)] text-white flex-shrink-0 active:scale-95 transition-transform"
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
             <line x1="10" y1="4" x2="10" y2="16" />
