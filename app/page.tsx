@@ -10,8 +10,6 @@ import ScheduleItem, { getDisplayInfo } from "@/components/ScheduleItem";
 import TimelineView from "@/components/TimelineView";
 import AddScheduleSheet from "@/components/AddScheduleSheet";
 import UndoToast from "@/components/UndoToast";
-import ArchiveView from "@/components/ArchiveView";
-import BriefingModal from "@/components/BriefingModal";
 import DailyNoteView from "@/components/DailyNoteView";
 import GeneralNoteView from "@/components/GeneralNoteView";
 import MoodYearView from "@/components/MoodYearView";
@@ -20,7 +18,6 @@ import AddWishSheet from "@/components/AddWishSheet";
 import HealingAddSheet from "@/components/HealingAddSheet";
 import YearProgress from "@/components/YearProgress";
 import WishCompletionSheet from "@/components/WishCompletionSheet";
-import HabitView from "@/components/HabitView";
 import CheckinView from "@/components/CheckinView";
 import TagView from "@/components/TagView";
 import type { TodoTab } from "@/types";
@@ -44,12 +41,8 @@ export default function Home() {
   const [completingWish, setCompletingWish] = useState<WishItem | null>(null);
 
   const [activeTag, setActiveTag] = useState<string | null>(null);
-  const [showArchive, setShowArchive] = useState(false);
   const [showAddSchedule, setShowAddSchedule] = useState(false);
   const [editSchedule, setEditSchedule] = useState<Schedule | null>(null);
-  const [showBriefing, setShowBriefing] = useState(false);
-  const [briefingText, setBriefingText] = useState("");
-  const [briefingLoading, setBriefingLoading] = useState(false);
 
   const [undoItem, setUndoItem] = useState<{
     todo: Todo;
@@ -318,27 +311,11 @@ export default function Home() {
     setEditWish(null);
   };
 
-  // Briefing
-  const loadBriefing = async () => {
-    setShowBriefing(true);
-    setBriefingLoading(true);
-    try {
-      const res = await fetch(`${BASE}/api/ai/briefing`);
-      const body = await res.json();
-      setBriefingText(
-        body.data?.briefing ?? "브리핑을 불러올 수 없습니다."
-      );
-    } catch {
-      setBriefingText("AI 서비스를 사용할 수 없습니다.");
-    } finally {
-      setBriefingLoading(false);
-    }
-  };
-
   // Filtered data
   const filteredTodos = todos.filter(
     (t) => t.stage === todoTab && !t.completed
   );
+  const archivedTodos = todos.filter((t) => t.stage === "archive" && !t.completed);
   const filteredSchedules = schedules
     .filter((s) =>
       ddayTab === "timeline"
@@ -493,37 +470,12 @@ export default function Home() {
         </button>
       </nav>
 
-      {/* Bottom actions */}
-      <div className="px-3 pb-4 space-y-0.5">
-        <button
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-[var(--label-secondary)] hover:bg-[var(--fill-quaternary)] transition-colors"
-          onClick={() => setShowArchive(true)}
-        >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 7h14l-1.5 10H5.5L4 7z" />
-            <path d="M3 7h16" />
-            <path d="M9 11h4" />
-          </svg>
-          <span className="text-[15px] font-medium">보관함</span>
-        </button>
-        <button
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-[var(--sys-orange)] hover:bg-[var(--sys-orange)]/8 transition-colors"
-          onClick={loadBriefing}
-        >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="7" />
-            <circle cx="11" cy="11" r="1.5" fill="currentColor" />
-            <path d="M11 5v1.5M11 15.5V17M5 11h1.5M15.5 11H17" />
-          </svg>
-          <span className="text-[15px] font-medium">AI 브리핑</span>
-        </button>
-      </div>
     </aside>
   );
 
   const handleSwipe = (dir: "left" | "right") => {
     if (section === "todo") {
-      const tabs: TodoTab[] = ["now", "soon", "habit"];
+      const tabs: TodoTab[] = ["now", "soon", "archive"];
       const idx = tabs.indexOf(todoTab);
       if (dir === "left" && idx < tabs.length - 1) setTodoTab(tabs[idx + 1]);
       if (dir === "right" && idx > 0) setTodoTab(tabs[idx - 1]);
@@ -567,57 +519,19 @@ export default function Home() {
   /* ── Content Area ── */
   const Content = () => (
     <div className="flex-1 flex flex-col h-dvh overflow-hidden">
-      {/* Mobile Header */}
-      <header className="md:hidden flex items-center justify-between px-5 pt-3 pb-1 safe-area-pt">
-        <h1 className="text-[38px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "checkin" ? "체크인" : section === "wish" ? "위시" : "D-day"}
-        </h1>
-        <div className="flex items-center gap-1">
-          {section === "todo" && (
-            <button
-              className="w-11 h-11 flex items-center justify-center text-[var(--label-tertiary)]"
-              onClick={() => setShowArchive(true)}
-            >
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 7h14l-1.5 10H5.5L4 7z" />
-                <path d="M3 7h16" />
-                <path d="M9 11h4" />
-              </svg>
-            </button>
-          )}
-          <button
-            className="w-11 h-11 flex items-center justify-center text-[var(--sys-orange)]"
-            onClick={loadBriefing}
-          >
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="7" />
-              <circle cx="11" cy="11" r="1.5" fill="currentColor" />
-              <path d="M11 5v1.5M11 15.5V17M5 11h1.5M15.5 11H17" />
-            </svg>
-          </button>
-        </div>
-      </header>
-
-      {/* Desktop Header */}
-      <header className="hidden md:flex items-center justify-between px-8 pt-8 pb-2">
-        <h1 className="text-[28px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "checkin" ? "체크인" : section === "wish" ? "위시" : "D-day"}
-        </h1>
-      </header>
-
       {/* Year Progress (mobile) */}
-      <div className="md:hidden px-5 pb-2">
+      <div className="md:hidden px-5 pt-3 pb-2 safe-area-pt">
         <YearProgress />
       </div>
 
       {/* Tabs */}
-      <div className="md:px-8 pt-1 pb-2">
+      <div className="md:px-8 pt-1 md:pt-8 pb-2">
         {section === "todo" ? (
           <SectionTabs
             tabs={[
               { key: "now", label: `지금${nowCount > 0 ? ` ${nowCount}` : ""}` },
               { key: "soon", label: `곧${soonCount > 0 ? ` ${soonCount}` : ""}` },
-              { key: "habit", label: "습관" },
+              { key: "archive", label: "보관함" },
             ]}
             active={todoTab}
             onChange={(key) => setTodoTab(key as TodoTab)}
@@ -677,12 +591,34 @@ export default function Home() {
               onAdd={() => { setEditWish(null); setShowAddWish(true); }}
               onTagClick={setActiveTag}
             />
-          ) : section === "todo" && todoTab === "habit" ? (
-            <HabitView />
+          ) : section === "todo" && todoTab === "archive" ? (
+            <div className="flex-1 flex flex-col">
+              {archivedTodos.length === 0 ? (
+                <div className="flex-1 flex flex-col items-center justify-center text-[var(--label-tertiary)]">
+                  <span className="text-[56px] mb-5 opacity-30">📦</span>
+                  <p className="text-[20px]">보관함이 비어 있습니다</p>
+                  <p className="text-[15px] text-[var(--label-quaternary)] mt-1.5">30일 후 자동 삭제됩니다</p>
+                </div>
+              ) : (
+                <div className="mx-5 md:mx-0 flex flex-col gap-2.5">
+                  {archivedTodos.map((todo) => (
+                    <div key={todo.id} className="bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden">
+                      <TodoItem
+                        todo={todo}
+                        onToggle={toggleTodo}
+                        onDelete={deleteTodo}
+                        onEdit={editTodo}
+                        onTagClick={setActiveTag}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           ) : section === "todo" ? (
             <div className="flex-1 flex flex-col">
               {filteredTodos.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-24 text-[var(--label-tertiary)]">
+                <div className="flex-1 flex flex-col items-center justify-center text-[var(--label-tertiary)]">
                   <span className="text-[56px] mb-5 opacity-30">✅</span>
                   <p className="text-[20px]">
                     {todoTab === "now" ? "할 일을 추가해보세요" : "곧 처리할 일이 없습니다"}
@@ -739,7 +675,7 @@ export default function Home() {
           ) : (
             <div className="flex-1 flex flex-col">
               {filteredSchedules.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-24 text-[var(--label-tertiary)]">
+                <div className="flex-1 flex flex-col items-center justify-center text-[var(--label-tertiary)]">
                   <span className="text-[56px] mb-5 opacity-30">📅</span>
                   <p className="text-[20px]">
                     {ddayTab === "general" ? "일정을 추가해보세요" : "기념일을 추가해보세요"}
@@ -788,15 +724,6 @@ export default function Home() {
       <Content />
       <BottomNav active={section} onChange={setSection} />
 
-      {showArchive && (
-        <ArchiveView
-          todos={todos}
-          onToggle={toggleTodo}
-          onDelete={deleteTodo}
-          onEdit={editTodo}
-          onClose={() => setShowArchive(false)}
-        />
-      )}
       {showAddSchedule && (
         <AddScheduleSheet
           schedule={editSchedule}
@@ -833,16 +760,6 @@ export default function Home() {
           wish={completingWish}
           onComplete={completeWish}
           onClose={() => setCompletingWish(null)}
-        />
-      )}
-      {showBriefing && (
-        <BriefingModal
-          briefing={
-            briefingLoading
-              ? "브리핑을 생성하고 있습니다..."
-              : briefingText
-          }
-          onClose={() => setShowBriefing(false)}
         />
       )}
       {activeTag && (
