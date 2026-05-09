@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { Todo, Schedule, ScheduleType, RepeatMode, Section, NoteTab, WishItem, WishCategory, Link } from "@/types";
+import type { Todo, Schedule, ScheduleType, RepeatMode, Section, NoteTab, WishItem, WishCategory } from "@/types";
 import BottomNav from "@/components/BottomNav";
 import SectionTabs from "@/components/SectionTabs";
 import TodoItem from "@/components/TodoItem";
@@ -18,11 +18,10 @@ import MoodYearView from "@/components/MoodYearView";
 import WishlistView from "@/components/WishlistView";
 import AddWishSheet from "@/components/AddWishSheet";
 import HealingAddSheet from "@/components/HealingAddSheet";
-import AddLinkSheet from "@/components/AddLinkSheet";
 import YearProgress from "@/components/YearProgress";
 import WishCompletionSheet from "@/components/WishCompletionSheet";
 import HabitView from "@/components/HabitView";
-import LinkSection from "@/components/LinkSection";
+import CheckinView from "@/components/CheckinView";
 import TagView from "@/components/TagView";
 import type { TodoTab } from "@/types";
 
@@ -43,10 +42,6 @@ export default function Home() {
   const [showAddWish, setShowAddWish] = useState(false);
   const [editWish, setEditWish] = useState<WishItem | null>(null);
   const [completingWish, setCompletingWish] = useState<WishItem | null>(null);
-
-  const [links, setLinks] = useState<Link[]>([]);
-  const [linkTab, setLinkTab] = useState<"unread" | "read">("unread");
-  const [showAddLink, setShowAddLink] = useState(false);
 
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [showArchive, setShowArchive] = useState(false);
@@ -94,21 +89,11 @@ export default function Home() {
     }
   }, []);
 
-  const fetchLinks = useCallback(async () => {
-    try {
-      const res = await fetch(`${BASE}/api/links`);
-      const body = await res.json();
-      if (body.data) setLinks(body.data);
-    } catch (err) {
-      console.error("Failed to fetch links:", err);
-    }
-  }, []);
-
   useEffect(() => {
-    Promise.all([fetchTodos(), fetchSchedules(), fetchWishes(), fetchLinks()]).finally(
+    Promise.all([fetchTodos(), fetchSchedules(), fetchWishes()]).finally(
       () => setLoading(false)
     );
-  }, [fetchTodos, fetchSchedules, fetchWishes, fetchLinks]);
+  }, [fetchTodos, fetchSchedules, fetchWishes]);
 
   // Todo actions
   const addTodo = async (title: string) => {
@@ -333,55 +318,6 @@ export default function Home() {
     setEditWish(null);
   };
 
-  // Link actions
-  const toggleLinkRead = async (id: string, read: boolean) => {
-    setLinks((prev) =>
-      prev.map((l) =>
-        l.id === id
-          ? { ...l, read, readAt: read ? new Date().toISOString() : undefined }
-          : l
-      )
-    );
-    try {
-      await fetch(`${BASE}/api/links/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ read }),
-      });
-    } catch (err) {
-      console.error("Failed to toggle link read:", err);
-      // best-effort: refetch on failure
-      fetchLinks();
-    }
-  };
-
-  const deleteLink = async (id: string) => {
-    setLinks((prev) => prev.filter((l) => l.id !== id));
-    try {
-      await fetch(`${BASE}/api/links/${id}`, { method: "DELETE" });
-    } catch (err) {
-      console.error("Failed to delete link:", err);
-      fetchLinks();
-    }
-  };
-
-  const saveNewLink = async (data: { url: string; memo: string }) => {
-    try {
-      const res = await fetch(`${BASE}/api/links`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const body = await res.json();
-      if (body.data) {
-        setLinks((prev) => [body.data, ...prev]);
-      }
-    } catch (err) {
-      console.error("Failed to add link:", err);
-    }
-    setShowAddLink(false);
-  };
-
   // Briefing
   const loadBriefing = async () => {
     setShowBriefing(true);
@@ -490,21 +426,25 @@ export default function Home() {
 
         <button
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
-            section === "link"
+            section === "checkin"
               ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
               : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
           }`}
-          onClick={() => setSection("link")}
+          onClick={() => setSection("checkin")}
         >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "link" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "link" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
-            <path d="M16 1H6C5 1 4 2 4 3v18l7-3 7 3V3c0-1-1-2-2-2z" />
+          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "checkin" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "checkin" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
+            {section === "checkin" ? (
+              <path fillRule="evenodd" clipRule="evenodd" d="M11 1.5C5.8 1.5 1.5 5.8 1.5 11s4.3 9.5 9.5 9.5 9.5-4.3 9.5-9.5S16.2 1.5 11 1.5zM7.9 9.5a1.1 1.1 0 110-2.2 1.1 1.1 0 010 2.2zm6.2 0a1.1 1.1 0 110-2.2 1.1 1.1 0 010 2.2zM6.5 12.8h9c-.9 2.4-2.9 4-4.5 4s-3.6-1.6-4.5-4z" />
+            ) : (
+              <>
+                <circle cx="11" cy="11" r="8.5" />
+                <circle cx="7.9" cy="8.7" r="0.95" fill="currentColor" stroke="none" />
+                <circle cx="14.1" cy="8.7" r="0.95" fill="currentColor" stroke="none" />
+                <path d="M6.8 12.8c.8 1.8 2.4 3 4.2 3s3.4-1.2 4.2-3" />
+              </>
+            )}
           </svg>
-          <span className="text-[15px] font-medium flex-1">링크</span>
-          {links.filter((l) => !l.read).length > 0 && (
-            <span className="text-[13px] text-[var(--label-tertiary)]">
-              {links.filter((l) => !l.read).length}
-            </span>
-          )}
+          <span className="text-[15px] font-medium flex-1">체크인</span>
         </button>
 
         <button
@@ -592,9 +532,6 @@ export default function Home() {
       const ni = noteTabs.indexOf(noteTab);
       if (dir === "left" && ni < noteTabs.length - 1) setNoteTab(noteTabs[ni + 1]);
       if (dir === "right" && ni > 0) setNoteTab(noteTabs[ni - 1]);
-    } else if (section === "link") {
-      if (dir === "left" && linkTab === "unread") setLinkTab("read");
-      if (dir === "right" && linkTab === "read") setLinkTab("unread");
     } else if (section === "wish") {
       const wishTabs: WishCategory[] = ["healing", "item", "experience"];
       const wi = wishTabs.indexOf(wishTab);
@@ -633,7 +570,7 @@ export default function Home() {
       {/* Mobile Header */}
       <header className="md:hidden flex items-center justify-between px-5 pt-3 pb-1 safe-area-pt">
         <h1 className="text-[38px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "link" ? "링크" : section === "wish" ? "위시" : "D-day"}
+          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "checkin" ? "체크인" : section === "wish" ? "위시" : "D-day"}
         </h1>
         <div className="flex items-center gap-1">
           {section === "todo" && (
@@ -664,7 +601,7 @@ export default function Home() {
       {/* Desktop Header */}
       <header className="hidden md:flex items-center justify-between px-8 pt-8 pb-2">
         <h1 className="text-[28px] font-bold tracking-tight text-[var(--label-primary)]">
-          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "link" ? "링크" : section === "wish" ? "위시" : "D-day"}
+          {section === "todo" ? "할 일" : section === "note" ? "노트" : section === "checkin" ? "체크인" : section === "wish" ? "위시" : "D-day"}
         </h1>
       </header>
 
@@ -725,16 +662,8 @@ export default function Home() {
                 <MoodYearView />
               )}
             </div>
-          ) : section === "link" ? (
-            <LinkSection
-              links={links}
-              activeTab={linkTab}
-              onTabChange={setLinkTab}
-              onToggleRead={toggleLinkRead}
-              onDelete={deleteLink}
-              onTagClick={(tag) => setActiveTag(tag)}
-              onAdd={() => setShowAddLink(true)}
-            />
+          ) : section === "checkin" ? (
+            <CheckinView />
           ) : section === "wish" ? (
             <WishlistView
               wishes={wishes}
@@ -897,12 +826,6 @@ export default function Home() {
             onClose={() => { setShowAddWish(false); setEditWish(null); }}
           />
         ) : null}
-      {showAddLink && (
-        <AddLinkSheet
-          onSave={saveNewLink}
-          onClose={() => setShowAddLink(false)}
-        />
-      )}
       {completingWish && (
         <WishCompletionSheet
           wish={completingWish}

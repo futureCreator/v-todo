@@ -94,7 +94,7 @@ export const VALID_SCHEDULE_TYPES: ScheduleType[] = ["general", "anniversary"];
 export const VALID_REPEAT_MODES: RepeatMode[] = ["none", "every_100_days", "monthly", "yearly"];
 
 // Notes
-export type Section = "todo" | "note" | "link" | "wish" | "dday";
+export type Section = "todo" | "note" | "checkin" | "wish" | "dday";
 export type NoteTab = "daily" | "general" | "mood";
 
 export interface FileItem {
@@ -216,29 +216,3 @@ export interface GratitudeStore {
 export type MoodValue = 1 | 2 | 3 | 4 | 5;
 export type MoodMap = Record<string, MoodValue>;
 
-// Links
-export interface Link {
-  id: string;
-  /** Original Telegram message text. URL(s) and hashtags are kept inline. */
-  memo: string;
-  /** All URLs extracted from the message, in original order. First is the primary. */
-  urls: string[];
-  /** Domain of the first URL (e.g. "x.com"). Cached at save time for cheap rendering. */
-  primaryDomain: string;
-  /** Read state. False = inbox, true = archived/read. */
-  read: boolean;
-  /** Source channel. Always "telegram" in v1; slot kept for future expansion. */
-  source: "telegram" | "manual";
-  /** Telegram message ID — used for dedupe (idempotency). Optional because manual entries won't have one. */
-  telegramMessageId?: number;
-  /** ISO 8601 instant. */
-  createdAt: string;
-  /** ISO 8601 instant. Set when `read` flips to true, cleared (undefined) when flipped back. */
-  readAt?: string;
-}
-
-export interface LinkStore {
-  links: Link[];
-  /** The last Telegram update_id that was processed. Used as the next `getUpdates?offset=`. */
-  lastUpdateId?: number;
-}
