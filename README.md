@@ -37,6 +37,16 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.17.4 - 2026-05-09
+- **Feature**: 체크인 섹션 신설 — 링크 섹션을 대체, 무드/감사 일기를 데일리 노트에서 분리해 체크인으로 이동, 데일리 노트는 에디터 전용 뷰로 단순화
+- **Feature**: 오늘의 브리핑 버튼을 체크인 화면 하단에 배치 — D-day "새 일정 추가" 버튼과 동일한 디자인 (full-width accent 배경)
+- **Remove**: 습관 트래커 기능 일괄 제거 (탭, API, 컴포넌트, 히트맵)
+- **Remove**: 링크 아카이브 기능 제거 — 텔레그램 봇 폴러, URL 추출 유틸, 링크 API/스토어 삭제
+- **Remove**: 헤더 바 제거 — 보관함을 할 일 탭에 폴드
+- **Improve**: 체크인 화면에서 "오늘의 기분"/"오늘의 감사" 헤더의 이모지/아이콘 제거 — 텍스트만 깔끔하게 표시
+- **Fix**: 모바일에서 body 스크롤 잠금 — YearProgress가 스크롤 시 따라 움직이지 않고 고정되도록 수정
+- **Fix**: 체크인 DateNavigator를 flex 컨테이너로 상단에 고정
+
 ### v0.17.3 - 2026-04-16
 - **Change**: 감사 일기 항목 수 확장 — 3개에서 5개로 증가, 기존 데이터 하위 호환 유지
 

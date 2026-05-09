@@ -57,7 +57,6 @@ export default function MoodInput({ date }: MoodInputProps) {
       <div className="bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden">
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
-            <span className="text-[18px]">🫧</span>
             <span className="text-[17px] font-semibold text-[var(--label-primary)]">오늘의 기분</span>
           </div>
         </div>

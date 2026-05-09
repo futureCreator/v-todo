@@ -91,9 +91,6 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="var(--sys-orange)">
-              <path d="M9 1.5l2 4.1 4.5.7-3.3 3.2.8 4.5L9 11.8 5 14l.8-4.5L2.5 6.3l4.5-.7L9 1.5z" />
-            </svg>
             <span className="text-[17px] font-semibold text-[var(--label-primary)]">오늘의 감사</span>
           </div>
           <div className="flex items-center gap-2">
