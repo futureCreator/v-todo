@@ -1,5 +1,5 @@
 import { STAGE_LABELS } from "@/types";
-import type { Todo, Schedule, Habit } from "@/types";
+import type { Todo, Schedule } from "@/types";
 
 function daysUntil(dateStr: string): number {
   const target = new Date(dateStr + "T00:00:00");
@@ -14,7 +14,6 @@ export function buildBriefingPrompt(
   todayNote?: string,
   yesterdayNote?: string,
   yesterdayDate?: string,
-  habits?: { title: string; streak: number }[],
   yesterdayGratitude?: string[],
   recentMoods?: { date: string; value: number }[],
 ): string {
@@ -49,10 +48,6 @@ export function buildBriefingPrompt(
   }
   const dailyNoteBlock = noteSections.length > 0 ? "\n" + noteSections.join("\n\n") + "\n" : "";
 
-  const habitSection = habits && habits.length > 0
-    ? `\n## 오늘의 습관\n${habits.map((h) => `- ${h.title} (${h.streak > 0 ? `${h.streak}일 연속` : "오늘 시작"})`).join("\n")}\n`
-    : "";
-
   const gratitudeSection = yesterdayGratitude && yesterdayGratitude.some((s) => s.trim())
     ? `\n## 어제의 감사\n${yesterdayGratitude.filter((s) => s.trim()).map((s, i) => `${i + 1}. ${s}`).join("\n")}\n`
     : "";
@@ -73,10 +68,6 @@ export function buildBriefingPrompt(
     reqItems.push(`${reqNum}. 데일리 노트에 적힌 내용 중 오늘 브리핑에 참고할 만한 사항`);
     reqNum++;
   }
-  if (habitSection) {
-    reqItems.push(`${reqNum}. 오늘의 습관 현황과 스트릭 격려`);
-    reqNum++;
-  }
   if (gratitudeSection) {
     reqItems.push(`${reqNum}. 어제 감사했던 것을 리마인드하여 긍정적으로 하루 시작`);
     reqNum++;
@@ -94,7 +85,7 @@ ${todoList || "(할 일이 없습니다)"}
 
 ## D-day / 일정
 ${scheduleList || "(등록된 일정이 없습니다)"}
-${dailyNoteBlock}${habitSection}${gratitudeSection}${moodSection}
+${dailyNoteBlock}${gratitudeSection}${moodSection}
 위 내용을 종합하여 오늘의 브리핑을 작성해주세요:
 ${reqItems.join("\n")}
 

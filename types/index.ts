@@ -157,48 +157,7 @@ export interface UpdateWishRequest {
 
 export const VALID_WISH_CATEGORIES: WishCategory[] = ["healing", "item", "experience"];
 
-// Habits
-export type HabitRepeatMode = "daily" | "weekdays" | "interval";
-export type TodoTab = "now" | "soon" | "habit";
-
-export interface Habit {
-  id: string;
-  title: string;
-  repeatMode: HabitRepeatMode;
-  weekdays: number[];
-  intervalDays: number;
-  createdAt: string;
-}
-
-export interface HabitStore {
-  habits: Habit[];
-}
-
-export interface HabitLog {
-  habitId: string;
-  date: string;
-  completed: boolean;
-}
-
-export interface HabitLogStore {
-  logs: HabitLog[];
-}
-
-export interface CreateHabitRequest {
-  title: string;
-  repeatMode?: HabitRepeatMode;
-  weekdays?: number[];
-  intervalDays?: number;
-}
-
-export interface UpdateHabitRequest {
-  title?: string;
-  repeatMode?: HabitRepeatMode;
-  weekdays?: number[];
-  intervalDays?: number;
-}
-
-export const VALID_HABIT_REPEAT_MODES: HabitRepeatMode[] = ["daily", "weekdays", "interval"];
+export type TodoTab = "now" | "soon" | "archive";
 
 // Gratitude
 export type GratitudeItems = [string, string, string, string, string];
