@@ -37,6 +37,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.17.5 - 2026-05-09
+- **Change**: 다크 테마를 Catppuccin Mocha → Apple HIG Dark로 교체 — 배경 true black(#000)/elevated #1C1C1E, system colors(Blue #0A84FF, Red #FF453A, Green #30D158 등), 라벨 alpha 단계(0.6/0.3/0.18) 적용
+- **Change**: PWA themeColor 다크 모드 #1e1e2e → #000000
+- **Remove**: 오늘의 브리핑 모달 헤더의 주황색 태양 SVG 아이콘 제거 — 텍스트만 표시
+
 ### v0.17.4 - 2026-05-09
 - **Feature**: 체크인 섹션 신설 — 링크 섹션을 대체, 무드/감사 일기를 데일리 노트에서 분리해 체크인으로 이동, 데일리 노트는 에디터 전용 뷰로 단순화
 - **Feature**: 오늘의 브리핑 버튼을 체크인 화면 하단에 배치 — D-day "새 일정 추가" 버튼과 동일한 디자인 (full-width accent 배경)
