@@ -92,7 +92,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit, onTagClick 
     >
       {/* Checkbox — 44pt tap target */}
       <button
-        className="size-11 flex items-center justify-center flex-shrink-0"
+        className="press size-11 flex items-center justify-center flex-shrink-0"
         onClick={handleToggle}
       >
         <span
@@ -162,7 +162,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit, onTagClick 
 
       {/* Delete — 44pt tap target */}
       <button
-        className="size-11 flex items-center justify-center flex-shrink-0 text-[var(--label-quaternary)] md:opacity-0 md:group-hover:opacity-100 active:text-[var(--system-red)] transition-all"
+        className="press size-11 flex items-center justify-center flex-shrink-0 text-[var(--label-quaternary)] md:opacity-0 md:group-hover:opacity-100 active:text-[var(--system-red)] transition-all"
         onClick={() => onDelete(todo.id)}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">

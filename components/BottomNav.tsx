@@ -13,7 +13,7 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
       <div className="flex h-[50px]">
         {/* 할 일 */}
         <button
-          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
             active === "todo"
               ? "text-[var(--accent-primary)]"
               : "text-[var(--label-tertiary)]"
@@ -35,7 +35,7 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
 
         {/* 노트 */}
         <button
-          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
             active === "note"
               ? "text-[var(--accent-primary)]"
               : "text-[var(--label-tertiary)]"
@@ -59,7 +59,7 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
 
         {/* 체크인 */}
         <button
-          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
             active === "checkin"
               ? "text-[var(--accent-primary)]"
               : "text-[var(--label-tertiary)]"
@@ -83,7 +83,7 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
 
         {/* 위시 */}
         <button
-          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
             active === "wish"
               ? "text-[var(--accent-primary)]"
               : "text-[var(--label-tertiary)]"
@@ -102,7 +102,7 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
 
         {/* D-day */}
         <button
-          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
             active === "dday"
               ? "text-[var(--accent-primary)]"
               : "text-[var(--label-tertiary)]"

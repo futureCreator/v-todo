@@ -64,7 +64,7 @@ export default function WishlistView({
         )}
         <div className="mx-5 md:mx-0 mt-auto pt-4">
           <button
-            className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
+            className="press w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
             onClick={onAdd}
           >
             힐링 추가
@@ -133,7 +133,7 @@ export default function WishlistView({
 
       <div className="mx-5 md:mx-0 mt-auto pt-4">
         <button
-          className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
+          className="press w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
           onClick={onAdd}
         >
           새 위시 추가
