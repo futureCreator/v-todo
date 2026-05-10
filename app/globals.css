@@ -80,6 +80,13 @@
   --shadow-lg: 0 4px 20px rgba(76, 79, 105, 0.09), 0 2px 6px rgba(76, 79, 105, 0.05);
   --shadow-xl: 0 12px 40px rgba(76, 79, 105, 0.13), 0 4px 12px rgba(76, 79, 105, 0.07);
 
+  /* ── Motion tokens ── */
+  --ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-ios-spring: cubic-bezier(0.5, 1.4, 0.4, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+
   color-scheme: light dark;
 }
 
