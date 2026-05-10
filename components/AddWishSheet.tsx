@@ -48,8 +48,8 @@ export default function AddWishSheet({
   const canSave = title.trim().length > 0;
 
   const handleSave = () => {
-    haptic.tap();
     if (!canSave) return;
+    haptic.tap();
     const priceNum = priceInput.length > 0 ? parseInt(priceInput, 10) : null;
     const actualPriceNum = actualPriceInput.length > 0 ? parseInt(actualPriceInput, 10) : null;
     onSave({
