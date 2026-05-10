@@ -6,7 +6,7 @@ const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
 const GRATITUDE_PATH = path.join(DATA_DIR, "gratitude.json");
 const TMP_PATH = path.join(DATA_DIR, "gratitude.tmp.json");
 
-export async function readGratitudeEntries(): Promise<GratitudeEntry[]> {
+async function readGratitudeEntries(): Promise<GratitudeEntry[]> {
   try {
     const raw = await fs.readFile(GRATITUDE_PATH, "utf-8");
     const parsed: GratitudeStore = JSON.parse(raw);

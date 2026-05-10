@@ -18,7 +18,7 @@ import { tags } from "@lezer/highlight";
 import type { Extension } from "@codemirror/state";
 
 /** Markdown syntax highlighting — Catppuccin aware */
-export const mdHighlight = HighlightStyle.define([
+const mdHighlight = HighlightStyle.define([
   { tag: tags.heading1, fontWeight: "700", fontSize: "1.4em" },
   { tag: tags.heading2, fontWeight: "700", fontSize: "1.2em" },
   { tag: tags.heading3, fontWeight: "600", fontSize: "1.1em" },
@@ -41,7 +41,7 @@ export const mdHighlight = HighlightStyle.define([
 ]);
 
 /** CodeMirror theme using v-todo CSS custom properties */
-export const cmTheme = EditorView.theme({
+const cmTheme = EditorView.theme({
   "&": {
     flex: "1",
     minHeight: "0",
