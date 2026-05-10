@@ -122,13 +122,17 @@ export default function WishCompletionSheet({
       : "멋진 경험이었죠!";
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-end justify-center">
+      <button
+        type="button"
+        aria-label="닫기"
+        className="absolute inset-0 bg-black/40 cursor-default"
+        onClick={onClose}
+      />
       <div
+        role="dialog"
+        aria-modal="true"
         className="relative w-full max-w-lg bg-[var(--bg-primary)] rounded-t-3xl p-6 animate-[sheetUp_0.3s_ease-out] max-h-[85dvh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
       >
         {/* Drag handle */}
         <div className="w-10 h-1 bg-[var(--fill-tertiary)] rounded-full mx-auto mb-6" />
@@ -162,10 +166,11 @@ export default function WishCompletionSheet({
 
         {/* Completion date */}
         <div className="mb-4">
-          <label className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
+          <label htmlFor="wish-complete-date" className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
             완료일
           </label>
           <input
+            id="wish-complete-date"
             type="date"
             value={dateInput}
             onChange={(e) => setDateInput(e.target.value)}
@@ -175,11 +180,12 @@ export default function WishCompletionSheet({
 
         {/* Actual price */}
         <div className="mb-4">
-          <label className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
+          <label htmlFor="wish-complete-price" className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
             실제 가격
           </label>
           <div className="relative">
             <input
+              id="wish-complete-price"
               type="text"
               inputMode="numeric"
               value={priceInput}
@@ -194,14 +200,17 @@ export default function WishCompletionSheet({
         </div>
 
         {/* Satisfaction */}
-        <div className="mb-4">
-          <label className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
+        <fieldset className="mb-4">
+          <legend className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
             만족도
-          </label>
+          </legend>
           <div className="flex gap-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
+                type="button"
+                aria-label={`${star}점`}
+                aria-pressed={satisfaction != null && star <= satisfaction}
                 className="flex-1 py-3 rounded-xl text-[24px] transition-colors"
                 style={{
                   backgroundColor:
@@ -221,14 +230,15 @@ export default function WishCompletionSheet({
               </button>
             ))}
           </div>
-        </div>
+        </fieldset>
 
         {/* Review */}
         <div className="mb-6">
-          <label className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
+          <label htmlFor="wish-complete-review" className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
             한줄 후기
           </label>
           <input
+            id="wish-complete-review"
             type="text"
             value={review}
             onChange={(e) => setReview(e.target.value)}

@@ -139,8 +139,10 @@ export default function FileListItem({
       {/* Context Menu Overlay */}
       {showMenu && (
         <>
-          <div
-            className="fixed inset-0 z-50"
+          <button
+            type="button"
+            aria-label="메뉴 닫기"
+            className="fixed inset-0 z-50 cursor-default"
             onClick={() => setShowMenu(false)}
           />
           <div className="absolute right-4 top-2 z-50 bg-[var(--bg-elevated)] rounded-xl border border-[var(--separator)] shadow-lg overflow-hidden min-w-[160px]">

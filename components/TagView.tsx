@@ -32,14 +32,18 @@ export default function TagView({ tag, todos, schedules, wishes, onClose }: TagV
   const totalCount = matchedTodos.length + matchedSchedules.length + matchedWishes.length;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end md:items-center justify-center ios-sheet-overlay"
-      style={{ background: "rgba(0,0,0,0.4)" }}
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center ios-sheet-overlay">
+      <button
+        type="button"
+        aria-label="닫기"
+        className="absolute inset-0 cursor-default"
+        style={{ background: "rgba(0,0,0,0.4)" }}
+        onClick={onClose}
+      />
       <div
-        className="w-full md:max-w-lg md:max-h-[70vh] max-h-[85vh] bg-[var(--sys-bg-elevated)] md:rounded-2xl rounded-t-[16px] flex flex-col ios-sheet"
-        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        className="relative w-full md:max-w-lg md:max-h-[70vh] max-h-[85vh] bg-[var(--sys-bg-elevated)] md:rounded-2xl rounded-t-[16px] flex flex-col ios-sheet"
       >
         <div className="drag-handle md:hidden" />
 

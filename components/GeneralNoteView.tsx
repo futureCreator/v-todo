@@ -82,6 +82,7 @@ export default function GeneralNoteView() {
   // Fetch when current nav state changes
   useEffect(() => {
     if (current.type === "list") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- async fetch on nav change
       fetchFiles(current.path);
     } else {
       fetchFileContent(current.path);
@@ -350,8 +351,10 @@ export default function GeneralNoteView() {
 
         {showNewMenu && (
           <>
-            <div
-              className="fixed inset-0 z-40"
+            <button
+              type="button"
+              aria-label="메뉴 닫기"
+              className="fixed inset-0 z-40 cursor-default"
               onClick={() => setShowNewMenu(false)}
             />
             <div className="absolute bottom-full mb-2 left-5 right-5 md:left-0 md:right-0 z-50 bg-[var(--bg-elevated)] rounded-xl border border-[var(--separator)] shadow-lg overflow-hidden">
@@ -389,8 +392,10 @@ export default function GeneralNoteView() {
       {/* Delete Confirmation */}
       {showDeleteConfirm && (
         <>
-          <div
-            className="fixed inset-0 z-50 bg-black/40 ios-sheet-overlay"
+          <button
+            type="button"
+            aria-label="닫기"
+            className="fixed inset-0 z-50 bg-black/40 ios-sheet-overlay cursor-default"
             onClick={() => setShowDeleteConfirm(null)}
           />
           <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-50 bg-[var(--bg-elevated)] rounded-2xl w-[280px] overflow-hidden shadow-xl">

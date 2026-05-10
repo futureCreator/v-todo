@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import type { Schedule, ScheduleType, RepeatMode } from "@/types";
 import KoreanLunarCalendar from "korean-lunar-calendar";
 
@@ -52,30 +52,22 @@ export default function AddScheduleSheet({
     return schedule.targetDate;
   });
   const [originDate, setOriginDate] = useState(schedule?.originDate ?? "");
-  const [solarPreview, setSolarPreview] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (type === "general") {
+  const solarPreview: string | null = (() => {
+    if (!isLunar || !inputDate) return null;
+    const [, m, d] = inputDate.split("-").map(Number);
+    if (!m || !d) return null;
+    return lunarToSolar(new Date().getFullYear(), m, d);
+  })();
+
+  const handleTypeChange = (t: ScheduleType) => {
+    setType(t);
+    if (t === "general") {
       setRepeatMode("none");
     } else if (repeatMode === "none") {
       setRepeatMode("yearly");
     }
-  }, [type, repeatMode]);
-
-  // Compute solar preview when lunar is on
-  useEffect(() => {
-    if (isLunar && inputDate) {
-      const [, m, d] = inputDate.split("-").map(Number);
-      if (m && d) {
-        const solar = lunarToSolar(new Date().getFullYear(), m, d);
-        setSolarPreview(solar);
-      } else {
-        setSolarPreview(null);
-      }
-    } else {
-      setSolarPreview(null);
-    }
-  }, [isLunar, inputDate]);
+  };
 
   const handleSave = () => {
     if (!name.trim() || !inputDate) return;
@@ -115,10 +107,17 @@ export default function AddScheduleSheet({
   const canSave = name.trim().length > 0 && inputDate.length > 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center">
+      <button
+        type="button"
+        aria-label="닫기"
+        className="absolute inset-0 bg-black/40 cursor-default"
+        onClick={onClose}
+      />
       <div
-        className="w-full max-w-lg bg-[var(--bg-primary)] rounded-t-3xl p-6 animate-[sheetUp_0.3s_ease-out]"
-        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        className="relative w-full max-w-lg bg-[var(--bg-primary)] rounded-t-3xl p-6 animate-[sheetUp_0.3s_ease-out]"
       >
         <div className="w-10 h-1 bg-[var(--fill-tertiary)] rounded-full mx-auto mb-6" />
 
@@ -156,7 +155,7 @@ export default function AddScheduleSheet({
                   ? "bg-[var(--accent-primary)] text-white"
                   : "bg-[var(--fill-quaternary)] text-[var(--label-secondary)]"
               }`}
-              onClick={() => setType(t)}
+              onClick={() => handleTypeChange(t)}
             >
               {t === "general" ? "일반 일정" : "기념일"}
             </button>
