@@ -14,6 +14,7 @@ export default function YearProgress() {
     const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
     const totalDays = isLeapYear ? 366 : 365;
     const percent = (dayOfYear / totalDays) * 100;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only init to avoid SSR/CSR time mismatch
     setProgress({ year, display: percent.toFixed(1) });
   }, []);
 

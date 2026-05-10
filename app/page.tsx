@@ -83,6 +83,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async data fetch on mount; setState runs after Promise resolves
     Promise.all([fetchTodos(), fetchSchedules(), fetchWishes()]).finally(
       () => setLoading(false)
     );

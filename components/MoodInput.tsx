@@ -44,6 +44,7 @@ export default function MoodInput({ date }: MoodInputProps) {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async fetch on mount/date change; setState runs after Promise resolves
     fetchMood(date);
   }, [date, fetchMood]);
 

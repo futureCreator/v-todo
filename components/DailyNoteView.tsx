@@ -57,6 +57,7 @@ export default function DailyNoteView() {
 
   // Load note when date changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async fetch on mount/date change
     fetchNote(date);
   }, [date, fetchNote]);
 
