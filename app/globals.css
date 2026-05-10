@@ -145,6 +145,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
   }
   html {
     height: 100%;
@@ -159,6 +161,22 @@
     height: 100%;
     overflow: hidden;
     overscroll-behavior: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  /* Allow text selection in input/content areas */
+  input, textarea, select, [contenteditable], .prose, [data-selectable] {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+  }
+  /* Prevent iOS focus auto-zoom on inputs smaller than 16px */
+  input, textarea, select {
+    font-size: max(16px, 1em);
+  }
+  /* Disable double-tap zoom on interactive elements */
+  button, a, input, select, textarea, [role="button"], [role="tab"] {
+    touch-action: manipulation;
   }
   ::-webkit-scrollbar {
     width: 0;
