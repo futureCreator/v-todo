@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { haptic } from "@/lib/haptic";
 
 interface DateNavigatorProps {
   date: Date;
@@ -37,12 +38,14 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
   const isToday = isSameDay(date, today);
 
   const goToPrev = () => {
+    haptic.selection();
     const prev = new Date(date);
     prev.setDate(prev.getDate() - 1);
     onChange(prev);
   };
 
   const goToNext = () => {
+    haptic.selection();
     const next = new Date(date);
     next.setDate(next.getDate() + 1);
     onChange(next);
@@ -52,10 +55,13 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
     const val = e.target.value;
     if (!val) return;
     const [y, m, d] = val.split("-").map(Number);
-    onChange(new Date(y, m - 1, d));
+    const picked = new Date(y, m - 1, d);
+    if (!isSameDay(picked, date)) haptic.selection();
+    onChange(picked);
   };
 
   const openPicker = () => {
+    haptic.selection();
     inputRef.current?.showPicker();
   };
 
