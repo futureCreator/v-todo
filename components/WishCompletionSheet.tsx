@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import type { WishItem } from "@/types";
+import { haptic } from "@/lib/haptic";
 
 interface WishCompletionSheetProps {
   wish: WishItem;
@@ -102,6 +103,7 @@ export default function WishCompletionSheet({
   }, []);
 
   const handleComplete = () => {
+    haptic.success();
     const priceNum = priceInput.length > 0 ? parseInt(priceInput, 10) : null;
     onComplete({
       actualPrice: isNaN(priceNum as number) ? null : priceNum,

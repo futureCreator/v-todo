@@ -2,6 +2,7 @@
 
 import type { WishItem as WishItemType } from "@/types";
 import { splitParts } from "@/lib/tags";
+import { haptic } from "@/lib/haptic";
 
 interface WishItemProps {
   wish: WishItemType;
@@ -138,7 +139,7 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick 
         <div className="flex items-center justify-between mt-2">
           <button
             className="press size-[36px] flex items-center justify-center rounded-full"
-            onClick={() => onToggle(wish.id)}
+            onClick={() => { haptic.medium(); onToggle(wish.id); }}
             aria-label={wish.completed ? "완료 취소" : "완료 표시"}
           >
             <div
@@ -157,7 +158,7 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick 
           </button>
           <button
             className="press size-[36px] flex items-center justify-center rounded-full"
-            onClick={() => onDelete(wish.id)}
+            onClick={() => { haptic.warning(); onDelete(wish.id); }}
             aria-label="위시 삭제"
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
