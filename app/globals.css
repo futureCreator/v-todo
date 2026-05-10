@@ -421,7 +421,11 @@
     animation: checkPop 0.25s cubic-bezier(0.32, 0.72, 0, 1);
   }
   .press {
-    transition: transform var(--duration-fast) var(--ease-ios);
+    transition:
+      transform var(--duration-fast) var(--ease-ios),
+      opacity var(--duration-fast) var(--ease-ios),
+      color var(--duration-fast) var(--ease-ios),
+      background-color var(--duration-fast) var(--ease-ios);
   }
   .press:active {
     transform: scale(0.97);
