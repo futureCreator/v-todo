@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Schedule, ScheduleType, RepeatMode } from "@/types";
 import KoreanLunarCalendar from "korean-lunar-calendar";
 import { haptic } from "@/lib/haptic";
@@ -53,6 +53,8 @@ export default function AddScheduleSheet({
     return schedule.targetDate;
   });
   const [originDate, setOriginDate] = useState(schedule?.originDate ?? "");
+
+  useEffect(() => { haptic.light(); }, []);
 
   const solarPreview: string | null = (() => {
     if (!isLunar || !inputDate) return null;

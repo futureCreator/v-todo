@@ -97,6 +97,8 @@ export default function WishCompletionSheet({
   const [review, setReview] = useState("");
   const [showConfetti, setShowConfetti] = useState(true);
 
+  useEffect(() => { haptic.light(); }, []);
+
   useEffect(() => {
     const timer = setTimeout(() => setShowConfetti(false), 1800);
     return () => clearTimeout(timer);

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import { haptic } from "@/lib/haptic";
 
 type HealingType = "image" | "text" | "link";
 
@@ -27,6 +28,8 @@ export default function HealingAddSheet({ onSave, onClose }: HealingAddSheetProp
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => { haptic.light(); }, []);
 
   const canSave =
     (type === "image" && uploadedUrl !== null) ||

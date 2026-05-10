@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { WishItem, WishCategory } from "@/types";
 import { haptic } from "@/lib/haptic";
 
@@ -44,6 +44,8 @@ export default function AddWishSheet({
   );
   const [satisfaction, setSatisfaction] = useState<number | null>(wish?.satisfaction ?? null);
   const [reviewInput, setReviewInput] = useState(wish?.review ?? "");
+
+  useEffect(() => { haptic.light(); }, []);
 
   const canSave = title.trim().length > 0;
 
