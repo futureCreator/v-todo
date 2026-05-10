@@ -2,6 +2,7 @@
 
 import type { WishItem } from "@/types";
 import { extractDomain } from "@/lib/fetch-title";
+import { haptic } from "@/lib/haptic";
 
 interface HealingCardProps {
   item: WishItem;
@@ -10,6 +11,7 @@ interface HealingCardProps {
 
 export default function HealingCard({ item, onDelete }: HealingCardProps) {
   const handleDelete = () => {
+    haptic.warning();
     onDelete(item.id);
   };
 
