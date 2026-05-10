@@ -144,17 +144,17 @@ export default function TimelineView({ schedules, onEdit, onTagClick }: Timeline
                       )}
                     </div>
                     <div className="text-[17px] leading-[22px] font-semibold text-[var(--label-primary)] truncate flex items-center flex-wrap gap-1">
-                      {splitParts(item.name).map((part, i) =>
+                      {splitParts(item.name).map((part) =>
                         part.type === "tag" ? (
                           <button
-                            key={i}
+                            key={part.key}
                             className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-[var(--accent-primary)]/12 text-[var(--accent-primary)] text-[12px] font-medium leading-tight"
                             onClick={(e) => { e.stopPropagation(); e.preventDefault(); onTagClick?.(part.value); }}
                           >
                             #{part.value}
                           </button>
                         ) : (
-                          <span key={i}>{part.value}</span>
+                          <span key={part.key}>{part.value}</span>
                         )
                       )}
                     </div>

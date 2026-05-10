@@ -194,28 +194,32 @@ export default function MoodYearView() {
             style={{ width: DAY_LABEL_W, gap: GAP }}
           >
             <div style={{ height: cellSize }} />
-            {Array.from({ length: 31 }, (_, i) => (
-              <div
-                key={i}
-                className="flex items-center justify-end pr-0.5 text-[var(--label-tertiary)]"
-                style={{
-                  height: cellSize,
-                  fontSize: Math.max(cellSize * 0.45, 8),
-                  lineHeight: 1,
-                }}
-              >
-                {i + 1}
-              </div>
-            ))}
+            {Array.from({ length: 31 }, (_, i) => {
+              const day = i + 1;
+              return (
+                <div
+                  key={`day-label-${day}`}
+                  className="flex items-center justify-end pr-0.5 text-[var(--label-tertiary)]"
+                  style={{
+                    height: cellSize,
+                    fontSize: Math.max(cellSize * 0.45, 8),
+                    lineHeight: 1,
+                  }}
+                >
+                  {day}
+                </div>
+              );
+            })}
           </div>
 
           {/* Month columns */}
           <div className="flex flex-1" style={{ gap: GAP }}>
             {Array.from({ length: 12 }, (_, mi) => {
+              const month = mi + 1;
               const maxDay = daysInMonth(year, mi);
               return (
                 <div
-                  key={mi}
+                  key={`month-${month}`}
                   className="flex flex-col flex-1"
                   style={{ gap: GAP }}
                 >
@@ -233,33 +237,48 @@ export default function MoodYearView() {
                   {/* Day cells */}
                   {Array.from({ length: 31 }, (_, di) => {
                     const day = di + 1;
+                    const cellKey = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
                     if (day > maxDay) {
                       return (
                         <div
-                          key={di}
+                          key={cellKey}
                           className="w-full"
                           style={{ height: cellSize }}
                         />
                       );
                     }
-                    const dateStr = `${year}-${String(mi + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-                    const value = moods[dateStr];
-                    const isToday = dateStr === todayStr;
+                    const value = moods[cellKey];
+                    const isToday = cellKey === todayStr;
 
+                    if (value) {
+                      return (
+                        <button
+                          key={cellKey}
+                          type="button"
+                          aria-label={`${month}월 ${day}일 ${MOOD_EMOJI[value]}`}
+                          className="w-full rounded-[3px] transition-transform active:scale-110"
+                          style={{
+                            height: cellSize,
+                            backgroundColor: MOOD_COLORS[value],
+                            border: isToday
+                              ? "2px solid var(--label-primary)"
+                              : "none",
+                          }}
+                          onClick={() => handleCellTap(cellKey, value)}
+                        />
+                      );
+                    }
                     return (
                       <div
-                        key={di}
-                        className="w-full rounded-[3px] cursor-pointer transition-transform active:scale-110"
+                        key={cellKey}
+                        className="w-full rounded-[3px]"
                         style={{
                           height: cellSize,
-                          backgroundColor: value
-                            ? MOOD_COLORS[value]
-                            : "var(--fill-quaternary)",
+                          backgroundColor: "var(--fill-quaternary)",
                           border: isToday
                             ? "2px solid var(--label-primary)"
                             : "none",
                         }}
-                        onClick={() => handleCellTap(dateStr, value)}
                       />
                     );
                   })}

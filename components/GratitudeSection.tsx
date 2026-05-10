@@ -4,16 +4,17 @@ import { useState, useEffect, useCallback, useRef } from "react";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
+const EMPTY_ITEMS: [string, string, string, string, string] = ["", "", "", "", ""];
+
 interface GratitudeSectionProps {
   date: string;
 }
 
 export default function GratitudeSection({ date }: GratitudeSectionProps) {
-  const empty: [string, string, string, string, string] = ["", "", "", "", ""];
-  const [items, setItems] = useState<[string, string, string, string, string]>(empty);
+  const [items, setItems] = useState<[string, string, string, string, string]>(EMPTY_ITEMS);
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "idle">("idle");
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
-  const itemsRef = useRef<[string, string, string, string, string]>(empty);
+  const itemsRef = useRef<[string, string, string, string, string]>(EMPTY_ITEMS);
   const dirtyRef = useRef(false);
   const dateRef = useRef(date);
 
@@ -33,8 +34,8 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
       const hasContent = loaded.some((s: string) => s.trim().length > 0);
       setSaveStatus(hasContent ? "saved" : "idle");
     } catch {
-      setItems(empty);
-      itemsRef.current = [...empty];
+      setItems(EMPTY_ITEMS);
+      itemsRef.current = [...EMPTY_ITEMS];
     }
   }, []);
 
@@ -55,6 +56,7 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- async fetch on mount/date change
     fetchGratitude(date);
   }, [date, fetchGratitude]);
 
@@ -83,8 +85,6 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
     }, 1000);
   };
 
-  const filledCount = items.filter((s) => s.trim().length > 0).length;
-
   return (
     <div className="mx-5 md:mx-0 mb-3">
       <div className="bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden">
@@ -107,7 +107,7 @@ export default function GratitudeSection({ date }: GratitudeSectionProps) {
         <div>
           <div className="px-4 pb-4 flex flex-col gap-2.5">
             {[0, 1, 2, 3, 4].map((i) => (
-              <div key={i} className="flex items-center gap-3">
+              <div key={`gratitude-${i}`} className="flex items-center gap-3">
                 <span className="size-6 flex items-center justify-center rounded-full bg-[var(--fill-quaternary)] text-[13px] font-semibold text-[var(--label-tertiary)] flex-shrink-0">
                   {i + 1}
                 </span>

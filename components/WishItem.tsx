@@ -17,8 +17,6 @@ function formatDate(dateStr: string): string {
 }
 
 export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick }: WishItemProps) {
-  const categoryEmoji = wish.category === "item" ? "🛍️" : "⭐";
-
   const renderPrice = () => {
     if (wish.completed && wish.actualPrice != null) {
       if (wish.price != null && wish.price !== wish.actualPrice) {
@@ -117,10 +115,10 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick 
           onClick={() => onEdit(wish)}
         >
           <div className={`text-[17px] leading-[22px] font-semibold text-[var(--label-primary)] ${wish.completed ? "line-through" : ""} flex items-center flex-wrap gap-1`}>
-            {splitParts(wish.title).map((part, i) =>
+            {splitParts(wish.title).map((part) =>
               part.type === "tag" ? (
                 <button
-                  key={i}
+                  key={part.key}
                   className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-[var(--accent-primary)]/12 text-[var(--accent-primary)] text-[11px] font-medium leading-tight no-underline"
                   onClick={(e) => { e.stopPropagation(); e.preventDefault(); onTagClick?.(part.value); }}
                   style={{ textDecoration: "none" }}
@@ -128,7 +126,7 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick 
                   #{part.value}
                 </button>
               ) : (
-                <span key={i}>{part.value}</span>
+                <span key={part.key}>{part.value}</span>
               )
             )}
           </div>

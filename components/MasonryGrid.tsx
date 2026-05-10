@@ -38,9 +38,9 @@ export default function MasonryGrid({ children, gap = 12 }: MasonryGridProps) {
       }}
     >
       {columns.map((col, ci) => (
-        <div key={ci} className="flex flex-col min-w-0" style={{ gap }}>
+        <div key={`col-${ci}`} className="flex flex-col min-w-0" style={{ gap }}>
           {col.map((idx) => (
-            <div key={idx}>{items[idx]}</div>
+            <div key={`item-${idx}`}>{items[idx]}</div>
           ))}
         </div>
       ))}

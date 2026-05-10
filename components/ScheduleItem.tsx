@@ -151,25 +151,25 @@ export default function ScheduleItem({ schedule, onEdit, onTagClick }: ScheduleI
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="text-[20px] leading-[26px] font-semibold text-[var(--label-primary)] truncate flex items-center flex-wrap gap-1">
-          {splitParts(schedule.name).map((part, i) =>
+          {splitParts(schedule.name).map((part) =>
             part.type === "tag" ? (
               <button
-                key={i}
+                key={part.key}
                 className="inline-flex items-center px-2 py-0.5 rounded-full bg-[var(--accent-primary)]/12 text-[var(--accent-primary)] text-[13px] font-medium leading-tight"
                 onClick={(e) => { e.stopPropagation(); e.preventDefault(); onTagClick?.(part.value); }}
               >
                 #{part.value}
               </button>
             ) : (
-              <span key={i}>{part.value}</span>
+              <span key={part.key}>{part.value}</span>
             )
           )}
         </div>
         {subtitleParts.length > 0 && (
           <div className="text-[15px] leading-[20px] text-[var(--label-tertiary)] mt-0.5">
-            {subtitleParts.map((part, i) => (
-              <span key={i}>
-                {i > 0 && (
+            {subtitleParts.map((part, idx) => (
+              <span key={part}>
+                {idx > 0 && (
                   <span className="text-[var(--label-quaternary)]"> &middot; </span>
                 )}
                 {part === milestone ? (
