@@ -53,3 +53,4 @@ next-env.d.ts
 /.test-data/
 
 # PM2 (ecosystem.config.js is now tracked)
+.playwright-cli/
