@@ -37,6 +37,16 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.18.0 - 2026-05-11
+- **Feature**: 네이티브 폴리싱 (Behavior Pack) — 모션 토큰(`--ease-ios`, `--ease-ios-spring`, `--duration-fast/base/slow`) 도입, `.press` 유틸로 버튼/카드에 `scale(0.97)` 탭 피드백, 기본 웹 노이즈 제거(tap-highlight, callout, overscroll, text-size-adjust)
+- **Feature**: 햅틱 피드백 — `lib/haptic.ts` 헬퍼(navigator.vibrate 기반, Android 전용·iOS 무음 폴백). 투두 토글/삭제, 위시 토글/완료/추가, 일정/힐링 액션, 하단 탭, 날짜 네비, 무드 선택, 시트 오픈 등 전 인터랙션에 결합
+- **Feature**: 네이티브 폴리싱 (Visual Pack) — `document.startViewTransition` 래퍼(`lib/view-transition.ts`)와 6개 키프레임. 하단 탭 전환 시 크로스페이드, 날짜 prev/next/jump 시 방향감 있는 슬라이드(`html[data-date-direction]`). 미지원 브라우저는 즉시 전환으로 폴백
+- **Feature**: `<EmptyState>` 공통 컴포넌트 — `<h2>` 헤딩 시맨틱, `aria-hidden` 데코 아이콘, 옵션 CTA 버튼. 7개 빈 상태에 적용(투두 지금/곧·보관함, 일정 타임라인, 위시 힐링·물건·경험, 노트, 태그 필터)
+- **A11y**: 시트/오버레이를 `<button>` + `role="dialog"` + `aria-modal`로 교체, 시맨틱 강화
+- **Refactor**: `DateNavigator`에서 `setDateDirection` 헬퍼 추출, `splitParts`에 안정 key 부여, hardcoded `duration-200/300` → `--duration-*` 토큰
+- **Cleanup**: 미사용 export 제거 및 private 전환, 사용되지 않게 된 `categoryEmoji` 삭제, 중복 `prefers-reduced-motion` 블록 병합
+- **Test**: 햅틱 5개 + view-transition 3개 추가 (총 94개 통과)
+
 ### v0.17.6 - 2026-05-09
 - **Refactor**: 중첩 컴포넌트 정의 제거 — `app/page.tsx`의 `Sidebar`/`Content`를 JSX 변수로 변환해 매 렌더마다 state가 파괴되던 문제 해결
 - **Fix**: `WishCompletionSheet` 하이드레이션 mismatch 수정 — `Math.random()`을 `useEffect`로 옮겨 SSR/CSR 차이 제거
