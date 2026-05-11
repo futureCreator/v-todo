@@ -38,7 +38,9 @@ export default function WishlistView({
     { key: "experience", label: `경험${experienceCount > 0 ? ` ${experienceCount}` : ""}` },
   ];
 
-  const filtered = wishes.filter((w) => w.category === wishTab);
+  const filtered = wishes
+    .filter((w) => w.category === wishTab)
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 
   // Healing tab: no completed/active split
   if (wishTab === "healing") {

@@ -37,6 +37,9 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Changelog
 
+### v0.18.1 - 2026-05-11
+- **Improve**: 위시 화면 정렬 — 모든 탭(힐링/물건/경험)에서 `createdAt` 내림차순으로 정렬하여 최근에 추가한 항목이 위쪽에 오도록 변경
+
 ### v0.18.0 - 2026-05-11
 - **Feature**: 네이티브 폴리싱 (Behavior Pack) — 모션 토큰(`--ease-ios`, `--ease-ios-spring`, `--duration-fast/base/slow`) 도입, `.press` 유틸로 버튼/카드에 `scale(0.97)` 탭 피드백, 기본 웹 노이즈 제거(tap-highlight, callout, overscroll, text-size-adjust)
 - **Feature**: 햅틱 피드백 — `lib/haptic.ts` 헬퍼(navigator.vibrate 기반, Android 전용·iOS 무음 폴백). 투두 토글/삭제, 위시 토글/완료/추가, 일정/힐링 액션, 하단 탭, 날짜 네비, 무드 선택, 시트 오픈 등 전 인터랙션에 결합
