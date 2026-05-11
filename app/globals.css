@@ -491,15 +491,12 @@ html[data-date-direction="backward"] ::view-transition-new(date-content) {
   animation: vtSlideInLeft 280ms var(--ease-ios) both;
 }
 
+/* ── Reduced Motion ── */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(*),
   ::view-transition-new(*) {
     animation: none !important;
   }
-}
-
-/* ── Reduced Motion ── */
-@media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
