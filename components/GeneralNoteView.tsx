@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import type { FileItem } from "@/types";
 import FileListItem from "@/components/FileListItem";
 import NoteEditor from "@/components/NoteEditor";
+import EmptyState from "@/components/EmptyState";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -276,13 +277,19 @@ export default function GeneralNoteView() {
       {/* File list */}
       <div className="flex-1 overflow-y-auto">
         {files.length === 0 && !showNameInput ? (
-          <div className="flex flex-col items-center justify-center py-24 text-[var(--label-tertiary)]">
-            <span className="text-[56px] mb-5 opacity-30">📝</span>
-            <p className="text-[20px]">노트가 없습니다</p>
-            <p className="text-[15px] text-[var(--label-quaternary)] mt-1.5">
-              + 버튼으로 새 노트를 만들어보세요
-            </p>
-          </div>
+          <EmptyState
+            icon={
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="9" y1="13" x2="15" y2="13" />
+                <line x1="9" y1="17" x2="13" y2="17" />
+              </svg>
+            }
+            title="노트가 없습니다"
+            description="자유로운 형식으로 메모를 작성해보세요"
+            action={{ label: "+ 노트 추가", onClick: () => setShowNameInput("file") }}
+          />
         ) : (
           <>
             {files.map((item) => (
