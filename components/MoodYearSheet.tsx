@@ -53,7 +53,7 @@ export default function MoodYearSheet({ onClose }: MoodYearSheetProps) {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto md:px-5">
           <MoodYearView />
         </div>
       </div>
