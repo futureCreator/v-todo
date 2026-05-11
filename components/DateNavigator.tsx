@@ -38,11 +38,15 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
   const today = new Date();
   const isToday = isSameDay(date, today);
 
+  const setDateDirection = (dir: "forward" | "backward") => {
+    if (typeof document !== "undefined") {
+      document.documentElement.dataset.dateDirection = dir;
+    }
+  };
+
   const goToPrev = () => {
     haptic.selection();
-    if (typeof document !== "undefined") {
-      document.documentElement.dataset.dateDirection = "backward";
-    }
+    setDateDirection("backward");
     const prev = new Date(date);
     prev.setDate(prev.getDate() - 1);
     withViewTransition(() => onChange(prev));
@@ -50,9 +54,7 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
 
   const goToNext = () => {
     haptic.selection();
-    if (typeof document !== "undefined") {
-      document.documentElement.dataset.dateDirection = "forward";
-    }
+    setDateDirection("forward");
     const next = new Date(date);
     next.setDate(next.getDate() + 1);
     withViewTransition(() => onChange(next));
@@ -65,10 +67,7 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
     const picked = new Date(y, m - 1, d);
     if (isSameDay(picked, date)) return;
     haptic.selection();
-    if (typeof document !== "undefined") {
-      document.documentElement.dataset.dateDirection =
-        picked.getTime() >= date.getTime() ? "forward" : "backward";
-    }
+    setDateDirection(picked.getTime() >= date.getTime() ? "forward" : "backward");
     withViewTransition(() => onChange(picked));
   };
 
