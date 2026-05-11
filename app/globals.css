@@ -382,6 +382,31 @@
   }
 }
 
+@keyframes vtSlideOutLeft {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-24px); }
+}
+@keyframes vtSlideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes vtSlideOutRight {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(24px); }
+}
+@keyframes vtSlideInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes vtFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes vtFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* ── Animation Utilities ── */
 @layer utilities {
   .item-enter {
@@ -429,6 +454,47 @@
   }
   .press:active {
     transform: scale(0.97);
+  }
+}
+
+/* ═══════════════════════════════════════
+   View Transitions
+   ═══════════════════════════════════════ */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 280ms;
+  animation-timing-function: var(--ease-ios);
+}
+
+/* Tab change: cross-fade */
+::view-transition-old(tab-content) {
+  animation: vtFadeOut 200ms var(--ease-ios) both;
+}
+::view-transition-new(tab-content) {
+  animation: vtFadeIn 240ms var(--ease-ios) both;
+}
+
+/* Date forward (next day) */
+html[data-date-direction="forward"] ::view-transition-old(date-content) {
+  animation: vtSlideOutLeft 240ms var(--ease-ios) both;
+}
+html[data-date-direction="forward"] ::view-transition-new(date-content) {
+  animation: vtSlideInRight 280ms var(--ease-ios) both;
+}
+
+/* Date backward (prev day) */
+html[data-date-direction="backward"] ::view-transition-old(date-content) {
+  animation: vtSlideOutRight 240ms var(--ease-ios) both;
+}
+html[data-date-direction="backward"] ::view-transition-new(date-content) {
+  animation: vtSlideInLeft 280ms var(--ease-ios) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }
 
