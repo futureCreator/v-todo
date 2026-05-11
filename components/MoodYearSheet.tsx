@@ -8,19 +8,24 @@ interface MoodYearSheetProps {
 
 export default function MoodYearSheet({ onClose }: MoodYearSheetProps) {
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end md:items-center justify-center ios-sheet-overlay"
-      style={{ background: "rgba(0,0,0,0.4)" }}
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center ios-sheet-overlay">
+      <button
+        type="button"
+        aria-label="닫기"
+        onClick={onClose}
+        className="absolute inset-0 cursor-default"
+        style={{ background: "rgba(0,0,0,0.4)" }}
+      />
       <div
-        className="ios-sheet w-full max-w-lg max-h-[80vh] flex flex-col rounded-t-[16px] md:rounded-[16px]"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mood-year-sheet-title"
+        className="relative ios-sheet w-full max-w-lg max-h-[80vh] flex flex-col rounded-t-[16px] md:rounded-[16px]"
         style={{
           background: "var(--sys-bg-elevated)",
           boxShadow: "var(--shadow-xl)",
           paddingBottom: "max(env(safe-area-inset-bottom, 0px), 0px)",
         }}
-        onClick={(e) => e.stopPropagation()}
       >
         <div className="drag-handle md:hidden" />
 
@@ -31,12 +36,14 @@ export default function MoodYearSheet({ onClose }: MoodYearSheetProps) {
         >
           <div className="w-[50px]" />
           <h3
+            id="mood-year-sheet-title"
             className="text-[20px] font-semibold"
             style={{ color: "var(--sys-label)" }}
           >
             올해 무드
           </h3>
           <button
+            type="button"
             onClick={onClose}
             className="text-[20px] font-semibold w-[50px] text-right active:opacity-60 transition-opacity"
             style={{ color: "var(--sys-blue)" }}
