@@ -20,6 +20,7 @@ import YearProgress from "@/components/YearProgress";
 import WishCompletionSheet from "@/components/WishCompletionSheet";
 import CheckinView from "@/components/CheckinView";
 import TagView from "@/components/TagView";
+import EmptyState from "@/components/EmptyState";
 import type { TodoTab } from "@/types";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -596,11 +597,17 @@ export default function Home() {
           ) : section === "todo" && todoTab === "archive" ? (
             <div className="flex-1 flex flex-col">
               {archivedTodos.length === 0 ? (
-                <div className="flex-1 flex flex-col items-center justify-center text-[var(--label-tertiary)]">
-                  <span className="text-[56px] mb-5 opacity-30">📦</span>
-                  <p className="text-[20px]">보관함이 비어 있습니다</p>
-                  <p className="text-[15px] text-[var(--label-quaternary)] mt-1.5">30일 후 자동 삭제됩니다</p>
-                </div>
+                <EmptyState
+                  icon={
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 8v13H3V8" />
+                      <rect x="1" y="3" width="22" height="5" rx="1" />
+                      <line x1="10" y1="12" x2="14" y2="12" />
+                    </svg>
+                  }
+                  title="보관함이 비어 있습니다"
+                  description="완료되지 않은 할 일이 자동 보관되며, 30일 후 삭제됩니다"
+                />
               ) : (
                 <div className="mx-5 md:mx-0 flex flex-col gap-2.5">
                   {archivedTodos.map((todo) => (
@@ -620,17 +627,20 @@ export default function Home() {
           ) : section === "todo" ? (
             <div className="flex-1 flex flex-col">
               {filteredTodos.length === 0 ? (
-                <div className="flex-1 flex flex-col items-center justify-center text-[var(--label-tertiary)]">
-                  <span className="text-[56px] mb-5 opacity-30">✅</span>
-                  <p className="text-[20px]">
-                    {todoTab === "now" ? "할 일을 추가해보세요" : "곧 처리할 일이 없습니다"}
-                  </p>
-                  <p className="text-[15px] text-[var(--label-quaternary)] mt-1.5">
-                    {todoTab === "now"
+                <EmptyState
+                  icon={
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="3" />
+                      <path d="M8 12.5l2.5 2.5L16 9.5" />
+                    </svg>
+                  }
+                  title={todoTab === "now" ? "할 일을 추가해보세요" : "곧 처리할 일이 없습니다"}
+                  description={
+                    todoTab === "now"
                       ? "3일 이내에 완료하지 않으면 '곧'으로 이동합니다"
-                      : "3일 동안 미처리된 할 일이 여기에 표시됩니다"}
-                  </p>
-                </div>
+                      : "3일 동안 미처리된 할 일이 여기에 표시됩니다"
+                  }
+                />
               ) : (
                 <div className="mx-5 md:mx-0 flex flex-col gap-2.5">
                   {filteredTodos.map((todo) => (
