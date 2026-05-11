@@ -68,10 +68,10 @@ export default function MoodInput({ date }: MoodInputProps) {
             <button
               type="button"
               onClick={() => setShowYearSheet(true)}
-              className="flex items-center gap-0.5 text-[15px] text-[var(--accent-primary)] active:opacity-60 transition-opacity"
+              className="flex items-center gap-0.5 px-2 py-2 -my-2 -mr-2 text-[15px] text-[var(--accent-primary)] active:opacity-60 transition-opacity"
             >
               <span>올해 보기</span>
-              <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <polyline points="7 4 13 10 7 16" />
               </svg>
             </button>
