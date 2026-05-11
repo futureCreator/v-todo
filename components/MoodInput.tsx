@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { haptic } from "@/lib/haptic";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -49,6 +50,7 @@ export default function MoodInput({ date }: MoodInputProps) {
   }, [date, fetchMood]);
 
   const handleTap = (value: number) => {
+    if (value !== selected) haptic.selection();
     setSelected(value);
     saveMood(value);
   };

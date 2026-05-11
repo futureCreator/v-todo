@@ -88,7 +88,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit, onTagClick 
 
   return (
     <div
-      className={`group flex items-center gap-3 px-4 md:px-5 transition-all duration-300 ${
+      className={`group flex items-center gap-3 px-4 md:px-5 transition-all duration-[var(--duration-base)] ${
         completing ? "opacity-0 -translate-x-4" : "opacity-100"
       }`}
     >
@@ -98,7 +98,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit, onTagClick 
         onClick={handleToggle}
       >
         <span
-          className={`w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
+          className={`w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center transition-all duration-[var(--duration-fast)] ${
             completing
               ? "border-[var(--accent-primary)] bg-[var(--accent-primary)] scale-95"
               : "border-[var(--sys-gray)] hover:border-[var(--accent-primary)]"

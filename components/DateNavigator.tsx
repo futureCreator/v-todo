@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { haptic } from "@/lib/haptic";
+import { withViewTransition } from "@/lib/view-transition";
 
 interface DateNavigatorProps {
   date: Date;
@@ -37,18 +38,26 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
   const today = new Date();
   const isToday = isSameDay(date, today);
 
+  const setDateDirection = (dir: "forward" | "backward") => {
+    if (typeof document !== "undefined") {
+      document.documentElement.dataset.dateDirection = dir;
+    }
+  };
+
   const goToPrev = () => {
     haptic.selection();
+    setDateDirection("backward");
     const prev = new Date(date);
     prev.setDate(prev.getDate() - 1);
-    onChange(prev);
+    withViewTransition(() => onChange(prev));
   };
 
   const goToNext = () => {
     haptic.selection();
+    setDateDirection("forward");
     const next = new Date(date);
     next.setDate(next.getDate() + 1);
-    onChange(next);
+    withViewTransition(() => onChange(next));
   };
 
   const handleDatePick = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,8 +65,10 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
     if (!val) return;
     const [y, m, d] = val.split("-").map(Number);
     const picked = new Date(y, m - 1, d);
-    if (!isSameDay(picked, date)) haptic.selection();
-    onChange(picked);
+    if (isSameDay(picked, date)) return;
+    haptic.selection();
+    setDateDirection(picked.getTime() >= date.getTime() ? "forward" : "backward");
+    withViewTransition(() => onChange(picked));
   };
 
   const openPicker = () => {

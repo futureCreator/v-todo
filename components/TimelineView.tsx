@@ -3,6 +3,7 @@
 import type { Schedule } from "@/types";
 import { getDisplayInfo } from "@/components/ScheduleItem";
 import { splitParts } from "@/lib/tags";
+import EmptyState from "@/components/EmptyState";
 
 interface TimelineViewProps {
   schedules: Schedule[];
@@ -73,10 +74,18 @@ export default function TimelineView({ schedules, onEdit, onTagClick }: Timeline
 
   if (enriched.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 text-[var(--label-tertiary)]">
-        <span className="text-[56px] mb-5 opacity-30">📅</span>
-        <p className="text-[20px]">등록된 일정이 없습니다</p>
-      </div>
+      <EmptyState
+        icon={
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+        }
+        title="기념할 일정이 없어요"
+        description="기억하고 싶은 날짜를 추가해보세요"
+      />
     );
   }
 

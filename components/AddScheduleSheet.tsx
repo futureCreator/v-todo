@@ -188,13 +188,13 @@ export default function AddScheduleSheet({
           <span className="text-[20px] text-[var(--label-primary)]">음력</span>
           <button
             type="button"
-            className={`w-[51px] h-[31px] rounded-full transition-colors duration-200 relative flex-shrink-0 ${
+            className={`w-[51px] h-[31px] rounded-full transition-colors duration-[var(--duration-fast)] relative flex-shrink-0 ${
               isLunar ? "bg-[var(--accent-primary)]" : "bg-[var(--fill-tertiary)]"
             }`}
             onClick={() => setIsLunar(!isLunar)}
           >
             <span
-              className={`pointer-events-none absolute top-[2px] left-[2px] w-[27px] h-[27px] rounded-full bg-white shadow-sm transition-transform duration-200 ${
+              className={`pointer-events-none absolute top-[2px] left-[2px] w-[27px] h-[27px] rounded-full bg-white shadow-sm transition-transform duration-[var(--duration-fast)] ${
                 isLunar ? "translate-x-[20px]" : "translate-x-0"
               }`}
             />

@@ -3,6 +3,7 @@
 import type { Todo, Schedule, WishItem } from "@/types";
 import { extractTags } from "@/lib/tags";
 import { getDisplayInfo } from "@/components/ScheduleItem";
+import EmptyState from "@/components/EmptyState";
 
 interface TagViewProps {
   tag: string;
@@ -66,10 +67,17 @@ export default function TagView({ tag, todos, schedules, wishes, onClose }: TagV
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
           {totalCount === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-[var(--label-tertiary)]">
-              <span className="text-[56px] mb-5 opacity-30">#</span>
-              <p className="text-[20px]">이 태그를 사용하는 항목이 없습니다</p>
-            </div>
+            <EmptyState
+              icon={
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+              }
+              title={`#${tag} 태그의 항목이 없어요`}
+              description="태그가 붙은 할 일·일정·위시가 여기에 모입니다"
+              action={{ label: "전체 보기", onClick: onClose }}
+            />
           ) : (
             <div className="py-3">
               {/* Todos */}

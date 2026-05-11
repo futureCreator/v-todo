@@ -38,7 +38,7 @@ export default function CheckinView() {
   return (
     <div className="flex flex-col flex-1 min-h-0">
       <DateNavigator date={date} onChange={setDate} />
-      <div className="flex-1 min-h-0 overflow-y-auto flex flex-col">
+      <div className="flex-1 min-h-0 overflow-y-auto flex flex-col" style={{ viewTransitionName: "date-content" }}>
         <div className="pt-3">
           <MoodInput date={dateToString(date)} />
           <GratitudeSection date={dateToString(date)} />
