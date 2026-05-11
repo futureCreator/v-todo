@@ -83,7 +83,6 @@ export default function WishlistView({
   // Item/Experience tabs with masonry
   const active = filtered.filter((w) => !w.completed);
   const completed = filtered.filter((w) => w.completed);
-  const categoryEmoji = wishTab === "item" ? "🛍️" : "⭐";
   const emptyMessage = wishTab === "item" ? "아직 담긴 물건이 없어요" : "아직 계획된 경험이 없어요";
 
   return (
