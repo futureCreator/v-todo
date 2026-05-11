@@ -563,6 +563,7 @@ export default function Home() {
       {/* Main Content */}
       <main
         className={`flex-1 overflow-y-auto ${(section === "note" || section === "checkin") ? "pb-20 md:pb-0 flex flex-col min-h-0" : "pb-20 md:pb-8"}`}
+        style={{ viewTransitionName: "tab-content" }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
