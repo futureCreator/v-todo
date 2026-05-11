@@ -91,7 +91,7 @@ export const STAGE_LABELS: Record<Stage, string> = {
 
 // Notes
 export type Section = "todo" | "note" | "checkin" | "wish" | "dday";
-export type NoteTab = "daily" | "general" | "mood";
+export type NoteTab = "daily" | "general";
 
 export interface FileItem {
   name: string;

@@ -12,7 +12,6 @@ import AddScheduleSheet from "@/components/AddScheduleSheet";
 import UndoToast from "@/components/UndoToast";
 import DailyNoteView from "@/components/DailyNoteView";
 import GeneralNoteView from "@/components/GeneralNoteView";
-import MoodYearView from "@/components/MoodYearView";
 import WishlistView from "@/components/WishlistView";
 import AddWishSheet from "@/components/AddWishSheet";
 import HealingAddSheet from "@/components/HealingAddSheet";
@@ -482,7 +481,7 @@ export default function Home() {
       if (dir === "left" && idx < tabs.length - 1) setTodoTab(tabs[idx + 1]);
       if (dir === "right" && idx > 0) setTodoTab(tabs[idx - 1]);
     } else if (section === "note") {
-      const noteTabs: NoteTab[] = ["daily", "general", "mood"];
+      const noteTabs: NoteTab[] = ["daily", "general"];
       const ni = noteTabs.indexOf(noteTab);
       if (dir === "left" && ni < noteTabs.length - 1) setNoteTab(noteTabs[ni + 1]);
       if (dir === "right" && ni > 0) setNoteTab(noteTabs[ni - 1]);
@@ -543,7 +542,6 @@ export default function Home() {
             tabs={[
               { key: "daily", label: "데일리" },
               { key: "general", label: "노트" },
-              { key: "mood", label: "무드" },
             ]}
             active={noteTab}
             onChange={(key) => setNoteTab(key as NoteTab)}
@@ -573,10 +571,8 @@ export default function Home() {
             <div className="flex-1 flex flex-col min-h-0 md:px-8">
               {noteTab === "daily" ? (
                 <DailyNoteView />
-              ) : noteTab === "general" ? (
-                <GeneralNoteView />
               ) : (
-                <MoodYearView />
+                <GeneralNoteView />
               )}
             </div>
           ) : section === "checkin" ? (
