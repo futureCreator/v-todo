@@ -1,6 +1,7 @@
 "use client";
 
 import type { Section } from "@/types";
+import { haptic } from "@/lib/haptic";
 
 interface BottomNavProps {
   active: Section;
@@ -13,12 +14,12 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
       <div className="flex h-[50px]">
         {/* 할 일 */}
         <button
-          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
             active === "todo"
               ? "text-[var(--accent-primary)]"
               : "text-[var(--label-tertiary)]"
           }`}
-          onClick={() => onChange("todo")}
+          onClick={() => { if (active !== "todo") { haptic.selection(); onChange("todo"); } }}
         >
           <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "todo" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "todo" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
             {active === "todo" ? (
@@ -35,12 +36,12 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
 
         {/* 노트 */}
         <button
-          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
             active === "note"
               ? "text-[var(--accent-primary)]"
               : "text-[var(--label-tertiary)]"
           }`}
-          onClick={() => onChange("note")}
+          onClick={() => { if (active !== "note") { haptic.selection(); onChange("note"); } }}
         >
           <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "note" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "note" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
             {active === "note" ? (
@@ -59,12 +60,12 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
 
         {/* 체크인 */}
         <button
-          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
             active === "checkin"
               ? "text-[var(--accent-primary)]"
               : "text-[var(--label-tertiary)]"
           }`}
-          onClick={() => onChange("checkin")}
+          onClick={() => { if (active !== "checkin") { haptic.selection(); onChange("checkin"); } }}
         >
           <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "checkin" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "checkin" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
             {active === "checkin" ? (
@@ -83,12 +84,12 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
 
         {/* 위시 */}
         <button
-          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
             active === "wish"
               ? "text-[var(--accent-primary)]"
               : "text-[var(--label-tertiary)]"
           }`}
-          onClick={() => onChange("wish")}
+          onClick={() => { if (active !== "wish") { haptic.selection(); onChange("wish"); } }}
         >
           <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "wish" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "wish" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
             {active === "wish" ? (
@@ -102,12 +103,12 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
 
         {/* D-day */}
         <button
-          className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
+          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
             active === "dday"
               ? "text-[var(--accent-primary)]"
               : "text-[var(--label-tertiary)]"
           }`}
-          onClick={() => onChange("dday")}
+          onClick={() => { if (active !== "dday") { haptic.selection(); onChange("dday"); } }}
         >
           <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "dday" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "dday" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
             {active === "dday" ? (

@@ -135,7 +135,7 @@ export default function ScheduleItem({ schedule, onEdit, onTagClick }: ScheduleI
 
   return (
     <button
-      className="w-full flex items-center gap-3.5 px-4 md:px-6 min-h-[72px] py-2 text-left group"
+      className="press w-full flex items-center gap-3.5 px-4 md:px-6 min-h-[72px] py-2 text-left group"
       onClick={() => onEdit(schedule)}
     >
       {/* Calendar block */}

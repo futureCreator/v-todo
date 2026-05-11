@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Schedule, ScheduleType, RepeatMode } from "@/types";
 import KoreanLunarCalendar from "korean-lunar-calendar";
+import { haptic } from "@/lib/haptic";
 
 function lunarToSolar(year: number, month: number, day: number) {
   try {
@@ -53,6 +54,8 @@ export default function AddScheduleSheet({
   });
   const [originDate, setOriginDate] = useState(schedule?.originDate ?? "");
 
+  useEffect(() => { haptic.light(); }, []);
+
   const solarPreview: string | null = (() => {
     if (!isLunar || !inputDate) return null;
     const [, m, d] = inputDate.split("-").map(Number);
@@ -71,6 +74,7 @@ export default function AddScheduleSheet({
 
   const handleSave = () => {
     if (!name.trim() || !inputDate) return;
+    haptic.tap();
 
     let targetDate: string;
     let finalOriginDate: string;
@@ -216,7 +220,7 @@ export default function AddScheduleSheet({
         {schedule && onDelete && (
           <button
             className="w-full py-3.5 mt-4 rounded-xl text-[20px] font-medium text-[var(--system-red)] bg-[var(--system-red)]/10"
-            onClick={() => onDelete(schedule.id)}
+            onClick={() => { haptic.warning(); onDelete(schedule.id); }}
           >
             일정 삭제
           </button>

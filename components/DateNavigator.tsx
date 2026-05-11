@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { haptic } from "@/lib/haptic";
 
 interface DateNavigatorProps {
   date: Date;
@@ -37,12 +38,14 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
   const isToday = isSameDay(date, today);
 
   const goToPrev = () => {
+    haptic.selection();
     const prev = new Date(date);
     prev.setDate(prev.getDate() - 1);
     onChange(prev);
   };
 
   const goToNext = () => {
+    haptic.selection();
     const next = new Date(date);
     next.setDate(next.getDate() + 1);
     onChange(next);
@@ -52,10 +55,13 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
     const val = e.target.value;
     if (!val) return;
     const [y, m, d] = val.split("-").map(Number);
-    onChange(new Date(y, m - 1, d));
+    const picked = new Date(y, m - 1, d);
+    if (!isSameDay(picked, date)) haptic.selection();
+    onChange(picked);
   };
 
   const openPicker = () => {
+    haptic.selection();
     inputRef.current?.showPicker();
   };
 
@@ -63,7 +69,7 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
     <div className="flex items-center justify-between px-5 md:px-0 py-3">
       {/* Prev button */}
       <button
-        className="size-11 flex items-center justify-center text-[var(--label-tertiary)] active:text-[var(--label-primary)] transition-colors"
+        className="press size-11 flex items-center justify-center text-[var(--label-tertiary)] active:text-[var(--label-primary)] transition-colors"
         onClick={goToPrev}
       >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -73,7 +79,7 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
 
       {/* Date label + hidden date picker */}
       <button
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg active:bg-[var(--fill-quaternary)] transition-colors"
+        className="press flex items-center gap-2 px-3 py-1.5 rounded-lg active:bg-[var(--fill-quaternary)] transition-colors"
         onClick={openPicker}
       >
         <span className="text-[20px] font-semibold text-[var(--label-primary)]">
@@ -95,7 +101,7 @@ export default function DateNavigator({ date, onChange }: DateNavigatorProps) {
 
       {/* Next button */}
       <button
-        className="size-11 flex items-center justify-center text-[var(--label-tertiary)] active:text-[var(--label-primary)] transition-colors"
+        className="press size-11 flex items-center justify-center text-[var(--label-tertiary)] active:text-[var(--label-primary)] transition-colors"
         onClick={goToNext}
       >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

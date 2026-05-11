@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { WishItem, WishCategory } from "@/types";
+import { haptic } from "@/lib/haptic";
 
 interface AddWishSheetProps {
   wish?: WishItem | null;
@@ -44,10 +45,13 @@ export default function AddWishSheet({
   const [satisfaction, setSatisfaction] = useState<number | null>(wish?.satisfaction ?? null);
   const [reviewInput, setReviewInput] = useState(wish?.review ?? "");
 
+  useEffect(() => { haptic.light(); }, []);
+
   const canSave = title.trim().length > 0;
 
   const handleSave = () => {
     if (!canSave) return;
+    haptic.tap();
     const priceNum = priceInput.length > 0 ? parseInt(priceInput, 10) : null;
     const actualPriceNum = actualPriceInput.length > 0 ? parseInt(actualPriceInput, 10) : null;
     onSave({
@@ -301,7 +305,7 @@ export default function AddWishSheet({
         {wish && onDelete && (
           <button
             className="w-full py-3.5 mt-2 rounded-xl text-[20px] font-medium text-[var(--system-red)] bg-[var(--system-red)]/10"
-            onClick={() => onDelete(wish.id)}
+            onClick={() => { haptic.warning(); onDelete(wish.id); }}
           >
             위시 삭제
           </button>

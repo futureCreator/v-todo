@@ -2,6 +2,7 @@
 
 import type { WishItem as WishItemType } from "@/types";
 import { splitParts } from "@/lib/tags";
+import { haptic } from "@/lib/haptic";
 
 interface WishItemProps {
   wish: WishItemType;
@@ -80,7 +81,7 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick 
       {/* Image area — only if image exists */}
       {wish.imageUrl ? (
         <button
-          className="w-full relative"
+          className="press w-full relative"
           onClick={() => onEdit(wish)}
           aria-label="위시 편집"
         >
@@ -111,7 +112,7 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick 
       {/* Content */}
       <div className="px-3 pt-2.5 pb-3">
         <button
-          className="w-full text-left"
+          className="press w-full text-left"
           onClick={() => onEdit(wish)}
         >
           <div className={`text-[17px] leading-[22px] font-semibold text-[var(--label-primary)] ${wish.completed ? "line-through" : ""} flex items-center flex-wrap gap-1`}>
@@ -137,8 +138,8 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick 
         {/* Bottom actions */}
         <div className="flex items-center justify-between mt-2">
           <button
-            className="size-[36px] flex items-center justify-center rounded-full"
-            onClick={() => onToggle(wish.id)}
+            className="press size-[36px] flex items-center justify-center rounded-full"
+            onClick={() => { haptic.medium(); onToggle(wish.id); }}
             aria-label={wish.completed ? "완료 취소" : "완료 표시"}
           >
             <div
@@ -156,8 +157,8 @@ export default function WishItem({ wish, onToggle, onEdit, onDelete, onTagClick 
             </div>
           </button>
           <button
-            className="size-[36px] flex items-center justify-center rounded-full"
-            onClick={() => onDelete(wish.id)}
+            className="press size-[36px] flex items-center justify-center rounded-full"
+            onClick={() => { haptic.warning(); onDelete(wish.id); }}
             aria-label="위시 삭제"
           >
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
