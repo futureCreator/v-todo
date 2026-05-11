@@ -5,6 +5,7 @@ import SectionTabs from "@/components/SectionTabs";
 import WishItemCard from "@/components/WishItem";
 import HealingCard from "@/components/HealingCard";
 import MasonryGrid from "@/components/MasonryGrid";
+import EmptyState from "@/components/EmptyState";
 
 interface WishlistViewProps {
   wishes: WishItem[];
@@ -57,10 +58,15 @@ export default function WishlistView({
             </MasonryGrid>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-16 gap-3">
-            <span className="text-[56px] opacity-30">💚</span>
-            <span className="text-[20px] text-[var(--label-tertiary)]">기분이 좋아지는 것들을 모아보세요</span>
-          </div>
+          <EmptyState
+            icon={
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+            }
+            title="힐링 아이템이 없어요"
+            description="기분이 좋아지는 것들을 모아보세요"
+          />
         )}
         <div className="mx-5 md:mx-0 mt-auto pt-4">
           <button
@@ -106,10 +112,23 @@ export default function WishlistView({
       )}
 
       {active.length === 0 && completed.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-16 gap-3">
-          <span className="text-[56px] opacity-30">{categoryEmoji}</span>
-          <span className="text-[20px] text-[var(--label-tertiary)]">{emptyMessage}</span>
-        </div>
+        <EmptyState
+          icon={
+            wishTab === "item" ? (
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
+              </svg>
+            ) : (
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+            )
+          }
+          title={emptyMessage}
+          description={wishTab === "item" ? "갖고 싶은 것을 적어두면 잊지 않아요" : "해보고 싶은 경험을 모아보세요"}
+        />
       )}
 
       {completed.length > 0 && (
