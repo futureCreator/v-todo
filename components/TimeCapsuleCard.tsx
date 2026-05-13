@@ -109,7 +109,7 @@ export default function TimeCapsuleCard({ onSelectDate }: TimeCapsuleCardProps) 
   return (
     <section
       aria-label="이 날의 발자취"
-      className="mx-5 md:mx-0 mb-3 bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden"
+      className="bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden"
     >
       <div className="px-4 pt-3 pb-1">
         <span className="text-[15px] font-semibold text-[var(--label-secondary)]">이 날의 발자취</span>
