@@ -114,8 +114,11 @@ describe("buildMonthlyReviewPrompt", () => {
     };
     const prompt = buildMonthlyReviewPrompt(input);
     expect(prompt).toContain("... (잘림)");
-    const noteLine = prompt.split("note: ")[1] ?? "";
-    expect(noteLine.length).toBeLessThan(3100);
+    // Extract content between "note: " and the next section header (## or end)
+    const afterNote = prompt.split("- note: ")[1] ?? "";
+    const notePortion = afterNote.split("\n\n## ")[0] ?? afterNote;
+    expect(notePortion.length).toBeLessThan(3100);
+    expect(notePortion.length).toBeGreaterThanOrEqual(3000);
   });
 
   it("lists completed todos and wishes when present", () => {

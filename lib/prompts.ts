@@ -35,7 +35,7 @@ const MOOD_EMOJI: Record<number, string> = {
   1: "😢", 2: "😔", 3: "😐", 4: "😊", 5: "😄",
 };
 
-const NOTE_MAX_CHARS = 2980;
+const NOTE_MAX_CHARS = 3000;
 
 function renderDay(day: MonthlyReviewDay): string | null {
   const lines: string[] = [];
