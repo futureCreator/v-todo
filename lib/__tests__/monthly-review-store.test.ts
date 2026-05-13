@@ -1,24 +1,18 @@
-import { describe, it, expect, beforeEach, afterAll } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import fs from "fs/promises";
 import path from "path";
+import { readMonthlyReviewCache, writeMonthlyReviewCache, CACHE_PATH, DATA_DIR } from "../monthly-review-store";
 
-const TEST_DIR = path.join(process.cwd(), ".test-data", "monthly-review-store");
-process.env.DATA_DIR = TEST_DIR;
-
-// dynamic import after env var set
-const { readMonthlyReviewCache, writeMonthlyReviewCache } = await import("../monthly-review-store");
-
-const CACHE_PATH = path.join(TEST_DIR, "monthly-review.json");
-
-async function reset() {
-  await fs.rm(TEST_DIR, { recursive: true, force: true });
-  await fs.mkdir(TEST_DIR, { recursive: true });
-}
+const TMP_PATH = path.join(DATA_DIR, "monthly-review.tmp.json");
 
 describe("monthly-review-store", () => {
-  beforeEach(reset);
-  afterAll(async () => {
-    await fs.rm(TEST_DIR, { recursive: true, force: true });
+  beforeEach(async () => {
+    await fs.mkdir(DATA_DIR, { recursive: true });
+  });
+
+  afterEach(async () => {
+    try { await fs.unlink(CACHE_PATH); } catch {}
+    try { await fs.unlink(TMP_PATH); } catch {}
   });
 
   it("returns null when cache file does not exist", async () => {

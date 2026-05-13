@@ -1,8 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
-import { DATA_DIR } from "@/lib/store";
 
-const CACHE_PATH = path.join(DATA_DIR, "monthly-review.json");
+export const DATA_DIR = process.env.DATA_DIR || path.join(process.cwd(), "data");
+export const CACHE_PATH = path.join(DATA_DIR, "monthly-review.json");
 const TMP_PATH = path.join(DATA_DIR, "monthly-review.tmp.json");
 
 export interface MonthlyReviewCache {
@@ -22,10 +22,9 @@ function isCache(value: unknown): value is MonthlyReviewCache {
 }
 
 export async function readMonthlyReviewCache(): Promise<MonthlyReviewCache | null> {
+  let raw: string;
   try {
-    const raw = await fs.readFile(CACHE_PATH, "utf-8");
-    const parsed: unknown = JSON.parse(raw);
-    return isCache(parsed) ? parsed : null;
+    raw = await fs.readFile(CACHE_PATH, "utf-8");
   } catch (err: unknown) {
     if (
       err instanceof Error &&
@@ -34,6 +33,14 @@ export async function readMonthlyReviewCache(): Promise<MonthlyReviewCache | nul
     ) {
       return null;
     }
+    console.error("Failed to read monthly-review.json:", err);
+    return null;
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    return isCache(parsed) ? parsed : null;
+  } catch {
     return null;
   }
 }
