@@ -99,6 +99,11 @@ export interface FileItem {
   modifiedAt: string;
 }
 
+export interface NoteFileContent {
+  content: string;
+  modifiedAt: string;
+}
+
 // Wishes
 export type WishCategory = "healing" | "item" | "experience";
 

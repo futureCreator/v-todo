@@ -1,23 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   listFiles,
-  readFile,
+  readFileWithMeta,
   writeFile,
   createItem,
   deleteItem,
   renameItem,
 } from "@/lib/file-store";
-import type { ApiResponse, FileItem } from "@/types";
+import type { ApiResponse, FileItem, NoteFileContent } from "@/types";
 
 export async function GET(
   request: NextRequest
-): Promise<NextResponse<ApiResponse<FileItem[] | string>>> {
+): Promise<NextResponse<ApiResponse<FileItem[] | NoteFileContent>>> {
   try {
     const p = request.nextUrl.searchParams.get("path") ?? "/";
 
     if (p.endsWith(".md")) {
-      const content = await readFile(p);
-      return NextResponse.json({ data: content });
+      const file = await readFileWithMeta(p);
+      return NextResponse.json({ data: file });
     }
 
     const items = await listFiles(p);
@@ -31,7 +31,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest
-): Promise<NextResponse<ApiResponse<string>>> {
+): Promise<NextResponse<ApiResponse<NoteFileContent>>> {
   try {
     const p = request.nextUrl.searchParams.get("path");
     if (!p) {
@@ -44,7 +44,8 @@ export async function PUT(
     const content =
       typeof body.content === "string" ? body.content : "";
     await writeFile(p, content);
-    return NextResponse.json({ data: content });
+    const file = await readFileWithMeta(p);
+    return NextResponse.json({ data: file });
   } catch (err) {
     const message =
       err instanceof Error ? err.message : "서버 오류가 발생했습니다.";

@@ -1,10 +1,32 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { FileItem } from "@/types";
+import type { FileItem, NoteFileContent } from "@/types";
 import FileListItem from "@/components/FileListItem";
 import NoteEditor from "@/components/NoteEditor";
 import EmptyState from "@/components/EmptyState";
+
+function startOfDay(d: Date): number {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+}
+
+function formatModifiedKst(iso: string): string {
+  const d = new Date(iso);
+  const now = new Date();
+  const dayDiff = Math.round(
+    (startOfDay(now) - startOfDay(d)) / (1000 * 60 * 60 * 24)
+  );
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  if (dayDiff === 0) return `오늘 ${hh}:${mm} 수정`;
+  if (dayDiff === 1) return `어제 ${hh}:${mm} 수정`;
+  if (d.getFullYear() === now.getFullYear()) {
+    return `${d.getMonth() + 1}월 ${d.getDate()}일 수정`;
+  }
+  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(
+    d.getDate()
+  ).padStart(2, "0")} 수정`;
+}
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -18,6 +40,7 @@ export default function GeneralNoteView() {
   ]);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [editorContent, setEditorContent] = useState("");
+  const [editorMeta, setEditorMeta] = useState<NoteFileContent | null>(null);
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving" | "idle">("idle");
   const [showNewMenu, setShowNewMenu] = useState(false);
   const [showNameInput, setShowNameInput] = useState<"file" | "directory" | null>(null);
@@ -50,13 +73,16 @@ export default function GeneralNoteView() {
         `${BASE}/api/notes/files?path=${encodeURIComponent(filePath)}`
       );
       const body = await res.json();
-      const text = typeof body.data === "string" ? body.data : "";
+      const data = body.data as NoteFileContent | undefined;
+      const text = typeof data?.content === "string" ? data.content : "";
       setEditorContent(text);
+      setEditorMeta(data ?? null);
       contentRef.current = text;
       dirtyRef.current = false;
       setSaveStatus(text ? "saved" : "idle");
     } catch {
       setEditorContent("");
+      setEditorMeta(null);
       contentRef.current = "";
     }
   }, []);
@@ -65,7 +91,7 @@ export default function GeneralNoteView() {
     if (!dirtyRef.current || !currentPathRef.current) return;
     setSaveStatus("saving");
     try {
-      await fetch(
+      const res = await fetch(
         `${BASE}/api/notes/files?path=${encodeURIComponent(currentPathRef.current)}`,
         {
           method: "PUT",
@@ -73,6 +99,9 @@ export default function GeneralNoteView() {
           body: JSON.stringify({ content: contentRef.current }),
         }
       );
+      const body = await res.json();
+      const data = body.data as NoteFileContent | undefined;
+      if (data) setEditorMeta(data);
       dirtyRef.current = false;
       setSaveStatus("saved");
     } catch {
@@ -222,6 +251,7 @@ export default function GeneralNoteView() {
 
   // Editor view
   if (current.type === "editor") {
+    const metaLine = editorMeta ? formatModifiedKst(editorMeta.modifiedAt) : null;
     return (
       <div className="flex flex-col flex-1 min-h-0">
         {/* Nav bar */}
@@ -235,9 +265,16 @@ export default function GeneralNoteView() {
             </svg>
             <span className="text-[20px]">뒤로</span>
           </button>
-          <span className="flex-1 text-[20px] font-semibold text-[var(--label-primary)] text-center truncate pr-12">
-            {currentFolderName()}
-          </span>
+          <div className="flex-1 flex flex-col items-center justify-center pr-12 min-w-0">
+            <span className="text-[20px] font-semibold text-[var(--label-primary)] truncate w-full text-center">
+              {currentFolderName()}
+            </span>
+            {metaLine && (
+              <span className="text-[13px] text-[var(--label-tertiary)] mt-0.5">
+                {metaLine}
+              </span>
+            )}
+          </div>
           {saveStatus !== "idle" && (
             <span className="text-[13px] text-[var(--label-tertiary)] absolute right-5 md:right-0">
               {saveStatus === "saving" ? "저장 중..." : "저장됨"}

@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import { DATA_DIR } from "@/lib/store";
-import type { FileItem } from "@/types";
+import type { FileItem, NoteFileContent } from "@/types";
 
 const NOTES_DIR = path.join(DATA_DIR, "notes");
 
@@ -58,6 +58,31 @@ export async function readFile(filePath: string): Promise<string> {
       (err as NodeJS.ErrnoException).code === "ENOENT"
     ) {
       return "";
+    }
+    throw err;
+  }
+}
+
+export async function readFileWithMeta(
+  filePath: string
+): Promise<NoteFileContent> {
+  const fullPath = safePath(filePath);
+  try {
+    const [content, stat] = await Promise.all([
+      fs.readFile(fullPath, "utf-8"),
+      fs.stat(fullPath),
+    ]);
+    return {
+      content,
+      modifiedAt: stat.mtime.toISOString(),
+    };
+  } catch (err: unknown) {
+    if (
+      err instanceof Error &&
+      "code" in err &&
+      (err as NodeJS.ErrnoException).code === "ENOENT"
+    ) {
+      return { content: "", modifiedAt: new Date().toISOString() };
     }
     throw err;
   }
