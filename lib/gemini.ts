@@ -4,7 +4,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 function getTextModel() {
   return genAI.getGenerativeModel({
-    model: "gemini-3.1-flash-lite-preview",
+    model: "gemini-3.1-flash-lite",
     generationConfig: {
       temperature: 0.7,
       maxOutputTokens: 4096,
