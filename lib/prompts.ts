@@ -1,6 +1,115 @@
 import { STAGE_LABELS } from "@/types";
 import type { Todo, Schedule } from "@/types";
 
+export interface MonthlyReviewDay {
+  date: string;        // YYYY-MM-DD
+  weekday: string;     // 월/화/수/...
+  mood: number | null; // 1~5
+  gratitude: string[]; // 빈 문자열은 호출자가 미리 제거
+  note: string | null; // null이면 미작성
+}
+
+export interface MonthlyReviewCompletedTodo {
+  date: string;
+  title: string;
+  stage: string; // "지금" | "곧" | "보관함"
+}
+
+export interface MonthlyReviewCompletedWish {
+  date: string;
+  title: string;
+  category: string;          // "힐링" | "물건" | "경험"
+  satisfaction: number | null;
+  review: string | null;
+}
+
+export interface MonthlyReviewInput {
+  today: string;     // YYYY-MM-DD
+  rangeStart: string; // YYYY-MM-DD (today - 29일)
+  days: MonthlyReviewDay[]; // 최근 → 과거 정렬된 상태로 호출자가 전달
+  completedTodos: MonthlyReviewCompletedTodo[];
+  completedWishes: MonthlyReviewCompletedWish[];
+}
+
+const MOOD_EMOJI: Record<number, string> = {
+  1: "😢", 2: "😔", 3: "😐", 4: "😊", 5: "😄",
+};
+
+const NOTE_MAX_CHARS = 3000;
+
+function renderDay(day: MonthlyReviewDay): string | null {
+  const lines: string[] = [];
+  if (day.mood !== null) {
+    lines.push(`- mood: ${day.mood} ${MOOD_EMOJI[day.mood] ?? ""}`.trim());
+  }
+  const gratitude = day.gratitude.filter((g) => g.trim());
+  if (gratitude.length > 0) {
+    lines.push("- gratitude:");
+    gratitude.forEach((g, i) => lines.push(`  ${i + 1}. ${g}`));
+  }
+  if (day.note && day.note.trim()) {
+    const note = day.note.length > NOTE_MAX_CHARS
+      ? day.note.slice(0, NOTE_MAX_CHARS) + "\n... (잘림)"
+      : day.note;
+    lines.push(`- note: ${note}`);
+  }
+  if (lines.length === 0) return null;
+  return `### ${day.date} (${day.weekday})\n${lines.join("\n")}`;
+}
+
+const SYSTEM_RULES = `당신은 사용자의 데이터를 30일 단위로 돌아보는 회고 파트너입니다.
+아래 30일치 기록에서 사용자가 스스로 보지 못하는 패턴을 짚어주세요.
+
+규칙:
+- 짧은 문단 3~5개로 구성. 각 문단은 ### 헤딩으로 시작.
+- 인사, 결론, 총평 금지.
+- 각 문단은 "관찰 → 근거 1~2개(날짜 인용) → 짧은 시사" 흐름.
+- 다음 차원에서 골고루: mood 추이/주기, 감사 일기에서 반복되는 사람·주제, 노트의 반복 키워드나 감정 변화, 행동(todo/wish 완료)과 mood의 관계.
+- 사람 이름이 등장하면 익명화하지 말고 그대로 인용하세요.
+- 평가·훈수·격려 금지. 본인이 쓴 내용을 거울처럼 비추기.
+- "당신은 ~한 사람" 같은 단정 라벨링 금지.
+- 데이터가 너무 적은 차원은 다루지 않고, 억지로 채우지 않음.
+- 한국어 존댓말.`;
+
+export function buildMonthlyReviewPrompt(input: MonthlyReviewInput): string {
+  const dayCount = input.days.filter(
+    (d) => d.mood !== null || d.gratitude.some((g) => g.trim()) || (d.note && d.note.trim())
+  ).length;
+
+  const dayBlocks = input.days
+    .map(renderDay)
+    .filter((s): s is string => s !== null);
+
+  const sections: string[] = [
+    `오늘 날짜: ${input.today}`,
+    `데이터 일수: ${dayCount}일 (${input.rangeStart} ~ ${input.today})`,
+  ];
+
+  if (dayBlocks.length > 0) {
+    sections.push(`## 일자별 (최근 → 과거)\n\n${dayBlocks.join("\n\n")}`);
+  }
+
+  if (input.completedTodos.length > 0) {
+    const todoLines = input.completedTodos
+      .map((t) => `- ${t.date} · [${t.stage}] ${t.title}`)
+      .join("\n");
+    sections.push(`## 30일 내 todo 완료\n${todoLines}`);
+  }
+
+  if (input.completedWishes.length > 0) {
+    const wishLines = input.completedWishes
+      .map((w) => {
+        const sat = w.satisfaction !== null ? ` · 만족도 ${w.satisfaction}/5` : "";
+        const review = w.review && w.review.trim() ? `\n  리뷰: ${w.review.trim()}` : "";
+        return `- ${w.date} · [${w.category}] ${w.title}${sat}${review}`;
+      })
+      .join("\n");
+    sections.push(`## 30일 내 wish 완료\n${wishLines}`);
+  }
+
+  return `${SYSTEM_RULES}\n\n${sections.join("\n\n")}\n`;
+}
+
 function daysUntil(dateStr: string): number {
   const target = new Date(dateStr + "T00:00:00");
   const today = new Date();
@@ -90,42 +199,4 @@ ${dailyNoteBlock}${gratitudeSection}${moodSection}
 ${reqItems.join("\n")}
 
 간결하고 실행 가능한 마크다운 형식으로 응답하세요.`;
-}
-
-export interface DailyNoteEntry {
-  date: string;
-  day: string;
-  content: string;
-}
-
-export function buildWeeklyReviewPrompt(
-  notes: DailyNoteEntry[],
-  previousReview: string | null,
-  weekMoods?: { date: string; value: number }[],
-): string {
-  const prevSection = previousReview
-    ? `\n## 이전 주 리뷰\n${previousReview}\n`
-    : "";
-
-  const moodEmojis: Record<number, string> = { 1: "😢", 2: "😔", 3: "😐", 4: "😊", 5: "😄" };
-  const moodSection = weekMoods && weekMoods.length > 0
-    ? `\n## 이번 주 기분 기록\n${weekMoods.map((m) => `- ${m.date}: ${moodEmojis[m.value] ?? "?"}`).join("\n")}\n`
-    : "";
-
-  const noteEntries = notes
-    .map((n) => `--- ${n.day} (${n.date}) ---\n${n.content}`)
-    .join("\n\n");
-
-  return `당신은 개인 생산성 코치입니다. 아래 데일리 노트에서 인사이트를 추출하세요.
-
-규칙:
-- 불릿 포인트만 출력 (서론, 결론, 인삿말 없이)
-- 반복되는 주제, 감정 변화, 숨은 패턴, 주목할 만한 점 중심
-- 기분 기록이 제공된 경우 노트 내용과 기분 사이의 상관관계를 분석
-- 직전 주 리뷰가 제공된 경우 참고하여 연속성 있는 관찰을 포함
-- 한국어로 작성
-${prevSection}${moodSection}
-## 이번 주 데일리 노트
-
-${noteEntries}`;
 }
