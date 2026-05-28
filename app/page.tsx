@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { Todo, Schedule, ScheduleType, RepeatMode, Section, NoteTab, WishItem, WishCategory } from "@/types";
+import type { Todo, Schedule, ScheduleType, RepeatMode, Section, NoteTab, WishItem, WishCategory, HealingType } from "@/types";
 import BottomNav from "@/components/BottomNav";
 import SectionTabs from "@/components/SectionTabs";
 import TodoItem from "@/components/TodoItem";
@@ -207,7 +207,7 @@ export default function Home() {
     actualPrice?: number | null;
     satisfaction?: number | null;
     review?: string | null;
-    healingType?: "image" | "text" | "link";
+    healingType?: HealingType;
   }) => {
     try {
       if (editWish) {
@@ -752,7 +752,7 @@ export default function Home() {
         ) : showAddWish ? (
           <AddWishSheet
             wish={editWish}
-            defaultCategory={wishTab}
+            defaultCategory={wishTab === "item" ? "item" : "experience"}
             onSave={saveWish}
             onDelete={editWish ? deleteWish : undefined}
             onUncomplete={editWish?.completed ? (id: string) => {

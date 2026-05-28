@@ -1,15 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import type { WishItem, WishCategory } from "@/types";
+import { useState, useEffect, useRef } from "react";
+import type { WishItem } from "@/types";
 import { haptic } from "@/lib/haptic";
+
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 interface AddWishSheetProps {
   wish?: WishItem | null;
-  defaultCategory: WishCategory;
+  defaultCategory: "item" | "experience";
   onSave: (data: {
     title: string;
-    category: WishCategory;
+    category: "item" | "experience";
     price: number | null;
     url: string | null;
     imageUrl: string | null;
@@ -32,12 +34,18 @@ export default function AddWishSheet({
   onClose,
 }: AddWishSheetProps) {
   const [title, setTitle] = useState(wish?.title ?? "");
-  const [category, setCategory] = useState<WishCategory>(wish?.category ?? defaultCategory);
+  const category: "item" | "experience" =
+    wish?.category === "item" || wish?.category === "experience"
+      ? wish.category
+      : defaultCategory;
   const [priceInput, setPriceInput] = useState(
     wish?.price != null ? String(wish.price) : ""
   );
   const [url, setUrl] = useState(wish?.url ?? "");
-  const [imageUrl, setImageUrl] = useState(wish?.imageUrl ?? "");
+  const [uploading, setUploading] = useState(false);
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(wish?.imageUrl ?? null);
+  const [previewSrc, setPreviewSrc] = useState<string | null>(wish?.imageUrl ?? null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const [memo, setMemo] = useState(wish?.memo ?? "");
   const [actualPriceInput, setActualPriceInput] = useState(
     wish?.actualPrice != null ? String(wish.actualPrice) : ""
@@ -59,7 +67,7 @@ export default function AddWishSheet({
       category,
       price: isNaN(priceNum as number) ? null : priceNum,
       url: url.trim() || null,
-      imageUrl: imageUrl.trim() || null,
+      imageUrl: uploadedUrl,
       memo: memo.trim() || null,
       ...(wish?.completed && {
         actualPrice: isNaN(actualPriceNum as number) ? null : actualPriceNum,
@@ -77,6 +85,32 @@ export default function AddWishSheet({
   const handleActualPriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const digits = e.target.value.replace(/\D/g, "");
     setActualPriceInput(digits);
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => setPreviewSrc(ev.target?.result as string);
+    reader.readAsDataURL(file);
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch(`${BASE}/api/wishes/upload`, {
+        method: "POST",
+        body: formData,
+      });
+      const body = await res.json();
+      if (body.data?.imageUrl) {
+        setUploadedUrl(body.data.imageUrl);
+      }
+    } catch {
+      // silent
+    }
+    setUploading(false);
   };
 
   return (
@@ -129,23 +163,6 @@ export default function AddWishSheet({
           className="w-full px-4 py-3.5 rounded-xl bg-[var(--fill-quaternary)] text-[20px] text-[var(--label-primary)] placeholder:text-[var(--label-quaternary)] outline-none mb-4"
         />
 
-        {/* Category */}
-        <div className="flex gap-2 mb-4">
-          {(["item", "experience"] as const).map((cat) => (
-            <button
-              key={cat}
-              className={`flex-1 py-3 rounded-xl text-[17px] font-medium transition-colors ${
-                category === cat
-                  ? "bg-[var(--accent-primary)] text-white"
-                  : "bg-[var(--fill-quaternary)] text-[var(--label-secondary)]"
-              }`}
-              onClick={() => setCategory(cat)}
-            >
-              {cat === "item" ? "🛍️ 물건" : "⭐ 경험"}
-            </button>
-          ))}
-        </div>
-
         {/* Price */}
         <div className="mb-4">
           <label htmlFor="wish-price" className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
@@ -182,19 +199,31 @@ export default function AddWishSheet({
           />
         </div>
 
-        {/* Image URL */}
+        {/* Photo */}
         <div className="mb-4">
-          <label htmlFor="wish-image-url" className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
-            이미지 URL
-          </label>
+          <span className="text-[15px] text-[var(--label-tertiary)] mb-1.5 block">
+            사진
+          </span>
           <input
-            id="wish-image-url"
-            type="url"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            placeholder="https://"
-            className="w-full px-4 py-3.5 rounded-xl bg-[var(--fill-quaternary)] text-[20px] text-[var(--label-primary)] placeholder:text-[var(--label-quaternary)] outline-none"
+            ref={fileRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            onChange={handleFileChange}
+            className="hidden"
           />
+          {previewSrc ? (
+            <div className="rounded-xl overflow-hidden mb-3">
+              <img src={previewSrc} alt="미리보기" className="w-full" />
+            </div>
+          ) : null}
+          <button
+            type="button"
+            className="w-full py-3.5 rounded-xl bg-[var(--fill-quaternary)] text-[20px] text-[var(--label-secondary)] font-medium"
+            onClick={() => fileRef.current?.click()}
+            disabled={uploading}
+          >
+            {uploading ? "업로드 중..." : uploadedUrl ? "다른 사진 선택" : "사진 선택"}
+          </button>
         </div>
 
         {/* Memo */}

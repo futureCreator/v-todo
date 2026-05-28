@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { haptic } from "@/lib/haptic";
 
-type HealingType = "image" | "text" | "link";
+type HealingType = "image" | "text";
 
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
@@ -23,7 +23,6 @@ interface HealingAddSheetProps {
 export default function HealingAddSheet({ onSave, onClose }: HealingAddSheetProps) {
   const [type, setType] = useState<HealingType>("image");
   const [text, setText] = useState("");
-  const [url, setUrl] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
   const [previewSrc, setPreviewSrc] = useState<string | null>(null);
@@ -33,8 +32,7 @@ export default function HealingAddSheet({ onSave, onClose }: HealingAddSheetProp
 
   const canSave =
     (type === "image" && uploadedUrl !== null) ||
-    (type === "text" && text.trim().length > 0) ||
-    (type === "link" && url.trim().length > 0);
+    (type === "text" && text.trim().length > 0);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -70,7 +68,7 @@ export default function HealingAddSheet({ onSave, onClose }: HealingAddSheetProp
       title: type === "text" ? text.trim() : "",
       category: "healing",
       healingType: type,
-      url: type === "link" ? url.trim() : null,
+      url: null,
       imageUrl: type === "image" ? uploadedUrl : null,
       price: null,
       memo: null,
@@ -113,7 +111,6 @@ export default function HealingAddSheet({ onSave, onClose }: HealingAddSheetProp
           {([
             { key: "image" as const, label: "🖼️ 이미지" },
             { key: "text" as const, label: "✍️ 글" },
-            { key: "link" as const, label: "🔗 링크" },
           ]).map((t) => (
             <button
               key={t.key}
@@ -162,16 +159,6 @@ export default function HealingAddSheet({ onSave, onClose }: HealingAddSheetProp
             rows={5}
             maxLength={1000}
             className="w-full px-4 py-3.5 rounded-xl bg-[var(--fill-quaternary)] text-[20px] text-[var(--label-primary)] placeholder:text-[var(--label-quaternary)] outline-none resize-none"
-          />
-        )}
-
-        {type === "link" && (
-          <input
-            type="url"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="https://"
-            className="w-full px-4 py-3.5 rounded-xl bg-[var(--fill-quaternary)] text-[20px] text-[var(--label-primary)] placeholder:text-[var(--label-quaternary)] outline-none"
           />
         )}
       </div>

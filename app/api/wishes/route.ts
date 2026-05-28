@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 import { readWishes, writeWishes } from "@/lib/wish-store";
 import type { CreateWishRequest, WishItem, ApiResponse } from "@/types";
-import { fetchPageTitle } from "@/lib/fetch-title";
 
 const VALID_CATEGORIES = ["healing", "item", "experience"];
+const VALID_HEALING_TYPES = ["image", "text"];
 
 export async function GET(): Promise<NextResponse<ApiResponse<WishItem[]>>> {
   try {
@@ -28,16 +28,11 @@ export async function POST(
     if (!VALID_CATEGORIES.includes(body.category)) {
       return NextResponse.json({ error: "카테고리는 item 또는 experience여야 합니다." }, { status: 400 });
     }
+    if (isHealing && body.healingType && !VALID_HEALING_TYPES.includes(body.healingType)) {
+      return NextResponse.json({ error: "유효하지 않은 힐링 타입입니다." }, { status: 400 });
+    }
 
-    const linkTitlePromise: Promise<string | null> =
-      isHealing && body.healingType === "link" && body.url
-        ? fetchPageTitle(body.url)
-        : Promise.resolve(null);
-
-    const [linkTitle, wishes] = await Promise.all([
-      linkTitlePromise,
-      readWishes(),
-    ]);
+    const wishes = await readWishes();
 
     const wish: WishItem = {
       id: uuidv4(),
@@ -53,9 +48,8 @@ export async function POST(
       satisfaction: null,
       review: null,
       createdAt: new Date().toISOString(),
-      ...(isHealing && {
+      ...(isHealing && body.healingType && {
         healingType: body.healingType,
-        linkTitle: linkTitle ?? body.linkTitle ?? undefined,
       }),
     };
 

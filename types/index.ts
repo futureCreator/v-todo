@@ -116,10 +116,13 @@ export interface WishItem {
   actualPrice: number | null;
   satisfaction: number | null;
   review: string | null;
+  /** legacy items may still have "link" */
   healingType?: "image" | "text" | "link";
   linkTitle?: string;
   createdAt: string;
 }
+
+export type HealingType = "image" | "text";
 
 export interface WishStore {
   wishes: WishItem[];
@@ -132,8 +135,7 @@ export interface CreateWishRequest {
   url?: string | null;
   imageUrl?: string | null;
   memo?: string | null;
-  healingType?: "image" | "text" | "link";
-  linkTitle?: string;
+  healingType?: HealingType;
 }
 
 export interface UpdateWishRequest {
@@ -148,8 +150,7 @@ export interface UpdateWishRequest {
   actualPrice?: number | null;
   satisfaction?: number | null;
   review?: string | null;
-  healingType?: "image" | "text" | "link";
-  linkTitle?: string;
+  healingType?: HealingType;
 }
 
 export type TodoTab = "now" | "soon" | "archive";
