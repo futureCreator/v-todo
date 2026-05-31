@@ -6,6 +6,7 @@ import WishItemCard from "@/components/WishItem";
 import HealingCard from "@/components/HealingCard";
 import MasonryGrid from "@/components/MasonryGrid";
 import EmptyState from "@/components/EmptyState";
+import { haptic } from "@/lib/haptic";
 
 interface WishlistViewProps {
   wishes: WishItem[];
@@ -18,17 +19,22 @@ interface WishlistViewProps {
   onTagClick?: (tag: string) => void;
 }
 
-function WishStickyCta({ onClick }: { onClick: () => void }) {
+function WishFab({ onClick, ariaLabel }: { onClick: () => void; ariaLabel: string }) {
   return (
-    <div className="sticky bottom-[68px] md:bottom-0 z-10 mx-5 md:mx-0 pt-3 pb-2 md:pb-4 bg-[var(--bg-primary)]">
-      <button
-        type="button"
-        className="press w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
-        onClick={onClick}
-      >
-        추가
-      </button>
-    </div>
+    <button
+      type="button"
+      aria-label={ariaLabel}
+      className="press fixed bottom-[72px] right-5 md:bottom-6 md:right-6 z-20 size-14 rounded-full bg-[var(--accent-primary)] text-white shadow-lg active:opacity-80 transition-opacity flex items-center justify-center"
+      onClick={() => {
+        haptic.tap();
+        onClick();
+      }}
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" aria-hidden="true">
+        <line x1="12" y1="5" x2="12" y2="19" />
+        <line x1="5" y1="12" x2="19" y2="12" />
+      </svg>
+    </button>
   );
 }
 
@@ -86,7 +92,7 @@ export default function WishlistView({
             />
           )}
         </div>
-        <WishStickyCta onClick={onAdd} />
+        <WishFab onClick={onAdd} ariaLabel="힐링 추가" />
       </div>
     );
   }
@@ -162,7 +168,10 @@ export default function WishlistView({
         )}
       </div>
 
-      <WishStickyCta onClick={onAdd} />
+      <WishFab
+        onClick={onAdd}
+        ariaLabel={wishTab === "item" ? "물건 추가" : "경험 추가"}
+      />
     </div>
   );
 }
