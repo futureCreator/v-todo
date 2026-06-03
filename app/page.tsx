@@ -17,7 +17,7 @@ import AddWishSheet from "@/components/AddWishSheet";
 import HealingAddSheet from "@/components/HealingAddSheet";
 import YearProgress from "@/components/YearProgress";
 import WishCompletionSheet from "@/components/WishCompletionSheet";
-import CheckinView from "@/components/CheckinView";
+import BuildView from "@/components/BuildView";
 import TagView from "@/components/TagView";
 import EmptyState from "@/components/EmptyState";
 import type { TodoTab } from "@/types";
@@ -404,25 +404,24 @@ export default function Home() {
 
         <button
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
-            section === "checkin"
+            section === "build"
               ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
               : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
           }`}
-          onClick={() => setSection("checkin")}
+          onClick={() => setSection("build")}
         >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "checkin" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "checkin" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
-            {section === "checkin" ? (
-              <path fillRule="evenodd" clipRule="evenodd" d="M11 1.5C5.8 1.5 1.5 5.8 1.5 11s4.3 9.5 9.5 9.5 9.5-4.3 9.5-9.5S16.2 1.5 11 1.5zM7.9 9.5a1.1 1.1 0 110-2.2 1.1 1.1 0 010 2.2zm6.2 0a1.1 1.1 0 110-2.2 1.1 1.1 0 010 2.2zM6.5 12.8h9c-.9 2.4-2.9 4-4.5 4s-3.6-1.6-4.5-4z" />
+          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "build" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "build" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
+            {section === "build" ? (
+              <path d="M3 4.5h5v13H3V4.5zm7 0h5v9H10V4.5zm7 0h2v6h-2V4.5z" />
             ) : (
               <>
-                <circle cx="11" cy="11" r="8.5" />
-                <circle cx="7.9" cy="8.7" r="0.95" fill="currentColor" stroke="none" />
-                <circle cx="14.1" cy="8.7" r="0.95" fill="currentColor" stroke="none" />
-                <path d="M6.8 12.8c.8 1.8 2.4 3 4.2 3s3.4-1.2 4.2-3" />
+                <rect x="3" y="4.5" width="5" height="13" rx="1" />
+                <rect x="10" y="4.5" width="5" height="9" rx="1" />
+                <rect x="17" y="4.5" width="2" height="6" rx="0.5" />
               </>
             )}
           </svg>
-          <span className="text-[15px] font-medium flex-1">체크인</span>
+          <span className="text-[15px] font-medium flex-1">빌드</span>
         </button>
 
         <button
@@ -561,12 +560,12 @@ export default function Home() {
 
       {/* Main Content */}
       <main
-        className={`flex-1 overflow-y-auto ${(section === "note" || section === "checkin") ? "pb-20 md:pb-0 flex flex-col min-h-0" : "pb-20 md:pb-8"}`}
+        className={`flex-1 ${section === "build" ? "overflow-hidden" : "overflow-y-auto"} ${(section === "note" || section === "build") ? "pb-20 md:pb-0 flex flex-col min-h-0" : "pb-20 md:pb-8"}`}
         style={{ viewTransitionName: "tab-content" }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <div className={`${(section === "note" || section === "checkin") ? "flex-1 flex flex-col min-h-0" : "md:px-8 flex flex-col min-h-full"}`}>
+        <div className={`${(section === "note" || section === "build") ? "flex-1 flex flex-col min-h-0" : "md:px-8 flex flex-col min-h-full"}`}>
           {section === "note" ? (
             <div className="flex-1 flex flex-col min-h-0 md:px-8">
               {noteTab === "daily" ? (
@@ -575,10 +574,8 @@ export default function Home() {
                 <GeneralNoteView />
               )}
             </div>
-          ) : section === "checkin" ? (
-            <div className="flex-1 flex flex-col min-h-0 md:px-8">
-              <CheckinView />
-            </div>
+          ) : section === "build" ? (
+            <BuildView />
           ) : section === "wish" ? (
             <WishlistView
               wishes={wishes}

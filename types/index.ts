@@ -86,7 +86,7 @@ export const STAGE_LABELS: Record<Stage, string> = {
 };
 
 // Notes
-export type Section = "todo" | "note" | "checkin" | "wish" | "dday";
+export type Section = "todo" | "note" | "build" | "wish" | "dday";
 export type NoteTab = "daily" | "general";
 
 export interface FileItem {
@@ -154,6 +154,48 @@ export interface UpdateWishRequest {
 }
 
 export type TodoTab = "now" | "soon" | "archive";
+
+// Build (Kanban)
+export type KanbanColumn = "idea" | "dev" | "review" | "release";
+
+export const KANBAN_COLUMNS: KanbanColumn[] = ["idea", "dev", "review", "release"];
+
+export interface KanbanCard {
+  id: string;
+  title: string;
+  column: KanbanColumn;
+  order: number;
+  createdAt: string;
+}
+
+export interface BuildStore {
+  cards: KanbanCard[];
+}
+
+export interface CreateKanbanCardRequest {
+  title: string;
+  column?: KanbanColumn;
+}
+
+export interface UpdateKanbanCardRequest {
+  title?: string;
+  column?: KanbanColumn;
+  order?: number;
+}
+
+export const KANBAN_COLUMN_LABELS: Record<KanbanColumn, string> = {
+  idea: "아이디어",
+  dev: "개발 중",
+  review: "검수 중",
+  release: "출시",
+};
+
+/** @deprecated legacy column keys from the 3-column board */
+export const LEGACY_KANBAN_COLUMN_MAP: Record<string, KanbanColumn> = {
+  todo: "idea",
+  doing: "dev",
+  done: "release",
+};
 
 // Gratitude
 export interface GratitudeEntry {

@@ -59,28 +59,27 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
           <span className="text-[12px] font-medium">노트</span>
         </button>
 
-        {/* 체크인 */}
+        {/* 빌드 */}
         <button
           className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
-            active === "checkin"
+            active === "build"
               ? "text-[var(--accent-primary)]"
               : "text-[var(--label-tertiary)]"
           }`}
-          onClick={() => { if (active !== "checkin") { haptic.selection(); withViewTransition(() => onChange("checkin")); } }}
+          onClick={() => { if (active !== "build") { haptic.selection(); withViewTransition(() => onChange("build")); } }}
         >
-          <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "checkin" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "checkin" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
-            {active === "checkin" ? (
-              <path fillRule="evenodd" clipRule="evenodd" d="M12.5 2.5C7 2.5 2.5 7 2.5 12.5S7 22.5 12.5 22.5 22.5 18 22.5 12.5 18 2.5 12.5 2.5zM9.2 10.8a1.3 1.3 0 110-2.6 1.3 1.3 0 010 2.6zm6.6 0a1.3 1.3 0 110-2.6 1.3 1.3 0 010 2.6zM7.7 14.5h9.6c-.9 2.6-3.1 4.3-4.8 4.3s-3.9-1.7-4.8-4.3z" />
+          <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "build" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "build" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
+            {active === "build" ? (
+              <path d="M3.5 5h5.5v15H3.5V5zm8 0h5.5v10h-5.5V5zm8 0h2v7h-2V5z" />
             ) : (
               <>
-                <circle cx="12.5" cy="12.5" r="9.5" />
-                <circle cx="9.2" cy="10" r="1.1" fill="currentColor" stroke="none" />
-                <circle cx="15.8" cy="10" r="1.1" fill="currentColor" stroke="none" />
-                <path d="M8 14.5c.9 2 2.6 3.3 4.5 3.3s3.6-1.3 4.5-3.3" />
+                <rect x="3.5" y="5" width="5.5" height="15" rx="1" />
+                <rect x="11.5" y="5" width="5.5" height="10" rx="1" />
+                <rect x="19.5" y="5" width="2" height="7" rx="0.5" />
               </>
             )}
           </svg>
-          <span className="text-[12px] font-medium">체크인</span>
+          <span className="text-[12px] font-medium">빌드</span>
         </button>
 
         {/* 위시 */}
