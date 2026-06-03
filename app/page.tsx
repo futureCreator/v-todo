@@ -411,15 +411,8 @@ export default function Home() {
           onClick={() => setSection("build")}
         >
           <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "build" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "build" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
-            {section === "build" ? (
-              <path d="M3 4.5h5v13H3V4.5zm7 0h5v9H10V4.5zm7 0h2v6h-2V4.5z" />
-            ) : (
-              <>
-                <rect x="3" y="4.5" width="5" height="13" rx="1" />
-                <rect x="10" y="4.5" width="5" height="9" rx="1" />
-                <rect x="17" y="4.5" width="2" height="6" rx="0.5" />
-              </>
-            )}
+            <rect x="4" y="7.5" width="12" height="10" rx="1.8" />
+            <rect x="6.5" y="4.5" width="12" height="10" rx="1.8" />
           </svg>
           <span className="text-[15px] font-medium flex-1">빌드</span>
         </button>

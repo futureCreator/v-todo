@@ -69,15 +69,8 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
           onClick={() => { if (active !== "build") { haptic.selection(); withViewTransition(() => onChange("build")); } }}
         >
           <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "build" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "build" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
-            {active === "build" ? (
-              <path d="M3.5 5h5.5v15H3.5V5zm8 0h5.5v10h-5.5V5zm8 0h2v7h-2V5z" />
-            ) : (
-              <>
-                <rect x="3.5" y="5" width="5.5" height="15" rx="1" />
-                <rect x="11.5" y="5" width="5.5" height="10" rx="1" />
-                <rect x="19.5" y="5" width="2" height="7" rx="0.5" />
-              </>
-            )}
+            <rect x="4.5" y="8.5" width="14" height="11" rx="2" />
+            <rect x="7.5" y="5" width="14" height="11" rx="2" />
           </svg>
           <span className="text-[12px] font-medium">빌드</span>
         </button>
