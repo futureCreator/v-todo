@@ -1,6 +1,6 @@
 "use client";
 
-import type { Todo, Schedule, WishItem } from "@/types";
+import type { Todo, Schedule } from "@/types";
 import { extractTags } from "@/lib/tags";
 import { getDisplayInfo } from "@/components/ScheduleItem";
 import EmptyState from "@/components/EmptyState";
@@ -9,7 +9,6 @@ interface TagViewProps {
   tag: string;
   todos: Todo[];
   schedules: Schedule[];
-  wishes: WishItem[];
   onClose: () => void;
 }
 
@@ -19,18 +18,15 @@ function ddayLabel(days: number): string {
   return `D+${Math.abs(days)}`;
 }
 
-export default function TagView({ tag, todos, schedules, wishes, onClose }: TagViewProps) {
+export default function TagView({ tag, todos, schedules, onClose }: TagViewProps) {
   const matchedTodos = todos.filter(
     (t) => !t.completed && extractTags(t.title).includes(tag)
   );
   const matchedSchedules = schedules.filter((s) =>
     extractTags(s.name).includes(tag)
   );
-  const matchedWishes = wishes.filter(
-    (w) => !w.completed && extractTags(w.title).includes(tag)
-  );
 
-  const totalCount = matchedTodos.length + matchedSchedules.length + matchedWishes.length;
+  const totalCount = matchedTodos.length + matchedSchedules.length;
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center ios-sheet-overlay">
@@ -75,7 +71,7 @@ export default function TagView({ tag, todos, schedules, wishes, onClose }: TagV
                 </svg>
               }
               title={`#${tag} 태그의 항목이 없어요`}
-              description="태그가 붙은 할 일·일정·위시가 여기에 모입니다"
+              description="태그가 붙은 할 일·일정이 여기에 모입니다"
               action={{ label: "전체 보기", onClick: onClose }}
             />
           ) : (
@@ -99,35 +95,6 @@ export default function TagView({ tag, todos, schedules, wishes, onClose }: TagV
                         <span className="text-[13px] text-[var(--label-quaternary)] flex-shrink-0">
                           {todo.stage === "now" ? "지금" : "곧"}
                         </span>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {/* Wishes */}
-              {matchedWishes.length > 0 && (
-                <section className="mb-4">
-                  <h3 className="px-5 text-[13px] font-semibold text-[var(--label-tertiary)] uppercase tracking-wide mb-2">
-                    위시리스트 {matchedWishes.length}
-                  </h3>
-                  <div className="mx-4 flex flex-col gap-1.5">
-                    {matchedWishes.map((wish) => (
-                      <div
-                        key={wish.id}
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--fill-quaternary)]"
-                      >
-                        <span className="text-[16px] flex-shrink-0">
-                          {wish.category === "item" ? "🛍️" : "⭐"}
-                        </span>
-                        <span className="text-[17px] text-[var(--label-primary)] flex-1 truncate">
-                          {wish.title.replace(/#[^\s#]+/g, "").trim()}
-                        </span>
-                        {wish.price != null && (
-                          <span className="text-[13px] text-[var(--accent-primary)] font-medium flex-shrink-0">
-                            {wish.price.toLocaleString("ko-KR")}원
-                          </span>
-                        )}
                       </div>
                     ))}
                   </div>

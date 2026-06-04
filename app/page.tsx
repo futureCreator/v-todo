@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { Todo, Schedule, ScheduleType, RepeatMode, Section, NoteTab, WishItem, WishCategory, HealingType } from "@/types";
+import type { Todo, Schedule, ScheduleType, RepeatMode, Section, NoteTab } from "@/types";
 import BottomNav from "@/components/BottomNav";
 import SectionTabs from "@/components/SectionTabs";
 import TodoItem from "@/components/TodoItem";
@@ -12,11 +12,7 @@ import AddScheduleSheet from "@/components/AddScheduleSheet";
 import UndoToast from "@/components/UndoToast";
 import DailyNoteView from "@/components/DailyNoteView";
 import GeneralNoteView from "@/components/GeneralNoteView";
-import WishlistView from "@/components/WishlistView";
-import AddWishSheet from "@/components/AddWishSheet";
-import HealingAddSheet from "@/components/HealingAddSheet";
 import YearProgress from "@/components/YearProgress";
-import WishCompletionSheet from "@/components/WishCompletionSheet";
 import BuildView from "@/components/BuildView";
 import TagView from "@/components/TagView";
 import EmptyState from "@/components/EmptyState";
@@ -32,13 +28,7 @@ export default function Home() {
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [wishes, setWishes] = useState<WishItem[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const [wishTab, setWishTab] = useState<WishCategory>("healing");
-  const [showAddWish, setShowAddWish] = useState(false);
-  const [editWish, setEditWish] = useState<WishItem | null>(null);
-  const [completingWish, setCompletingWish] = useState<WishItem | null>(null);
 
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [showAddSchedule, setShowAddSchedule] = useState(false);
@@ -72,22 +62,12 @@ export default function Home() {
     }
   }, []);
 
-  const fetchWishes = useCallback(async () => {
-    try {
-      const res = await fetch(`${BASE}/api/wishes`);
-      const body = await res.json();
-      if (body.data) setWishes(body.data);
-    } catch (err) {
-      console.error("Failed to fetch wishes:", err);
-    }
-  }, []);
-
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- async data fetch on mount; setState runs after Promise resolves
-    Promise.all([fetchTodos(), fetchSchedules(), fetchWishes()]).finally(
+    Promise.all([fetchTodos(), fetchSchedules()]).finally(
       () => setLoading(false)
     );
-  }, [fetchTodos, fetchSchedules, fetchWishes]);
+  }, [fetchTodos, fetchSchedules]);
 
   // Todo actions
   const addTodo = async (title: string) => {
@@ -194,122 +174,6 @@ export default function Home() {
     await fetch(`${BASE}/api/schedules/${id}`, { method: "DELETE" });
     setShowAddSchedule(false);
     setEditSchedule(null);
-  };
-
-  // Wish actions
-  const saveWish = async (data: {
-    title: string;
-    category: WishCategory;
-    price: number | null;
-    url: string | null;
-    imageUrl: string | null;
-    memo: string | null;
-    actualPrice?: number | null;
-    satisfaction?: number | null;
-    review?: string | null;
-    healingType?: HealingType;
-  }) => {
-    try {
-      if (editWish) {
-        const res = await fetch(`${BASE}/api/wishes/${editWish.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-        const body = await res.json();
-        if (body.data) {
-          setWishes((prev) =>
-            prev.map((w) => (w.id === editWish.id ? body.data : w))
-          );
-        }
-      } else {
-        const res = await fetch(`${BASE}/api/wishes`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-        const body = await res.json();
-        if (body.data) setWishes((prev) => [...prev, body.data]);
-      }
-    } catch (err) {
-      console.error("Failed to save wish:", err);
-    }
-    setShowAddWish(false);
-    setEditWish(null);
-  };
-
-  const toggleWish = async (id: string) => {
-    const wish = wishes.find((w) => w.id === id);
-    if (!wish) return;
-
-    if (!wish.completed) {
-      // Not completed → open CompletionSheet
-      setCompletingWish(wish);
-    } else {
-      // Completed → uncomplete immediately (clear completion info)
-      setWishes((prev) =>
-        prev.map((w) =>
-          w.id === id
-            ? { ...w, completed: false, completedAt: null, actualPrice: null, satisfaction: null, review: null }
-            : w
-        )
-      );
-      try {
-        await fetch(`${BASE}/api/wishes/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ completed: false }),
-        });
-      } catch (err) {
-        console.error("Failed to toggle wish:", err);
-        setWishes((prev) =>
-          prev.map((w) => (w.id === id ? wish : w))
-        );
-      }
-    }
-  };
-
-  const completeWish = async (data: {
-    actualPrice: number | null;
-    satisfaction: number | null;
-    review: string | null;
-    completedAt: string;
-  }) => {
-    if (!completingWish) return;
-    const id = completingWish.id;
-    setWishes((prev) =>
-      prev.map((w) =>
-        w.id === id
-          ? { ...w, completed: true, completedAt: data.completedAt, actualPrice: data.actualPrice, satisfaction: data.satisfaction, review: data.review }
-          : w
-      )
-    );
-    setCompletingWish(null);
-    try {
-      await fetch(`${BASE}/api/wishes/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          completed: true,
-          completedAt: data.completedAt,
-          actualPrice: data.actualPrice,
-          satisfaction: data.satisfaction,
-          review: data.review,
-        }),
-      });
-    } catch (err) {
-      console.error("Failed to complete wish:", err);
-      setWishes((prev) =>
-        prev.map((w) => (w.id === id ? completingWish : w))
-      );
-    }
-  };
-
-  const deleteWish = async (id: string) => {
-    setWishes((prev) => prev.filter((w) => w.id !== id));
-    await fetch(`${BASE}/api/wishes/${id}`, { method: "DELETE" });
-    setShowAddWish(false);
-    setEditWish(null);
   };
 
   // Filtered data
@@ -419,27 +283,6 @@ export default function Home() {
 
         <button
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
-            section === "wish"
-              ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
-              : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
-          }`}
-          onClick={() => setSection("wish")}
-        >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "wish" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "wish" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
-            {section === "wish" ? (
-              <path d="M11 1.5l2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.6-5 2.6 1-5.6-4.1-4 5.6-.8L11 1.5z" />
-            ) : (
-              <polygon points="11 2 13.9 7.6 20 8.5 15.5 12.9 16.6 19 11 16 5.4 19 6.5 12.9 2 8.5 8.1 7.6" />
-            )}
-          </svg>
-          <span className="text-[15px] font-medium flex-1">위시</span>
-          {wishes.filter((w) => !w.completed).length > 0 && (
-            <span className="text-[13px] text-[var(--label-tertiary)]">{wishes.filter((w) => !w.completed).length}</span>
-          )}
-        </button>
-
-        <button
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
             section === "dday"
               ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
               : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
@@ -477,11 +320,6 @@ export default function Home() {
       const ni = noteTabs.indexOf(noteTab);
       if (dir === "left" && ni < noteTabs.length - 1) setNoteTab(noteTabs[ni + 1]);
       if (dir === "right" && ni > 0) setNoteTab(noteTabs[ni - 1]);
-    } else if (section === "wish") {
-      const wishTabs: WishCategory[] = ["healing", "item", "experience"];
-      const wi = wishTabs.indexOf(wishTab);
-      if (dir === "left" && wi < wishTabs.length - 1) setWishTab(wishTabs[wi + 1]);
-      if (dir === "right" && wi > 0) setWishTab(wishTabs[wi - 1]);
     } else if (section === "dday") {
       const ddayTabs: ("timeline" | "general" | "anniversary")[] = ["timeline", "general", "anniversary"];
       const di = ddayTabs.indexOf(ddayTab);
@@ -569,17 +407,6 @@ export default function Home() {
             </div>
           ) : section === "build" ? (
             <BuildView />
-          ) : section === "wish" ? (
-            <WishlistView
-              wishes={wishes}
-              wishTab={wishTab}
-              onTabChange={setWishTab}
-              onToggle={toggleWish}
-              onEdit={(w) => { setEditWish(w); setShowAddWish(true); }}
-              onDelete={deleteWish}
-              onAdd={() => { setEditWish(null); setShowAddWish(true); }}
-              onTagClick={setActiveTag}
-            />
           ) : section === "todo" && todoTab === "archive" ? (
             <div className="flex-1 flex flex-col">
               {archivedTodos.length === 0 ? (
@@ -734,38 +561,11 @@ export default function Home() {
           }}
         />
       )}
-      {showAddWish && wishTab === "healing" ? (
-          <HealingAddSheet
-            onSave={saveWish}
-            onClose={() => { setShowAddWish(false); setEditWish(null); }}
-          />
-        ) : showAddWish ? (
-          <AddWishSheet
-            wish={editWish}
-            defaultCategory={wishTab === "item" ? "item" : "experience"}
-            onSave={saveWish}
-            onDelete={editWish ? deleteWish : undefined}
-            onUncomplete={editWish?.completed ? (id: string) => {
-              toggleWish(id);
-              setShowAddWish(false);
-              setEditWish(null);
-            } : undefined}
-            onClose={() => { setShowAddWish(false); setEditWish(null); }}
-          />
-        ) : null}
-      {completingWish && (
-        <WishCompletionSheet
-          wish={completingWish}
-          onComplete={completeWish}
-          onClose={() => setCompletingWish(null)}
-        />
-      )}
       {activeTag && (
         <TagView
           tag={activeTag}
           todos={todos}
           schedules={schedules}
-          wishes={wishes}
           onClose={() => setActiveTag(null)}
         />
       )}

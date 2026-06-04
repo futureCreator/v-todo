@@ -75,25 +75,6 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
           <span className="text-[12px] font-medium">빌드</span>
         </button>
 
-        {/* 위시 */}
-        <button
-          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
-            active === "wish"
-              ? "text-[var(--accent-primary)]"
-              : "text-[var(--label-tertiary)]"
-          }`}
-          onClick={() => { if (active !== "wish") { haptic.selection(); withViewTransition(() => onChange("wish")); } }}
-        >
-          <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "wish" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "wish" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
-            {active === "wish" ? (
-              <path d="M12.5 2.5l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2-4.5-4.4 6.2-.9 2.8-5.7z" />
-            ) : (
-              <polygon points="12.5 3 15.3 8.7 21.5 9.6 17 14 18.1 20.2 12.5 17.3 6.9 20.2 8 14 3.5 9.6 9.7 8.7" />
-            )}
-          </svg>
-          <span className="text-[12px] font-medium">위시</span>
-        </button>
-
         {/* D-day */}
         <button
           className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
