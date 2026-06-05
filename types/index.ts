@@ -156,9 +156,9 @@ export interface UpdateWishRequest {
 export type TodoTab = "now" | "soon" | "archive";
 
 // Build (Kanban)
-export type KanbanColumn = "idea" | "dev" | "checking" | "review" | "release";
+export type KanbanColumn = "idea" | "mvp" | "checking" | "dev" | "review" | "release";
 
-export const KANBAN_COLUMNS: KanbanColumn[] = ["idea", "dev", "checking", "review", "release"];
+export const KANBAN_COLUMNS: KanbanColumn[] = ["idea", "mvp", "checking", "dev", "review", "release"];
 
 export interface KanbanCard {
   id: string;
@@ -185,9 +185,10 @@ export interface UpdateKanbanCardRequest {
 
 export const KANBAN_COLUMN_LABELS: Record<KanbanColumn, string> = {
   idea: "아이디어",
-  dev: "개발 중",
-  checking: "검토 중",
-  review: "검수 중",
+  mvp: "MVP",
+  checking: "검토",
+  dev: "개발",
+  review: "검수",
   release: "출시",
 };
 

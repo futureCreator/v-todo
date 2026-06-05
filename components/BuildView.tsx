@@ -12,8 +12,9 @@ const COLUMNS = KANBAN_COLUMNS;
 
 const COLUMN_ACCENT: Record<KanbanColumn, string> = {
   idea: "var(--sys-purple)",
-  dev: "var(--sys-blue)",
+  mvp: "var(--sys-indigo)",
   checking: "var(--sys-teal)",
+  dev: "var(--sys-blue)",
   review: "var(--sys-orange)",
   release: "var(--sys-green)",
 };
@@ -522,7 +523,7 @@ export default function BuildView() {
         </div>
       </div>
 
-      {/* Desktop: 5-column board */}
+      {/* Desktop: 6-column board */}
       <div className="hidden md:flex flex-1 min-h-0 pb-4 gap-4">
         {COLUMNS.map((column, columnIndex) => (
           <div key={column} className="flex-1 min-w-0 flex flex-col min-h-0">
