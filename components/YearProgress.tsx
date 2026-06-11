@@ -29,13 +29,20 @@ export default function YearProgress() {
     >
       {progress && (
         <>
-          <div
-            className="absolute inset-y-0 left-0 rounded-full bg-[var(--sys-blue)]"
-            style={{ width: `${progress.display}%` }}
-          />
+          {/* Unfilled/Background Text (Visible on the grey/unfilled portion) */}
           <span className="absolute inset-0 flex items-center justify-center text-[13px] text-[var(--sys-label-secondary)] font-medium">
             {progress.year}&nbsp;&nbsp;{progress.display}%
           </span>
+
+          {/* Filled Bar & Masked Text (Visible on the blue/filled portion) */}
+          <div
+            className="absolute inset-0 rounded-full bg-[var(--sys-blue)] overflow-hidden"
+            style={{ clipPath: `inset(0 ${100 - parseFloat(progress.display)}% 0 0)` }}
+          >
+            <span className="absolute inset-0 flex items-center justify-center text-[13px] text-white font-semibold">
+              {progress.year}&nbsp;&nbsp;{progress.display}%
+            </span>
+          </div>
         </>
       )}
     </div>
