@@ -13,7 +13,6 @@ import UndoToast from "@/components/UndoToast";
 import DailyNoteView from "@/components/DailyNoteView";
 import GeneralNoteView from "@/components/GeneralNoteView";
 import YearProgress from "@/components/YearProgress";
-import BuildView from "@/components/BuildView";
 import TagView from "@/components/TagView";
 import EmptyState from "@/components/EmptyState";
 import type { TodoTab } from "@/types";
@@ -266,44 +265,6 @@ export default function Home() {
           <span className="text-[15px] font-medium flex-1">노트</span>
         </button>
 
-        <button
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
-            section === "build"
-              ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
-              : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
-          }`}
-          onClick={() => setSection("build")}
-        >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "build" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "build" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
-            <rect x="4" y="7.5" width="12" height="10" rx="1.8" />
-            <rect x="6.5" y="4.5" width="12" height="10" rx="1.8" />
-          </svg>
-          <span className="text-[15px] font-medium flex-1">빌드</span>
-        </button>
-
-        <button
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
-            section === "dday"
-              ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
-              : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
-          }`}
-          onClick={() => setSection("dday")}
-        >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "dday" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "dday" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
-            {section === "dday" ? (
-              <path d="M11 1C5.5 1 1 5.5 1 11s4.5 10 10 10 10-4.5 10-10S16.5 1 11 1zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm.5-13h-1.5v6l5.2 3.1.8-1.3-4.5-2.6V6z" />
-            ) : (
-              <>
-                <circle cx="11" cy="11" r="9" />
-                <polyline points="11 6 11 11 15 13" />
-              </>
-            )}
-          </svg>
-          <span className="text-[15px] font-medium flex-1">D-day</span>
-          {(ddayCount + annivCount) > 0 && (
-            <span className="text-[13px] text-[var(--label-tertiary)]">{ddayCount + annivCount}</span>
-          )}
-        </button>
       </nav>
 
     </aside>
@@ -320,11 +281,7 @@ export default function Home() {
       const ni = noteTabs.indexOf(noteTab);
       if (dir === "left" && ni < noteTabs.length - 1) setNoteTab(noteTabs[ni + 1]);
       if (dir === "right" && ni > 0) setNoteTab(noteTabs[ni - 1]);
-    } else if (section === "dday") {
-      const ddayTabs: ("timeline" | "general" | "anniversary")[] = ["timeline", "general", "anniversary"];
-      const di = ddayTabs.indexOf(ddayTab);
-      if (dir === "left" && di < ddayTabs.length - 1) setDdayTab(ddayTabs[di + 1]);
-      if (dir === "right" && di > 0) setDdayTab(ddayTabs[di - 1]);
+
     }
   };
 
@@ -376,27 +333,18 @@ export default function Home() {
             active={noteTab}
             onChange={(key) => setNoteTab(key as NoteTab)}
           />
-        ) : section === "dday" ? (
-          <SectionTabs
-            tabs={[
-              { key: "timeline", label: "타임라인" },
-              { key: "general", label: `D-day${ddayCount > 0 ? ` ${ddayCount}` : ""}` },
-              { key: "anniversary", label: `기념일${annivCount > 0 ? ` ${annivCount}` : ""}` },
-            ]}
-            active={ddayTab}
-            onChange={(key) => setDdayTab(key as "timeline" | "general" | "anniversary")}
-          />
+
         ) : null}
       </div>
 
       {/* Main Content */}
       <main
-        className={`flex-1 ${section === "build" ? "overflow-hidden" : "overflow-y-auto"} ${(section === "note" || section === "build") ? "pb-20 md:pb-0 flex flex-col min-h-0" : "pb-20 md:pb-8"}`}
+        className={`flex-1 overflow-y-auto ${section === "note" ? "pb-20 md:pb-0 flex flex-col min-h-0" : "pb-20 md:pb-8"}`}
         style={{ viewTransitionName: "tab-content" }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <div className={`${(section === "note" || section === "build") ? "flex-1 flex flex-col min-h-0" : "md:px-8 flex flex-col min-h-full"}`}>
+        <div className={`${section === "note" ? "flex-1 flex flex-col min-h-0" : "md:px-8 flex flex-col min-h-full"}`}>
           {section === "note" ? (
             <div className="flex-1 flex flex-col min-h-0 md:px-8">
               {noteTab === "daily" ? (
@@ -405,8 +353,6 @@ export default function Home() {
                 <GeneralNoteView />
               )}
             </div>
-          ) : section === "build" ? (
-            <BuildView />
           ) : section === "todo" && todoTab === "archive" ? (
             <div className="flex-1 flex flex-col">
               {archivedTodos.length === 0 ? (
@@ -437,7 +383,7 @@ export default function Home() {
                 </div>
               )}
             </div>
-          ) : section === "todo" ? (
+          ) : (
             <div className="flex-1 flex flex-col">
               {filteredTodos.length === 0 ? (
                 <EmptyState
@@ -474,68 +420,6 @@ export default function Home() {
                   <TodoInput onAdd={addTodo} />
                 </div>
               )}
-            </div>
-          ) : ddayTab === "timeline" ? (
-            <div className="flex-1 flex flex-col">
-              <TimelineView
-                schedules={schedules}
-                onEdit={(s) => {
-                  setEditSchedule(s);
-                  setShowAddSchedule(true);
-                }}
-                onTagClick={setActiveTag}
-              />
-              <div className="mx-5 md:mx-0 mt-auto pt-4">
-                <button
-                  className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
-                  onClick={() => {
-                    setEditSchedule(null);
-                    setShowAddSchedule(true);
-                  }}
-                >
-                  새 일정 추가
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="flex-1 flex flex-col">
-              {filteredSchedules.length === 0 ? (
-                <div className="flex-1 flex flex-col items-center justify-center text-[var(--label-tertiary)]">
-                  <span className="text-[56px] mb-5 opacity-30">📅</span>
-                  <p className="text-[20px]">
-                    {ddayTab === "general" ? "일정을 추가해보세요" : "기념일을 추가해보세요"}
-                  </p>
-                </div>
-              ) : (
-                <div className="mx-5 md:mx-0 flex flex-col gap-2">
-                  {filteredSchedules.map((schedule) => (
-                    <div
-                      key={schedule.id}
-                      className="bg-[var(--sys-bg-elevated)] rounded-xl overflow-hidden"
-                    >
-                      <ScheduleItem
-                        schedule={schedule}
-                        onEdit={(s) => {
-                          setEditSchedule(s);
-                          setShowAddSchedule(true);
-                        }}
-                        onTagClick={setActiveTag}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div className="mx-5 md:mx-0 mt-auto pt-4">
-                <button
-                  className="w-full py-3.5 rounded-xl bg-[var(--accent-primary)] text-white text-[20px] font-semibold active:opacity-80 transition-opacity"
-                  onClick={() => {
-                    setEditSchedule(null);
-                    setShowAddSchedule(true);
-                  }}
-                >
-                  새 일정 추가
-                </button>
-              </div>
             </div>
           )}
         </div>

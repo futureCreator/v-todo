@@ -58,44 +58,6 @@ export default function BottomNav({ active, onChange }: BottomNavProps) {
           </svg>
           <span className="text-[12px] font-medium">노트</span>
         </button>
-
-        {/* 빌드 */}
-        <button
-          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
-            active === "build"
-              ? "text-[var(--accent-primary)]"
-              : "text-[var(--label-tertiary)]"
-          }`}
-          onClick={() => { if (active !== "build") { haptic.selection(); withViewTransition(() => onChange("build")); } }}
-        >
-          <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "build" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "build" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
-            <rect x="4.5" y="8.5" width="14" height="11" rx="2" />
-            <rect x="7.5" y="5" width="14" height="11" rx="2" />
-          </svg>
-          <span className="text-[12px] font-medium">빌드</span>
-        </button>
-
-        {/* D-day */}
-        <button
-          className={`press flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
-            active === "dday"
-              ? "text-[var(--accent-primary)]"
-              : "text-[var(--label-tertiary)]"
-          }`}
-          onClick={() => { if (active !== "dday") { haptic.selection(); withViewTransition(() => onChange("dday")); } }}
-        >
-          <svg width="25" height="25" viewBox="0 0 25 25" fill={active === "dday" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={active === "dday" ? "0" : "1.8"} strokeLinecap="round" strokeLinejoin="round">
-            {active === "dday" ? (
-              <path d="M12.5 2.5C7 2.5 2.5 7 2.5 12.5S7 22.5 12.5 22.5 22.5 18 22.5 12.5 18 2.5 12.5 2.5zm0 18c-4.1 0-7.5-3.4-7.5-7.5S8.4 5.5 12.5 5.5s7.5 3.4 7.5 7.5-3.4 7.5-7.5 7.5zm.5-12h-1.5v5.5l4.8 2.9.8-1.2-4.1-2.4V8.5z" />
-            ) : (
-              <>
-                <circle cx="12.5" cy="12.5" r="9" />
-                <polyline points="12.5 7.5 12.5 12.5 16 14.5" />
-              </>
-            )}
-          </svg>
-          <span className="text-[12px] font-medium">D-day</span>
-        </button>
       </div>
     </nav>
   );
