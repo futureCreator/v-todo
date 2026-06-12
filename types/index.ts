@@ -86,7 +86,7 @@ export const STAGE_LABELS: Record<Stage, string> = {
 };
 
 // Notes
-export type Section = "todo" | "note";
+export type Section = "todo";
 export type NoteTab = "daily" | "general";
 
 export interface FileItem {

@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { Todo, Schedule, ScheduleType, RepeatMode, Section, NoteTab } from "@/types";
-import BottomNav from "@/components/BottomNav";
+import type { Todo, Schedule, ScheduleType, RepeatMode } from "@/types";
 import SectionTabs from "@/components/SectionTabs";
 import TodoItem from "@/components/TodoItem";
 import TodoInput from "@/components/TodoInput";
@@ -10,8 +9,6 @@ import ScheduleItem, { getDisplayInfo } from "@/components/ScheduleItem";
 import TimelineView from "@/components/TimelineView";
 import AddScheduleSheet from "@/components/AddScheduleSheet";
 import UndoToast from "@/components/UndoToast";
-import DailyNoteView from "@/components/DailyNoteView";
-import GeneralNoteView from "@/components/GeneralNoteView";
 import YearProgress from "@/components/YearProgress";
 import TagView from "@/components/TagView";
 import EmptyState from "@/components/EmptyState";
@@ -20,10 +17,8 @@ import type { TodoTab } from "@/types";
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export default function Home() {
-  const [section, setSection] = useState<Section>("todo");
   const [todoTab, setTodoTab] = useState<TodoTab>("now");
   const [ddayTab, setDdayTab] = useState<"timeline" | "general" | "anniversary">("timeline");
-  const [noteTab, setNoteTab] = useState<NoteTab>("daily");
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
@@ -216,73 +211,27 @@ export default function Home() {
         <YearProgress />
       </div>
 
-      {/* Nav items */}
+      {/* Nav */}
       <nav className="flex-1 px-3 space-y-0.5">
-        <button
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
-            section === "todo"
-              ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
-              : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
-          }`}
-          onClick={() => setSection("todo")}
-        >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "todo" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "todo" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
-            {section === "todo" ? (
-              <path d="M17 2H5a3 3 0 00-3 3v12a3 3 0 003 3h12a3 3 0 003-3V5a3 3 0 00-3-3zM9.5 14l-3-3 1-1 2 2 5-5 1 1-6 6z" />
-            ) : (
-              <>
-                <rect x="3" y="3" width="16" height="16" rx="3" />
-                <path d="M8 11.5l2.5 2.5L15 9" />
-              </>
-            )}
+        <div className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="currentColor" stroke="currentColor" strokeWidth="0" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M17 2H5a3 3 0 00-3 3v12a3 3 0 003 3h12a3 3 0 003-3V5a3 3 0 00-3-3zM9.5 14l-3-3 1-1 2 2 5-5 1 1-6 6z" />
           </svg>
           <span className="text-[15px] font-medium flex-1">할 일</span>
           {(nowCount + soonCount) > 0 && (
             <span className="text-[13px] text-[var(--label-tertiary)]">{nowCount + soonCount}</span>
           )}
-        </button>
-
-        <button
-          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-colors ${
-            section === "note"
-              ? "bg-[var(--accent-primary)]/12 text-[var(--accent-primary)]"
-              : "text-[var(--label-primary)] hover:bg-[var(--fill-quaternary)]"
-          }`}
-          onClick={() => setSection("note")}
-        >
-          <svg width="22" height="22" viewBox="0 0 22 22" fill={section === "note" ? "currentColor" : "none"} stroke="currentColor" strokeWidth={section === "note" ? "0" : "1.6"} strokeLinecap="round" strokeLinejoin="round">
-            {section === "note" ? (
-              <path d="M5 2C3.9 2 3 2.9 3 4v14c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H5zm2 4h8v1.5H7V6zm0 3.5h8V11H7V9.5zm0 3.5h5v1.5H7V13z" />
-            ) : (
-              <>
-                <rect x="4" y="3" width="14" height="16" rx="2" />
-                <line x1="8" y1="7" x2="14" y2="7" />
-                <line x1="8" y1="11" x2="14" y2="11" />
-                <line x1="8" y1="15" x2="12" y2="15" />
-              </>
-            )}
-          </svg>
-          <span className="text-[15px] font-medium flex-1">노트</span>
-        </button>
-
+        </div>
       </nav>
 
     </aside>
   );
 
   const handleSwipe = (dir: "left" | "right") => {
-    if (section === "todo") {
-      const tabs: TodoTab[] = ["now", "soon", "archive"];
-      const idx = tabs.indexOf(todoTab);
-      if (dir === "left" && idx < tabs.length - 1) setTodoTab(tabs[idx + 1]);
-      if (dir === "right" && idx > 0) setTodoTab(tabs[idx - 1]);
-    } else if (section === "note") {
-      const noteTabs: NoteTab[] = ["daily", "general"];
-      const ni = noteTabs.indexOf(noteTab);
-      if (dir === "left" && ni < noteTabs.length - 1) setNoteTab(noteTabs[ni + 1]);
-      if (dir === "right" && ni > 0) setNoteTab(noteTabs[ni - 1]);
-
-    }
+    const tabs: TodoTab[] = ["now", "soon", "archive"];
+    const idx = tabs.indexOf(todoTab);
+    if (dir === "left" && idx < tabs.length - 1) setTodoTab(tabs[idx + 1]);
+    if (dir === "right" && idx > 0) setTodoTab(tabs[idx - 1]);
   };
 
   const onTouchStart = (e: React.TouchEvent) => {
@@ -314,46 +263,26 @@ export default function Home() {
 
       {/* Tabs */}
       <div className="md:px-8 pt-1 md:pt-8 pb-2">
-        {section === "todo" ? (
-          <SectionTabs
-            tabs={[
-              { key: "now", label: `지금${nowCount > 0 ? ` ${nowCount}` : ""}` },
-              { key: "soon", label: `곧${soonCount > 0 ? ` ${soonCount}` : ""}` },
-              { key: "archive", label: "보관함" },
-            ]}
-            active={todoTab}
-            onChange={(key) => setTodoTab(key as TodoTab)}
-          />
-        ) : section === "note" ? (
-          <SectionTabs
-            tabs={[
-              { key: "daily", label: "데일리" },
-              { key: "general", label: "노트" },
-            ]}
-            active={noteTab}
-            onChange={(key) => setNoteTab(key as NoteTab)}
-          />
-
-        ) : null}
+        <SectionTabs
+          tabs={[
+            { key: "now", label: `지금${nowCount > 0 ? ` ${nowCount}` : ""}` },
+            { key: "soon", label: `곧${soonCount > 0 ? ` ${soonCount}` : ""}` },
+            { key: "archive", label: "보관함" },
+          ]}
+          active={todoTab}
+          onChange={(key) => setTodoTab(key as TodoTab)}
+        />
       </div>
 
       {/* Main Content */}
       <main
-        className={`flex-1 overflow-y-auto ${section === "note" ? "pb-20 md:pb-0 flex flex-col min-h-0" : "pb-20 md:pb-8"}`}
+        className="flex-1 overflow-y-auto pb-8 safe-area-pb"
         style={{ viewTransitionName: "tab-content" }}
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <div className={`${section === "note" ? "flex-1 flex flex-col min-h-0" : "md:px-8 flex flex-col min-h-full"}`}>
-          {section === "note" ? (
-            <div className="flex-1 flex flex-col min-h-0 md:px-8">
-              {noteTab === "daily" ? (
-                <DailyNoteView />
-              ) : (
-                <GeneralNoteView />
-              )}
-            </div>
-          ) : section === "todo" && todoTab === "archive" ? (
+        <div className="md:px-8 flex flex-col min-h-full">
+          {todoTab === "archive" ? (
             <div className="flex-1 flex flex-col">
               {archivedTodos.length === 0 ? (
                 <EmptyState
@@ -431,7 +360,6 @@ export default function Home() {
     <div className="flex bg-[var(--bg-primary)]">
       {sidebar}
       {content}
-      <BottomNav active={section} onChange={setSection} />
 
       {showAddSchedule && (
         <AddScheduleSheet
